@@ -1,5 +1,5 @@
 {
-  "name": "@sk-global/a11y-converter",
+  "name": "a11y-converter",
   "description": "Convert original HTML codes to a11y HTML",
   "version": "0.0.1",
   "source": "src/index.ts",
@@ -13,6 +13,9 @@
   ],
   "engines": {
     "node": ">=14.16"
+  },
+  "bin": {
+    "a11y-converter": "./src/cli.ts"
   },
   "scripts": {
     "build": "microbundle --define PKG_VERSION=$npm_package_version",
@@ -29,8 +32,8 @@
     "@types/content-type": "^1.1.5",
     "@types/html-to-text": "^8.1.1",
     "@types/jest": "^29.1.1",
+    "@types/mime-types": "^2.1.1",
     "@types/pdf-parse": "^1.1.1",
-    "cheerio": "^1.0.0-rc.12",
     "husky": "^8.0.1",
     "jest": "^29.1.2",
     "microbundle": "^0.15.0",
@@ -38,21 +41,32 @@
     "ts-jest": "^29.0.1",
     "ts-node": "^10.9.1"
   },
+  "peerDependencies": {
+    "cheerio": "^1.0.0-rc.12"
+  },
   "prettier": {
     "singleQuote": true
   },
+  "contributors": [
+    "Binh Bui <buithaibinh@gmail.com>"
+  ],
   "license": "MIT",
   "publishConfig": {
     "registry": "https://registry.npmjs.org",
     "access": "public"
   },
   "directories": {
-    "test": "__tests__"
+    "test": "test"
   },
   "author": "SK-Global",
   "dependencies": {
     "axios": "^0.27.2",
-    "iconv-lite": "^0.6.3"
+    "content-type": "^1.0.4",
+    "got-scraping": "^3.2.11",
+    "iconv-lite": "^0.6.3",
+    "import-local": "^3.1.0",
+    "mime-types": "^2.1.35",
+    "ow": "^0.28.1"
   },
   "repository": {
     "type": "git",

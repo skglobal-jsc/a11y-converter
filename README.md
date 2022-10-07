@@ -7,3 +7,4 @@ Reference:
 
 - https://github.com/dequelabs/axe-core/blob/develop/doc/API.md)
 - https://github.com/ffoodd/a11y.css
+- https://www.npmjs.com/package/htmlparser2
