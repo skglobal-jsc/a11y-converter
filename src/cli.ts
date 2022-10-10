@@ -11,7 +11,7 @@ inquirer
       type: 'input',
       name: 'url',
       message: 'Enter the URL to convert:',
-      validate: (input: string) => {
+      validate: (input) => {
         if (!input) {
           return 'Please enter a valid URL';
         }
