@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-const inquirer = require('inquirer');
+import inquirer from 'inquirer';
 
-const { A11yConverter } = require('./index');
-const { writeFileSync } = require('fs');
+import { A11yConverter } from './index.js';
+import { writeFileSync } from 'fs';
 
 inquirer
   .prompt([
@@ -11,7 +11,7 @@ inquirer
       type: 'input',
       name: 'url',
       message: 'Enter the URL to convert:',
-      validate: (input) => {
+      validate: (input: string) => {
         if (!input) {
           return 'Please enter a valid URL';
         }

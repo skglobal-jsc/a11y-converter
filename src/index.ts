@@ -3,10 +3,10 @@ import type { IncomingMessage } from 'node:http';
 import * as cheerio from 'cheerio';
 import { DomHandler } from 'htmlparser2';
 import { WritableStream } from 'htmlparser2/lib/WritableStream';
-import { BasicConverter, RequestsOptions } from './basic-converter';
+import { BasicConverter, RequestsOptions } from './basic-converter.js';
 
-import { parseTable } from '@sk-global/scrapeer';
-import { commonCssLinks, uvCss } from './utils';
+import { commonCssLinks, uvCss } from './utils/index.js';
+// const { parseTable } = require('@sk-global/scrapeer');
 
 export class A11yConverter extends BasicConverter {
   constructor() {
@@ -80,11 +80,11 @@ export class A11yConverter extends BasicConverter {
     $('table').each((i, el) => {
       // TODO: apply annotation for table tag
       // use @sk-global/scrapeer lib to get table data and build annotation
-      const data = parseTable($, el);
-      if (data) {
-        // add annotation before table
-        wrapAnnotation($(el), `<p>ここに表があります。</p>`);
-      }
+      // const data = parseTable($, el);
+      // if (data) {
+      //   // add annotation before table
+      wrapAnnotation($(el), `<p>ここに表があります。</p>`);
+      // }
       // wrap with skg-style table and skip speaking
       $(el).wrap('<div class="uv_table" aria-hidden="true"></div>');
     });
