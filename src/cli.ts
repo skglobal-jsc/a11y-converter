@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
-import inquirer from 'inquirer';
+const inquirer = require('inquirer');
+
 import { A11yConverter } from './index';
 import { writeFileSync } from 'fs';
 
@@ -26,7 +27,7 @@ inquirer
         url,
         method: 'GET',
       })
-      .then((html) => {
+      .then(({ html }) => {
         writeFileSync('output.html', html);
       });
   })
