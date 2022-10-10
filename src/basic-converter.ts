@@ -6,7 +6,6 @@ import type {
   Options,
 } from 'got-scraping';
 
-import ow from 'ow';
 import iconv from 'iconv-lite';
 import * as contentTypeParser from 'content-type';
 
@@ -30,14 +29,6 @@ function parseContentTypeFromResponse(response: IncomingMessage): {
   type: string;
   charset: BufferEncoding;
 } {
-  ow(
-    response,
-    ow.object.partialShape({
-      url: ow.string.url,
-      headers: ow.object,
-    })
-  );
-
   const { url, headers } = response;
   let parsedContentType: contentTypeParser.ParsedMediaType | undefined;
 
@@ -51,7 +42,6 @@ function parseContentTypeFromResponse(response: IncomingMessage): {
 
   // Parse content type from file extension as fallback
   if (!parsedContentType) {
-    console.warn(mime);
     const parsedUrl = new URL(url!);
     const contentTypeFromExtname =
       mime.contentType(extname(parsedUrl.pathname)) ||
@@ -121,7 +111,7 @@ export class BasicConverter {
 
   constructor() {}
 
-  async start(options: RequestsOptions): Promise<any> {
+  async convert(options: RequestsOptions): Promise<any> {
     await this._init();
 
     const stats = {};
@@ -131,21 +121,20 @@ export class BasicConverter {
     });
 
     // start convert process
+    let html = null;
     if (result) {
-      const { body, isXml, response, contentType } = result;
-      const converted = await this._convert({ result, options });
-      return { converted, stats };
+      html = await this._convertHtml({ result, options });
     }
 
     await this._clean();
-    return { converted: null, stats };
+    return { html, stats };
   }
 
   /**
    * Converts standard html to a11y html
    * @param param0
    */
-  async _convert({
+  protected async _convertHtml({
     result,
     options,
   }: {

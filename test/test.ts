@@ -1,19 +1,19 @@
 import { A11yConverter } from '../src';
 
+jest.useRealTimers();
+
 describe('A11y Converter ', () => {
   it('should be a class', () => {
     expect(new A11yConverter()).toBeInstanceOf(A11yConverter);
   });
 
-  it('should have a method', () => {
-    expect(new A11yConverter().start).toBeInstanceOf(Function);
-  });
-
   it('should return an object', async () => {
-    const result = await new A11yConverter().start({
-      url: 'https://www.google.com',
+    const converter = new A11yConverter();
+    const result = await converter.convert({
+      url: 'https://skg-development-dev.s3.ap-southeast-1.amazonaws.com/public/original.html',
       method: 'GET',
     });
+    console.log(result);
     expect(result).toBeInstanceOf(Object);
   });
 });
