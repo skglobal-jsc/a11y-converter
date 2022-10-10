@@ -2,8 +2,8 @@
 
 const inquirer = require('inquirer');
 
-import { A11yConverter } from './index';
-import { writeFileSync } from 'fs';
+const { A11yConverter } = require('./index');
+const { writeFileSync } = require('fs');
 
 inquirer
   .prompt([
