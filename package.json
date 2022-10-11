@@ -57,15 +57,15 @@
   },
   "author": "SK-Global",
   "dependencies": {
-    "@sk-global/scrapeer": "^0.0.13",
+    "@sk-global/scrapeer": "^0.0.15",
     "axios": "^0.27.2",
+    "cheerio": "^1.0.0-rc.12",
     "content-type": "^1.0.4",
     "got-scraping": "^3.2.11",
     "htmlparser2": "^8.0.1",
     "iconv-lite": "^0.6.3",
     "mime-types": "^2.1.35",
-    "ow": "^0.28.1",
-    "cheerio": "^1.0.0-rc.12"
+    "ow": "^0.28.1"
   },
   "repository": {
     "type": "git",

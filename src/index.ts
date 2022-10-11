@@ -6,7 +6,7 @@ import { WritableStream } from 'htmlparser2/lib/WritableStream';
 import { BasicConverter, RequestsOptions } from './basic-converter';
 
 import { commonCssLinks, uvCss } from './utils/index';
-// const { parseTable } = require('@sk-global/scrapeer');
+import { parseTable } from '@sk-global/scrapeer';
 
 export class A11yConverter extends BasicConverter {
   constructor() {
@@ -80,11 +80,22 @@ export class A11yConverter extends BasicConverter {
     $('table').each((i, el) => {
       // TODO: apply annotation for table tag
       // use @sk-global/scrapeer lib to get table data and build annotation
-      // const data = parseTable($, el);
-      // if (data) {
-      //   // add annotation before table
-      wrapAnnotation($(el), `<p>ここに表があります。</p>`);
-      // }
+      const data = parseTable($, el);
+      if (data) {
+        // build annotation
+        const texts = [
+          `この下に、縦${data.totalRows}行、横${data.totalCols}列の表があります。`,
+          `表のタイトルは「${data.caption}」です。`,
+          ...data.rows.map((row) => {
+            if (row.index === 1) {
+              return [`データの1行目`, ...row.cols].join('、');
+            }
+            return [`${row.index}行目`, ...row.cols].join('、');
+          }),
+        ];
+        const text = texts.map((t) => `<p>${t}</p>`).join('');
+        wrapAnnotation($(el), text);
+      }
       // wrap with skg-style table and skip speaking
       $(el).wrap('<div class="uv_table" aria-hidden="true"></div>');
     });
