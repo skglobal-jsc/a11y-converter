@@ -220,7 +220,7 @@ export class BasicConverter {
   ) {
     const requestOptions: OptionsInit & { isStream: true } = {
       url: options.url,
-      method: options.method as Method,
+      method: (options.method || 'GET') as Method,
       proxyUrl,
       ...gotOptions,
       headers: { ...options.headers, ...gotOptions?.headers },
