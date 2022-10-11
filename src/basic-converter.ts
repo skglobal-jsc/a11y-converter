@@ -100,7 +100,7 @@ function addResponsePropertiesToStream(stream: GotRequest) {
 
 export interface RequestsOptions {
   url: string;
-  method: Method;
+  method?: Method;
   headers?: IncomingHttpHeaders;
   payload?: string;
 }
@@ -214,16 +214,16 @@ export class BasicConverter {
    * Combines the provided `requestOptions` with mandatory (non-overridable) values.
    */
   protected _getRequestOptions(
-    request: RequestsOptions,
+    options: RequestsOptions,
     proxyUrl?: string,
     gotOptions?: OptionsInit
   ) {
     const requestOptions: OptionsInit & { isStream: true } = {
-      url: request.url,
-      method: request.method as Method,
+      url: options.url,
+      method: options.method as Method,
       proxyUrl,
       ...gotOptions,
-      headers: { ...request.headers, ...gotOptions?.headers },
+      headers: { ...options.headers, ...gotOptions?.headers },
       https: {
         ...gotOptions?.https,
         rejectUnauthorized: !this.ignoreSslErrors,
@@ -234,8 +234,8 @@ export class BasicConverter {
     // Delete any possible lowercased header for cookie as they are merged in _applyCookies under the uppercase Cookie header
     Reflect.deleteProperty(requestOptions.headers!, 'cookie');
 
-    if (/PATCH|POST|PUT/.test(request.method))
-      requestOptions.body = request.payload ?? '';
+    if (/PATCH|POST|PUT/.test(options.method || 'GET'))
+      requestOptions.body = options.payload ?? '';
 
     return requestOptions;
   }
