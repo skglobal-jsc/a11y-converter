@@ -26,5 +26,10 @@
     "allowJs": true,
     "typeRoots": ["./node_modules/@types", "src/@custom_types"]
   },
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs"
+    }
+  },
   "exclude": ["node_modules"]
 }

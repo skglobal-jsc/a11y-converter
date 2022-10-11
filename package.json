@@ -1,7 +1,7 @@
 {
   "name": "a11y-converter",
   "description": "Convert original HTML codes to a11y HTML",
-  "version": "0.1.55",
+  "version": "0.1.56",
   "source": "src/index.ts",
   "main": "./dist/index.js",
   "module": "dist/index.module.js",
@@ -15,6 +15,7 @@
     "node": ">=14.16"
   },
   "scripts": {
+    "dev": "ts-node demo.ts",
     "build": "microbundle --define PKG_VERSION=$npm_package_version",
     "watch": "microbundle watch --define PKG_VERSION=$npm_package_version",
     "test": "jest --coverage",

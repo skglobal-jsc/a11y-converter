@@ -12,7 +12,7 @@ import * as contentTypeParser from 'content-type';
 import { extname } from 'node:path';
 import * as mime from 'mime-types';
 import { gotScraping, TimeoutError } from 'got-scraping';
-import { concatStreamToBuffer } from './utils/index.js';
+import { concatStreamToBuffer } from './utils/index';
 
 const HTML_AND_XML_MIME_TYPES = [
   'text/html',

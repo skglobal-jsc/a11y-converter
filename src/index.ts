@@ -3,9 +3,9 @@ import type { IncomingMessage } from 'node:http';
 import * as cheerio from 'cheerio';
 import { DomHandler } from 'htmlparser2';
 import { WritableStream } from 'htmlparser2/lib/WritableStream';
-import { BasicConverter, RequestsOptions } from './basic-converter.js';
+import { BasicConverter, RequestsOptions } from './basic-converter';
 
-import { commonCssLinks, uvCss } from './utils/index.js';
+import { commonCssLinks, uvCss } from './utils/index';
 // const { parseTable } = require('@sk-global/scrapeer');
 
 export class A11yConverter extends BasicConverter {
