@@ -10,7 +10,7 @@ import { writeFileSync } from 'fs';
     });
 
     const { html } = res;
-    writeFileSync('output.html', html);
+    writeFileSync('output1.html', html);
   }
 
   await doConvert();

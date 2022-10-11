@@ -10,7 +10,6 @@ body {
   margin-right: auto;
   padding: 20px 20px 80px 20px;
   font-family: 'Noto Sans JP', sans-serif;
-
 }
 
 @media screen and (min-width:520px) {

@@ -107,9 +107,11 @@ export class A11yConverter extends BasicConverter {
     $('body').attr('aria-label', 'SKG');
     $('body').attr('lang', 'ja');
 
-    // wrap child of body with div and apply skg-style
     // TODO: Should use class instead of id
-    $('body').children().wrap('<div id="skg-style"></div>');
+    // apply skg-style class for body
+    $('body').attr('id', 'skg-style');
+    // $('body').addClass('skg-style');
+
 
     // apply a11y attributes to each element of body
     $('body *').each((i, el) => {
