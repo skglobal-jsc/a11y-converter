@@ -111,8 +111,10 @@ export class BasicConverter {
 
   constructor() {}
 
-  async convert(options: RequestsOptions): Promise<any> {
+  async convert(...args: [url: string]): Promise<any> {
     await this._init();
+    const [url] = args;
+    const options = { url, method: 'GET' } as RequestsOptions;
 
     const stats = {};
 
