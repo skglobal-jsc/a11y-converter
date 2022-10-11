@@ -1,9 +1,9 @@
 {
   "name": "a11y-converter",
   "description": "Convert original HTML codes to a11y HTML",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "source": "src/index.ts",
-  "exports": "./dist/index.js",
+  "main": "./dist/index.js",
   "module": "dist/index.module.js",
   "unpkg": "dist/index.umd.js",
   "types": "dist/index.d.ts",
