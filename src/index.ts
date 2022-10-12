@@ -53,6 +53,37 @@ export class A11yConverter extends BasicConverter {
     return Promise.resolve(html);
   }
 
+  /**
+   * Use cheerio to parse with htmlparser2 and return a cheerio object
+   * @param response
+   * @param isXml
+   * @returns
+   */
+  protected override async _parseHTML(
+    response: IncomingMessage,
+    isXml: boolean
+  ) {
+    const dom = await this._parseHtmlToDom(response);
+    const $ = cheerio.load(
+      dom as string,
+      {
+        xmlMode: isXml,
+        // Recent versions of cheerio use parse5 as the HTML parser/serializer. It's more strict than htmlparser2
+        // and not good for scraping. It also does not have a great streaming interface.
+        // Here we tell cheerio to use htmlparser2 for serialization, otherwise the conflict produces weird errors.
+        _useHtmlParser2: true,
+      } as cheerio.CheerioParserOptions
+    );
+
+    return {
+      dom,
+      $,
+      get body() {
+        return isXml ? $!.xml() : $!.html({ decodeEntities: false });
+      },
+    };
+  }
+
   private _removeUnnecessaryAttributes($: cheerio.CheerioAPI) {
     // remove all script tag. TODO: should remove only script tag in head?
     $('script').remove();
@@ -124,6 +155,10 @@ export class A11yConverter extends BasicConverter {
       console.warn('No content found for selector: ', contentSelector);
       throw new Error('No content found for selector: ' + contentSelector);
     }
+
+    //  flatten the content
+    // const $flattenedContent = this._flattenContent($, $content);
+
     const contentHtml = $content.html() || '';
 
     // find body and replace content with body
@@ -190,37 +225,6 @@ export class A11yConverter extends BasicConverter {
     cssRules.forEach((cssRule) => {
       $('head').append(`<style>${cssRule}</style>`);
     });
-  }
-
-  /**
-   * Use cheerio to parse with htmlparser2 and return a cheerio object
-   * @param response
-   * @param isXml
-   * @returns
-   */
-  protected override async _parseHTML(
-    response: IncomingMessage,
-    isXml: boolean
-  ) {
-    const dom = await this._parseHtmlToDom(response);
-    const $ = cheerio.load(
-      dom as string,
-      {
-        xmlMode: isXml,
-        // Recent versions of cheerio use parse5 as the HTML parser/serializer. It's more strict than htmlparser2
-        // and not good for scraping. It also does not have a great streaming interface.
-        // Here we tell cheerio to use htmlparser2 for serialization, otherwise the conflict produces weird errors.
-        _useHtmlParser2: true,
-      } as cheerio.CheerioParserOptions
-    );
-
-    return {
-      dom,
-      $,
-      get body() {
-        return isXml ? $!.xml() : $!.html({ decodeEntities: false });
-      },
-    };
   }
 
   private async _parseHtmlToDom(response: IncomingMessage) {
