@@ -12,6 +12,73 @@ import {
 import { commonCssLinks, uvCss } from './utils/index';
 import { parseTable } from '@sk-global/scrapeer';
 
+import * as _ from 'lodash';
+
+const ALLOWED_TEXT_TAG_TYPES = [
+  'TABLE',
+  'UL',
+  'OL',
+  'H1',
+  'H2',
+  'H3',
+  'H4',
+  'H5',
+  'H6',
+];
+
+const cleanText = (text: string = '') => {
+  const txt = text
+    .replace(/  *\n/g, '\n')
+    .replace(/\s+\n/g, '\n\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+
+  if (txt !== '') {
+    return `<p>${txt}</p>`;
+  }
+  return '';
+};
+
+const cleanDom = ($el: cheerio.Cheerio) => {
+  let textContent = '';
+  // get children
+  const $children = $el.children();
+
+  // if there are no children, return the text
+  if ($children.length === 0) {
+    textContent = cleanText($el.text());
+  }
+
+  // if there are children, get the text from each child
+  $children.each((i, child) => {
+    const $child = $el.children().eq(i);
+    // if the child is a text node, return the text
+    const tagName = $child.prop('tagName');
+    if ($child.is('text')) {
+      textContent += cleanText($el.text());
+    } else if ($child.is('a')) {
+      textContent += Object.keys($child.attr()).reduce((acc, key) => {
+        return `${acc} ${key}="${$child.attr(key)}"`;
+      }, '<a');
+      textContent += `>${$child.html()}</a>`;
+    } else if ($child.is('img')) {
+      textContent += Object.keys($child.attr()).reduce((acc, key) => {
+        return `${acc} ${key}="${$child.attr(key)}"`;
+      }, '<img');
+      textContent += '/>';
+    } else if (ALLOWED_TEXT_TAG_TYPES.includes(tagName)) {
+      const tag = tagName.toLowerCase();
+      const html = `<${tag}>${$child.html()}</${tag}>`;
+      textContent += html;
+    } else {
+      // if the child is not a text node, return the text from the child
+      textContent += cleanDom($child);
+    }
+  });
+
+  return textContent;
+};
+
 export class A11yConverter extends BasicConverter {
   constructor() {
     super();
@@ -157,9 +224,9 @@ export class A11yConverter extends BasicConverter {
     }
 
     //  flatten the content
-    // const $flattenedContent = this._flattenContent($, $content);
+    const $flattenedContent = this._flattenContent($, $content);
 
-    const contentHtml = $content.html() || '';
+    const contentHtml = $flattenedContent.html() || '';
 
     // find body and replace content with body
     let $body = $('body');
@@ -204,6 +271,13 @@ export class A11yConverter extends BasicConverter {
 
     // finally, replace all html with the new html
     $.root().html(html);
+  }
+
+  private _flattenContent($: cheerio.CheerioAPI, $content: cheerio.Cheerio) {
+    const text = cleanDom($content);
+    const $flattenedContent = $('<div></div>');
+    $flattenedContent.append(text);
+    return $flattenedContent;
   }
 
   private _applyCssRules($: cheerio.CheerioAPI, cssRules: string[]) {

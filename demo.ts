@@ -5,10 +5,10 @@ import { writeFileSync } from 'fs';
   async function doConvert() {
     const a11yConverter = new A11yConverter();
     const res = await a11yConverter.convert({
-      url: 'https://vnexpress.net/chu-tich-nuoc-phai-giai-quyet-dut-diem-quy-hoach-treo-o-cu-chi-4522305.html',
+      url: 'https://univoice-test.s3.ap-northeast-1.amazonaws.com/sample_original.html',
       method: 'GET',
       scrapingOptions: {
-        contentSelector: 'div.sidebar-1',
+        contentSelector: 'main',
       }
     });
 
