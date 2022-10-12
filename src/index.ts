@@ -160,6 +160,7 @@ export class A11yConverter extends BasicConverter {
     $html.attr('lang', $html.attr('lang') || language);
 
     // append head and body to html
+    $html.append($('head').html() || '');
     $html.append($body);
 
     // doctype html is required for a11y
