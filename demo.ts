@@ -5,10 +5,10 @@ import { writeFileSync } from 'fs';
   async function doConvert() {
     const a11yConverter = new A11yConverter();
     const res = await a11yConverter.convert({
-      url: 'https://univoice-test.s3.ap-northeast-1.amazonaws.com/sample_original.html',
+      url: 'https://vnexpress.net/nhieu-nguoi-ha-noi-do-di-mua-xang-trong-dem-4522222.html',
       method: 'GET',
       scrapingOptions: {
-        contentSelector: 'main',
+        contentSelector: 'div.sidebar-1',
       }
     });
 
