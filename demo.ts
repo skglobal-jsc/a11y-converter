@@ -5,12 +5,15 @@ import { writeFileSync } from 'fs';
   async function doConvert() {
     const a11yConverter = new A11yConverter();
     const res = await a11yConverter.convert({
-      url: 'https://skg-development-dev.s3.ap-southeast-1.amazonaws.com/public/original.html',
+      url: 'https://univoice-test.s3.ap-northeast-1.amazonaws.com/sample_original.html',
       method: 'GET',
+      scrapingOptions: {
+        contentSelector: 'main',
+      }
     });
 
     const { html } = res;
-    writeFileSync('output1.html', html);
+    writeFileSync('./output/a11y.html', html);
   }
 
   await doConvert();

@@ -98,11 +98,17 @@ function addResponsePropertiesToStream(stream: GotRequest) {
   return stream as unknown as IncomingMessage;
 }
 
+export interface ScrapingOptions {
+  contentSelector?: string;
+  language?: string;
+}
 export interface RequestsOptions {
   url: string;
   method: Method;
   headers?: IncomingHttpHeaders;
   payload?: string;
+
+  scrapingOptions?: ScrapingOptions;
 }
 
 export class BasicConverter {
@@ -176,6 +182,8 @@ export class BasicConverter {
       const responseStream = await this._requestAsBrowser(opts);
       const { statusCode } = responseStream;
       const { type, charset } = parseContentTypeFromResponse(responseStream);
+
+      console.log(`Response status code: ${statusCode}, content type: ${type}, charset: ${charset}`);
 
       const { response, encoding } = this._encodeResponse(
         options,
@@ -293,6 +301,7 @@ export class BasicConverter {
     // This means that the encoding is one of Node.js supported
     // encodings and we don't need to re-encode it.
     if (Buffer.isEncoding(encoding)) return { response, encoding };
+
 
     // Try to re-encode a variety of unsupported encodings to utf-8
     if (iconv.encodingExists(encoding)) {

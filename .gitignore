@@ -95,4 +95,4 @@ _gen
 env.sh
 node_modules
 .env
-*.html
+output

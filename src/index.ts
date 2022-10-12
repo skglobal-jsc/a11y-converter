@@ -3,7 +3,11 @@ import type { IncomingMessage } from 'node:http';
 import * as cheerio from 'cheerio';
 import { DomHandler } from 'htmlparser2';
 import { WritableStream } from 'htmlparser2/lib/WritableStream';
-import { BasicConverter, RequestsOptions } from './basic-converter';
+import {
+  BasicConverter,
+  RequestsOptions,
+  ScrapingOptions,
+} from './basic-converter';
 
 import { commonCssLinks, uvCss } from './utils/index';
 import { parseTable } from '@sk-global/scrapeer';
@@ -39,7 +43,7 @@ export class A11yConverter extends BasicConverter {
     this._applyCssRules($, []);
 
     // apply a11y attributes
-    this._applyAccessibilityAttributes($);
+    this._applyAccessibilityAttributes($, options.scrapingOptions);
 
     // apply annotation for img, table tag
     this._applyAnnotation($);
@@ -50,8 +54,15 @@ export class A11yConverter extends BasicConverter {
   }
 
   private _removeUnnecessaryAttributes($: cheerio.CheerioAPI) {
-    // remove script tag
+    // remove all script tag. TODO: should remove only script tag in head?
     $('script').remove();
+    // $('head script').remove();
+
+    // remove link tag with rel="preconnect" or rel="dns-prefetch"
+    // $('link[rel="preconnect"], link[rel="dns-prefetch"]').remove();
+
+    // remove google tag manager script, google analytics script
+    // $('script[src*="googletagmanager.com"], script[src*="google-analytics.com"]').remove();
 
     // TODO: remove unnecessary attributes
   }
@@ -101,35 +112,72 @@ export class A11yConverter extends BasicConverter {
     });
   }
 
-  private _applyAccessibilityAttributes($: cheerio.CheerioAPI) {
+  private _applyAccessibilityAttributes(
+    $: cheerio.CheerioAPI,
+    options: ScrapingOptions = {}
+  ) {
+    const { contentSelector = 'body', language = 'ja' } = options;
+
+    // scrape article content based on the contentSelector
+    const $content = $(contentSelector);
+    if ($content.length === 0) {
+      console.warn('No content found for selector: ', contentSelector);
+      throw new Error('No content found for selector: ' + contentSelector);
+    }
+    const contentHtml = $content.html() || '';
+
+    // find body and replace content with body
+    let $body = $('body');
+    // if body is not found, create body
+    if ($body.length === 0) {
+      // create body tag
+      $body = $('<body></body>');
+    }
+    $body.empty(); // remove all children
+    $body.append(contentHtml); // append content collected from contentSelector
+
     // TODO: apply common attributes
-    $('body').attr('role', 'document');
-    $('body').attr('aria-label', 'SKG');
-    $('body').attr('lang', 'ja');
+    $body.attr('aria-label', 'SKG');
 
-    // wrap child of body with div and apply skg-style
     // TODO: Should use class instead of id
-    $('body').children().wrap('<div id="skg-style"></div>');
+    $body.attr('id', 'skg-style');
 
-    // apply a11y attributes to each element of body
-    $('body *').each((i, el) => {
+    // TODO: apply a11y attributes to each element of body
+    $body.find('*').each((i, el) => {
       const $el = $(el);
       const tagName = $el.prop('tagName');
       const className = $el.attr('class');
-
-      // TODO: apply a11y attributes to each element
       // console.log(tagName, className);
     });
+
+    // Build final html
+    let $html = $('html');
+    if ($html.length === 0) {
+      // create html tag
+      $html = $('<html></html>');
+    }
+    // add lang attribute to html
+    $html.attr('lang', $html.attr('lang') || language);
+
+    // append head and body to html
+    $html.empty();
+    $html.append($('head'));
+    $html.append($body);
+
+    // doctype html is required for a11y
+    const doctype = '<!DOCTYPE html>';
+    const html = doctype + $html.html();
+
+    // finally, replace all html with the new html
+    $.root().html(html);
   }
 
   private _applyCssRules($: cheerio.CheerioAPI, cssRules: string[]) {
-    // first, remove all stylesheets of original html
-    $('head link').each((i, el) => {
-      const $el = $(el);
-      if ($el.attr('rel') === 'stylesheet') {
-        $el.remove();
-      }
-    });
+    // first, remove head style tag
+    $('head style').remove();
+
+    // remove all link tag with rel="stylesheet"
+    $('link[rel="stylesheet"]').remove();
 
     // apply a11y stylesheets link
     commonCssLinks.forEach((link) => {
