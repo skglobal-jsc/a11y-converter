@@ -200,6 +200,9 @@ export class A11yConverter extends BasicConverter {
       throw new Error('No content found for selector: ' + contentSelector);
     }
 
+    // remove all scripts and styles
+    $content.find('script, style').remove();
+
     //  flatten the content
     const text = cleanDom($content);
     const $flattenedContent = $('<div></div>');
@@ -216,7 +219,10 @@ export class A11yConverter extends BasicConverter {
   }
 
   private _removeUnnecessaryAttributes($: cheerio.CheerioAPI) {
+    // remove all script tags (including inline scripts)
     $('script').remove();
+
+
     // TODO: remove unnecessary attributes
   }
 
