@@ -8,7 +8,7 @@ import { writeFileSync } from 'fs';
       url: 'https://skg-development-dev.s3.ap-southeast-1.amazonaws.com/public/original.html',
       method: 'GET',
       scrapingOptions: {
-        contentSelector: 'main',
+        // contentSelector: '#dark_theme > section.section.page-detail.top-detail',
       },
       // extendFunction: async ({ html, $, contentType }) => {},
       extendFunction: ({ $ }) => {

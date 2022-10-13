@@ -12,6 +12,7 @@ import {
 import {
   buildHeadingComponent,
   buildImageComponent,
+  buildLinkComponent,
   buildListComponent,
   buildTableComponent,
   buildTextComponent,
@@ -40,6 +41,8 @@ const cleanText = (text: string = '') => {
     .trim();
 
   if (txt !== '') {
+    // TODO: if text include Telephone number , Email , Address must be hyperlinked
+
     return `<p>${txt}</p>`;
   }
   return '';
@@ -61,7 +64,7 @@ const cleanDom = ($el: cheerio.Cheerio) => {
     // if the child is a text node, return the text
     const tagName = $child.prop('tagName');
     if ($child.is('text')) {
-      textContent += cleanText($el.text());
+      textContent += cleanText($child.text());
     } else if ($child.is('a')) {
       textContent += Object.keys($child.attr()).reduce((acc, key) => {
         return `${acc} ${key}="${$child.attr(key)}"`;
@@ -222,7 +225,6 @@ export class A11yConverter extends BasicConverter {
     // remove all script tags (including inline scripts)
     $('script').remove();
 
-
     // TODO: remove unnecessary attributes
   }
 
@@ -311,6 +313,10 @@ export class A11yConverter extends BasicConverter {
         case 'IMG':
           // TODO: apply a11y attributes to img tag
           buildImageComponent($el);
+          break;
+        case 'A':
+          // TODO: apply a11y attributes to a tag
+          buildLinkComponent($el);
           break;
         default:
           break;

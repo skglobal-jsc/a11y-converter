@@ -65,3 +65,17 @@ export const buildTableComponent = ($table: cheerio.Cheerio) => {
   // apply a11y styles
   $table.addClass('uv_table');
 };
+
+
+export const buildLinkComponent = ($link: cheerio.Cheerio) => {
+  // apply a11y attributes
+  $link.attr('role', 'link');
+  $link.attr('tabindex', '0');
+  $link.attr(
+    'id',
+    $link.attr('id') || `link-${Math.random().toString(36).substr(2, 9)}`
+  );
+
+  // apply a11y styles
+  $link.addClass('uv_link');
+};
