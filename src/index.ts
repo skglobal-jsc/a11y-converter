@@ -9,7 +9,15 @@ import {
   ScrapingOptions,
 } from './basic-converter';
 
-import { commonCssLinks, uvCss } from './utils/index';
+import {
+  buildHeadingComponent,
+  buildImageComponent,
+  buildListComponent,
+  buildTableComponent,
+  buildTextComponent,
+  commonCssLinks,
+  uvCss,
+} from './utils/index';
 import { parseTable } from '@sk-global/scrapeer';
 
 const ALLOWED_TEXT_TAG_TYPES = [
@@ -94,7 +102,7 @@ export class A11yConverter extends BasicConverter {
         type: string;
         encoding: string;
       };
-      dom: any; // TODO: type this
+      dom: any;
       $: cheerio.CheerioAPI;
     };
     options: RequestsOptions;
@@ -193,8 +201,10 @@ export class A11yConverter extends BasicConverter {
     }
 
     //  flatten the content
-    const $flattenedContent = this._flattenContent($, $content);
-    // const $flattenedContent = this._flattenContent($, $content);
+    const text = cleanDom($content);
+    const $flattenedContent = $('<div></div>');
+    $flattenedContent.append(text);
+
     const contentHtml = `<body>${$flattenedContent.html() || ''}</body>`;
 
     const html = `<!DOCTYPE html>
@@ -206,7 +216,6 @@ export class A11yConverter extends BasicConverter {
   }
 
   private _removeUnnecessaryAttributes($: cheerio.CheerioAPI) {
-    // remove all script tag. TODO: should remove only script tag in head?
     $('script').remove();
     // TODO: remove unnecessary attributes
   }
@@ -223,7 +232,6 @@ export class A11yConverter extends BasicConverter {
 
     // TODO: apply annotation for img, table tag
     $('img').each((i, el) => {
-      // TODO: apply annotation for img tag
       // Use @sk-global/scrapeer lib to get image alt text
       // get alt text
       const altText = $(el).attr('alt');
@@ -273,6 +281,7 @@ export class A11yConverter extends BasicConverter {
       switch (tagName) {
         case 'P':
           // TODO: apply a11y attributes to p tag
+          buildTextComponent($el);
           break;
         case 'H1':
         case 'H2':
@@ -281,30 +290,26 @@ export class A11yConverter extends BasicConverter {
         case 'H5':
         case 'H6':
           // TODO: apply a11y attributes to heading tag
+          buildHeadingComponent($el);
           break;
         case 'UL':
         case 'OL':
           // TODO: apply a11y attributes to list tag
+          buildListComponent($el);
           break;
         case 'TABLE':
           // TODO: apply a11y attributes to table tag
           // example, add class to table
-          $el.addClass('uv_table');
+          buildTableComponent($el);
           break;
         case 'IMG':
           // TODO: apply a11y attributes to img tag
+          buildImageComponent($el);
           break;
         default:
           break;
       }
     });
-  }
-
-  private _flattenContent($: cheerio.CheerioAPI, $content: cheerio.Cheerio) {
-    const text = cleanDom($content);
-    const $flattenedContent = $('<div></div>');
-    $flattenedContent.append(text);
-    return $flattenedContent;
   }
 
   private _applyCssRules($: cheerio.CheerioAPI, cssRules: string[]) {
