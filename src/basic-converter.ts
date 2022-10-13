@@ -104,6 +104,7 @@ export interface ScrapingOptions {
 }
 export interface RequestsOptions {
   url: string;
+  loadedUrl?: string;
   method: Method;
   headers?: IncomingHttpHeaders;
   payload?: string;

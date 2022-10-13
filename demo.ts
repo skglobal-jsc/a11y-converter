@@ -5,10 +5,10 @@ import { writeFileSync } from 'fs';
   async function doConvert() {
     const a11yConverter = new A11yConverter();
     const res = await a11yConverter.convert({
-      url: 'https://skg-development-dev.s3.ap-southeast-1.amazonaws.com/public/original.html',
+      url: 'https://www.city.fukuoka.lg.jp/bousai/bichikusokushinweek.html',
       method: 'GET',
       scrapingOptions: {
-        // contentSelector: '#dark_theme > section.section.page-detail.top-detail',
+        contentSelector: 'body > div.tpl1 > div > div.tpl1-1-2 > div > div',
       },
       // extendFunction: async ({ html, $, contentType }) => {},
       extendFunction: ({ $ }) => {

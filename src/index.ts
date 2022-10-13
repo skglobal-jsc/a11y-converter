@@ -20,6 +20,7 @@ import {
   uvCss,
 } from './utils/index';
 import { parseTable } from '@sk-global/scrapeer';
+import * as url from 'url';
 
 const ALLOWED_TEXT_TAG_TYPES = [
   'TABLE',
@@ -48,7 +49,8 @@ const cleanText = (text: string = '') => {
   return '';
 };
 
-const cleanDom = ($el: cheerio.Cheerio) => {
+const cleanDom = ($el: cheerio.Cheerio, options: RequestsOptions) => {
+  const { loadedUrl } = options;
   let textContent = '';
   // get children
   const $children = $el.children();
@@ -72,6 +74,16 @@ const cleanDom = ($el: cheerio.Cheerio) => {
       textContent += `>${$child.html()}</a>`;
     } else if ($child.is('img')) {
       textContent += Object.keys($child.attr()).reduce((acc, key) => {
+        const value = $child.attr(key) || '';
+        if (key === 'src') {
+          // relative path to absolute path
+          const parsedUrl = url.parse(value);
+          if (!parsedUrl.host) {
+            return `${acc} ${key}="${url.resolve(loadedUrl!, value)}"`;
+          }
+
+          return `${acc} ${key}="${value}"`;
+        }
         return `${acc} ${key}="${$child.attr(key)}"`;
       }, '<img');
       textContent += '/>';
@@ -81,7 +93,7 @@ const cleanDom = ($el: cheerio.Cheerio) => {
       textContent += html;
     } else {
       // if the child is not a text node, return the text from the child
-      textContent += cleanDom($child);
+      textContent += cleanDom($child, options);
     }
   });
 
@@ -119,8 +131,9 @@ export class A11yConverter extends BasicConverter {
   }> {
     const { body, isXml, response, contentType, dom, $ } = result;
 
+    options.loadedUrl = response.url;
     // process the dom
-    this._processDom({ $, options: options.scrapingOptions });
+    this._processDom({ $, options });
 
     // remove unnecessary attributes
     this._removeUnnecessaryAttributes($);
@@ -183,16 +196,17 @@ export class A11yConverter extends BasicConverter {
    */
   private _processDom({
     $,
-    options = {},
+    options,
   }: {
     $: cheerio.CheerioAPI;
-    options?: ScrapingOptions;
+    options: RequestsOptions;
   }) {
+    const { scrapingOptions = {}, loadedUrl } = options;
     // get the head
     const head = `<head>${$('head').html()}</head>`;
 
     // replace root element with html
-    const { contentSelector = 'body', language = 'ja' } = options;
+    const { contentSelector = 'body', language = 'ja' } = scrapingOptions;
 
     const lang = $('html').attr('lang') || language;
 
@@ -207,7 +221,7 @@ export class A11yConverter extends BasicConverter {
     $content.find('script, style').remove();
 
     //  flatten the content
-    const text = cleanDom($content);
+    const text = cleanDom($content, options);
     const $flattenedContent = $('<div></div>');
     $flattenedContent.append(text);
 

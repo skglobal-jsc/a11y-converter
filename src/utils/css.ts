@@ -2,7 +2,9 @@ export const uvCss = `<style>
 body {
   font-family: 'Noto Sans JP', sans-serif;
 }
-
+img.uv_img{
+  display: block;
+}
 #skg-style {
   float: left;
   max-width: 720px;
