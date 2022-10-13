@@ -260,6 +260,9 @@ export class A11yConverter extends BasicConverter {
       if (altText) {
         // apply annotation for img tag
         wrapAnnotation($(el), `ここに「${altText}」の画像があります。`);
+      } else {
+        // apply annotation for img tag
+        wrapAnnotation($(el), 'ここに画像があります。');
       }
     });
 
@@ -281,6 +284,8 @@ export class A11yConverter extends BasicConverter {
         ];
         const text = texts.map((t) => `<p>${t}</p>`).join('');
         wrapAnnotation($(el), text);
+      } else {
+        wrapAnnotation($(el), 'ここに表があります。');
       }
       // wrap with skg-style table and skip speaking
       // $(el).wrap('<div class="uv_table" aria-hidden="true"></div>');
