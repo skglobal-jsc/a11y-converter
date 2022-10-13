@@ -260,20 +260,20 @@ ul {
 }
 
 /*table template for Uni-Voice ->*/
-.uv_table table {
+table.uv_table {
   border-collapse: collapse;
   border-spacing: 0;
   margin-bottom: 5px;
   max-width: 720px;
 }
 
-.uv_table table,
-.uv_table table td,
-.uv_table table th {
+table.uv_table ,
+table.uv_table td,
+table.uv_table th {
   border: 1px solid #808080;
 }
 
-.uv_table table caption {
+table.uv_table caption {
   text-align: left;
   font-weight: 700;
   color: #ffffff;
@@ -281,24 +281,24 @@ ul {
   background-color: #434343;
 }
 
-.uv_table table caption a {
+table.uv_table caption a {
   color: #FFFFFF;
   text-decoration: underline;
 }
 
-.uv_table table td,
-.uv_table table th {
+table.uv_table td,
+table.uv_table th {
   text-align: left;
   vertical-align: baseline;
   padding: 5px 10px;
 }
 
-.uv_table table th {
+table.uv_table th {
   font-weight: 700;
   background-color: #EFEFEF;
 }
 
-.uv_table table tr:nth-child(2n+1) {
+table.uv_table tr:nth-child(2n+1) {
   background: #EFEFEF;
 }
 

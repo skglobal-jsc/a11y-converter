@@ -98,7 +98,14 @@ export class A11yConverter extends BasicConverter {
       $: cheerio.CheerioAPI;
     };
     options: RequestsOptions;
-  }): Promise<any> {
+  }): Promise<{
+    html: string;
+    contentType: string;
+    isXml: boolean;
+    response: IncomingMessage;
+    dom: any;
+    $: cheerio.Root;
+  }> {
     const { body, isXml, response, contentType, dom, $ } = result;
 
     // process the dom
@@ -116,9 +123,14 @@ export class A11yConverter extends BasicConverter {
     // apply annotation for img, table tag
     this._applyAnnotation($);
 
-    // finally, get the html
-    const html = $.html();
-    return Promise.resolve(html);
+    return Promise.resolve({
+      html: $.html(),
+      contentType: contentType.type,
+      isXml,
+      response,
+      dom,
+      $,
+    });
   }
 
   /**
@@ -130,7 +142,7 @@ export class A11yConverter extends BasicConverter {
   protected override async _parseHTML(
     response: IncomingMessage,
     isXml: boolean
-  ) {
+  ): Promise<any> {
     const dom = await this._parseHtmlToDom(response);
     const $ = cheerio.load(
       dom as string,
@@ -241,7 +253,7 @@ export class A11yConverter extends BasicConverter {
         wrapAnnotation($(el), text);
       }
       // wrap with skg-style table and skip speaking
-      $(el).wrap('<div class="uv_table" aria-hidden="true"></div>');
+      // $(el).wrap('<div class="uv_table" aria-hidden="true"></div>');
       // set class for table
       // $(el).addClass('uv_table');
     });
@@ -250,11 +262,41 @@ export class A11yConverter extends BasicConverter {
   private _applyAccessibilityAttributes($: cheerio.CheerioAPI) {
     const $body = $('body');
     // TODO: apply a11y attributes to each element of body
+    // from this, tag name is only 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'table', 'img' and 'a'
+    // let apply skg style to each element
     $body.find('*').each((i, el) => {
       const $el = $(el);
       const tagName = $el.prop('tagName');
-      const className = $el.attr('class');
-      // console.log(tagName, className);
+      // remove class attribute
+      $el.removeAttr('class');
+
+      switch (tagName) {
+        case 'P':
+          // TODO: apply a11y attributes to p tag
+          break;
+        case 'H1':
+        case 'H2':
+        case 'H3':
+        case 'H4':
+        case 'H5':
+        case 'H6':
+          // TODO: apply a11y attributes to heading tag
+          break;
+        case 'UL':
+        case 'OL':
+          // TODO: apply a11y attributes to list tag
+          break;
+        case 'TABLE':
+          // TODO: apply a11y attributes to table tag
+          // example, add class to table
+          $el.addClass('uv_table');
+          break;
+        case 'IMG':
+          // TODO: apply a11y attributes to img tag
+          break;
+        default:
+          break;
+      }
     });
   }
 

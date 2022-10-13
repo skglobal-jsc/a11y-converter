@@ -109,6 +109,9 @@ export interface RequestsOptions {
   payload?: string;
 
   scrapingOptions?: ScrapingOptions;
+
+  // extend function, used it do some custom logic
+  extendFunction?: (options: any) => any;
 }
 
 export class BasicConverter {
@@ -131,13 +134,24 @@ export class BasicConverter {
     });
 
     // start convert process
-    let html = null;
+    let text: any = null;
     if (result) {
-      html = await this._convertHtml({ result, options });
+      const { html, contentType, $ } = await this._convertHtml({
+        result,
+        options,
+      });
+
+      // execute extend function if it exists
+      if (options.extendFunction) {
+        await options.extendFunction({ html, $, contentType });
+      }
+
+      // finally, get html
+      text = $ ? $.html() : html;
     }
 
     await this._clean();
-    return { html, stats };
+    return { html: text, stats };
   }
 
   /**
@@ -150,7 +164,14 @@ export class BasicConverter {
   }: {
     result: any;
     options: RequestsOptions;
-  }): Promise<any> {
+  }): Promise<{
+    html: string;
+    contentType: string;
+    isXml: boolean;
+    response: IncomingMessage;
+    dom: any;
+    $: cheerio.Root;
+  }> {
     throw new Error('Not implemented');
   }
 
@@ -183,7 +204,9 @@ export class BasicConverter {
       const { statusCode } = responseStream;
       const { type, charset } = parseContentTypeFromResponse(responseStream);
 
-      console.log(`Response status code: ${statusCode}, content type: ${type}, charset: ${charset}`);
+      console.log(
+        `Response status code: ${statusCode}, content type: ${type}, charset: ${charset}`
+      );
 
       const { response, encoding } = this._encodeResponse(
         options,
@@ -301,7 +324,6 @@ export class BasicConverter {
     // This means that the encoding is one of Node.js supported
     // encodings and we don't need to re-encode it.
     if (Buffer.isEncoding(encoding)) return { response, encoding };
-
 
     // Try to re-encode a variety of unsupported encodings to utf-8
     if (iconv.encodingExists(encoding)) {

@@ -5,11 +5,17 @@ import { writeFileSync } from 'fs';
   async function doConvert() {
     const a11yConverter = new A11yConverter();
     const res = await a11yConverter.convert({
-      url: 'https://vnexpress.net/dao-dien-tran-van-thuy-xa-hoi-can-su-tu-te-tinh-nguoi-4522718.html',
+      url: 'https://skg-development-dev.s3.ap-southeast-1.amazonaws.com/public/original.html',
       method: 'GET',
       scrapingOptions: {
         // contentSelector: '#dark_theme > section.section.page-detail.top-detail',
-      }
+      },
+      // extendFunction: async ({ html, $, contentType }) => {},
+      extendFunction: ({ $ }) => {
+        console.log('extendFunction');
+        // add class to table
+        $('table').addClass('uv_binh111');
+      },
     });
 
     const { html } = res;
