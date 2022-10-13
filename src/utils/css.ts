@@ -4,6 +4,7 @@ body {
 }
 img.uv_img{
   display: block;
+  margin: auto;
 }
 #skg-style {
   float: left;
