@@ -31,7 +31,6 @@
     "@types/html-to-text": "^8.1.1",
     "@types/inquirer": "^9.0.2",
     "@types/jest": "^29.1.1",
-    "@types/lodash": "^4.14.186",
     "@types/mime-types": "^2.1.1",
     "@types/pdf-parse": "^1.1.1",
     "husky": "^8.0.1",
@@ -65,7 +64,6 @@
     "got-scraping": "^3.2.11",
     "htmlparser2": "^8.0.1",
     "iconv-lite": "^0.6.3",
-    "lodash": "^4.17.21",
     "mime-types": "^2.1.35",
     "ow": "^0.28.1"
   },

@@ -5,10 +5,10 @@ import { writeFileSync } from 'fs';
   async function doConvert() {
     const a11yConverter = new A11yConverter();
     const res = await a11yConverter.convert({
-      url: 'https://univoice-test.s3.ap-northeast-1.amazonaws.com/sample_original.html',
+      url: 'https://vnexpress.net/dao-dien-tran-van-thuy-xa-hoi-can-su-tu-te-tinh-nguoi-4522718.html',
       method: 'GET',
       scrapingOptions: {
-        contentSelector: 'main',
+        // contentSelector: '#dark_theme > section.section.page-detail.top-detail',
       }
     });
 

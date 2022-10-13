@@ -309,6 +309,7 @@ ul {
   line-height: 1;
   display: table;
   list-style-type: none;
+  padding: 10px;
 }
 </style>`;
 

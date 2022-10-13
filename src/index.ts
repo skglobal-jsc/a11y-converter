@@ -12,8 +12,6 @@ import {
 import { commonCssLinks, uvCss } from './utils/index';
 import { parseTable } from '@sk-global/scrapeer';
 
-import * as _ from 'lodash';
-
 const ALLOWED_TEXT_TAG_TYPES = [
   'TABLE',
   'UL',
@@ -103,6 +101,9 @@ export class A11yConverter extends BasicConverter {
   }): Promise<any> {
     const { body, isXml, response, contentType, dom, $ } = result;
 
+    // process the dom
+    this._processDom({ $, options: options.scrapingOptions });
+
     // remove unnecessary attributes
     this._removeUnnecessaryAttributes($);
 
@@ -110,7 +111,7 @@ export class A11yConverter extends BasicConverter {
     this._applyCssRules($, []);
 
     // apply a11y attributes
-    this._applyAccessibilityAttributes($, options.scrapingOptions);
+    this._applyAccessibilityAttributes($);
 
     // apply annotation for img, table tag
     this._applyAnnotation($);
@@ -151,17 +152,50 @@ export class A11yConverter extends BasicConverter {
     };
   }
 
+  /**
+   * Do some processing on the dom
+   * - Get content from the selector
+   * - flatten the dom
+   * @param param0
+   */
+  private _processDom({
+    $,
+    options = {},
+  }: {
+    $: cheerio.CheerioAPI;
+    options?: ScrapingOptions;
+  }) {
+    // get the head
+    const head = `<head>${$('head').html()}</head>`;
+
+    // replace root element with html
+    const { contentSelector = 'body', language = 'ja' } = options;
+
+    const lang = $('html').attr('lang') || language;
+
+    // scrape article content based on the contentSelector
+    const $content = $(contentSelector);
+    if ($content.length === 0) {
+      console.warn('No content found for selector: ', contentSelector);
+      throw new Error('No content found for selector: ' + contentSelector);
+    }
+
+    //  flatten the content
+    const $flattenedContent = this._flattenContent($, $content);
+    // const $flattenedContent = this._flattenContent($, $content);
+    const contentHtml = `<body>${$flattenedContent.html() || ''}</body>`;
+
+    const html = `<!DOCTYPE html>
+
+<html lang="${lang}">${head}${contentHtml}</html>`;
+
+    // finally, replace all html with the new html
+    $.root().html(html);
+  }
+
   private _removeUnnecessaryAttributes($: cheerio.CheerioAPI) {
     // remove all script tag. TODO: should remove only script tag in head?
     $('script').remove();
-    // $('head script').remove();
-
-    // remove link tag with rel="preconnect" or rel="dns-prefetch"
-    // $('link[rel="preconnect"], link[rel="dns-prefetch"]').remove();
-
-    // remove google tag manager script, google analytics script
-    // $('script[src*="googletagmanager.com"], script[src*="google-analytics.com"]').remove();
-
     // TODO: remove unnecessary attributes
   }
 
@@ -174,6 +208,7 @@ export class A11yConverter extends BasicConverter {
       $wrapper.append(child);
       $el.before($wrapper);
     };
+
     // TODO: apply annotation for img, table tag
     $('img').each((i, el) => {
       // TODO: apply annotation for img tag
@@ -182,7 +217,7 @@ export class A11yConverter extends BasicConverter {
       const altText = $(el).attr('alt');
       if (altText) {
         // apply annotation for img tag
-        wrapAnnotation($(el), `<p>ここに「${altText}」の画像があります。</p>`);
+        wrapAnnotation($(el), `ここに「${altText}」の画像があります。`);
       }
     });
 
@@ -207,43 +242,13 @@ export class A11yConverter extends BasicConverter {
       }
       // wrap with skg-style table and skip speaking
       $(el).wrap('<div class="uv_table" aria-hidden="true"></div>');
+      // set class for table
+      // $(el).addClass('uv_table');
     });
   }
 
-  private _applyAccessibilityAttributes(
-    $: cheerio.CheerioAPI,
-    options: ScrapingOptions = {}
-  ) {
-    const { contentSelector = 'body', language = 'ja' } = options;
-
-    // scrape article content based on the contentSelector
-    const $content = $(contentSelector);
-    if ($content.length === 0) {
-      console.warn('No content found for selector: ', contentSelector);
-      throw new Error('No content found for selector: ' + contentSelector);
-    }
-
-    //  flatten the content
-    const $flattenedContent = this._flattenContent($, $content);
-
-    const contentHtml = $flattenedContent.html() || '';
-
-    // find body and replace content with body
-    let $body = $('body');
-    // if body is not found, create body
-    if ($body.length === 0) {
-      // create body tag
-      $body = $('<body></body>');
-    }
-    $body.empty(); // remove all children
-    $body.append(contentHtml); // append content collected from contentSelector
-
-    // TODO: apply common attributes
-    $body.attr('aria-label', 'SKG');
-
-    // TODO: Should use class instead of id
-    $body.attr('id', 'skg-style');
-
+  private _applyAccessibilityAttributes($: cheerio.CheerioAPI) {
+    const $body = $('body');
     // TODO: apply a11y attributes to each element of body
     $body.find('*').each((i, el) => {
       const $el = $(el);
@@ -251,26 +256,6 @@ export class A11yConverter extends BasicConverter {
       const className = $el.attr('class');
       // console.log(tagName, className);
     });
-
-    // Build final html
-    let $html = $('html');
-    if ($html.length === 0) {
-      // create html tag
-      $html = $('<html></html>');
-    }
-    // add lang attribute to html
-    $html.attr('lang', $html.attr('lang') || language);
-
-    // append head and body to html
-    $html.append($('head').html() || '');
-    $html.append($body);
-
-    // doctype html is required for a11y
-    const doctype = '<!DOCTYPE html>';
-    const html = doctype + $html.html();
-
-    // finally, replace all html with the new html
-    $.root().html(html);
   }
 
   private _flattenContent($: cheerio.CheerioAPI, $content: cheerio.Cheerio) {
@@ -283,6 +268,14 @@ export class A11yConverter extends BasicConverter {
   private _applyCssRules($: cheerio.CheerioAPI, cssRules: string[]) {
     // first, remove head style tag
     $('head style').remove();
+
+    const $body = $('body');
+
+    // TODO: apply common attributes
+    $body.attr('aria-label', 'SKG');
+
+    // TODO: Should use class instead of id
+    $body.attr('id', 'skg-style');
 
     // remove all link tag with rel="stylesheet"
     $('link[rel="stylesheet"]').remove();
