@@ -69,7 +69,7 @@ const cleanText = (text: string = '') => {
   return '';
 };
 
-const cleanDom = ($el: cheerio.Cheerio, options: RequestsOptions) => {
+const extractDom = ($el: cheerio.Cheerio, options: RequestsOptions) => {
   const { loadedUrl } = options;
   let textContent = '';
   // get children
@@ -114,7 +114,7 @@ const cleanDom = ($el: cheerio.Cheerio, options: RequestsOptions) => {
         textContent += html;
       } else {
         // if the child is not a text node, return the text from the child
-        textContent += cleanDom($child, options);
+        textContent += extractDom($child, options);
       }
     });
   }
@@ -246,10 +246,9 @@ export class A11yConverter extends BasicConverter {
     $content.find('script, style').remove();
 
     //  flatten the content
-    const text = cleanDom($content, options);
+    const text = extractDom($content, options);
     const $flattenedContent = $('<div></div>');
     $flattenedContent.append(text);
-
 
     // clean body and append flattened content
     const $body = $('body');
@@ -351,12 +350,19 @@ export class A11yConverter extends BasicConverter {
     // TODO: Should use class instead of id
     $body.attr('id', 'skg-style');
 
-    // remove all link tag with rel="stylesheet"
-    $('link[rel="stylesheet"]').remove();
+    const $head = $('head');
+    // remove all link of head tag, it will be added later
+    $head.find('link').remove();
+
+    // apply some required css rules
+    $head.append('<link rel="preconnect" href="https://fonts.googleapis.com">');
+    $head.append(
+      '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
+    );
 
     // apply a11y stylesheets link
     cssRules.forEach((link) => {
-      $('head').append(link);
+      $head.append(`<link rel="stylesheet" href="${link}">`);
     });
   }
 
