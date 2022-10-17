@@ -3,23 +3,20 @@ import type { IncomingMessage } from 'node:http';
 import * as cheerio from 'cheerio';
 import { DomHandler } from 'htmlparser2';
 import { WritableStream } from 'htmlparser2/lib/WritableStream';
-import {
-  BasicConverter,
-  RequestsOptions,
-  ScrapingOptions,
-} from './basic-converter';
+import { BasicConverter, RequestsOptions } from './basic-converter';
 
 import {
   buildHeadingComponent,
+  buildImageAnnotation,
   buildImageComponent,
   buildLinkComponent,
   buildListComponent,
+  buildTableAnnotation,
   buildTableComponent,
   buildTextComponent,
   commonCssLinks,
   uvCss,
 } from './utils/index';
-import { parseTable } from '@sk-global/scrapeer';
 import * as url from 'url';
 
 const ALLOWED_TEXT_TAG_TYPES = [
@@ -145,7 +142,7 @@ export class A11yConverter extends BasicConverter {
     this._applyAccessibilityAttributes($);
 
     // apply annotation for img, table tag
-    this._applyAnnotation($);
+    this._applyAnnotation($, options.scrapingOptions?.language);
 
     return Promise.resolve({
       html: $.html(),
@@ -242,7 +239,7 @@ export class A11yConverter extends BasicConverter {
     // TODO: remove unnecessary attributes
   }
 
-  private _applyAnnotation($: cheerio.CheerioAPI) {
+  private _applyAnnotation($: cheerio.CheerioAPI, language: string = 'ja') {
     const wrapAnnotation = ($el: cheerio.Cheerio, child: any) => {
       const $wrapper = $('<div></div>');
       $wrapper.addClass(
@@ -252,45 +249,22 @@ export class A11yConverter extends BasicConverter {
       $el.before($wrapper);
     };
 
-    // TODO: apply annotation for img, table tag
     $('img').each((i, el) => {
       // Use @sk-global/scrapeer lib to get image alt text
       // get alt text
-      const altText = $(el).attr('alt');
-      if (altText) {
-        // apply annotation for img tag
-        wrapAnnotation($(el), `ここに「${altText}」の画像があります。`);
-      } else {
-        // apply annotation for img tag
-        wrapAnnotation($(el), 'ここに画像があります。');
-      }
+      buildImageAnnotation({
+        $,
+        el,
+        language,
+      });
     });
 
     $('table').each((i, el) => {
-      // TODO: apply annotation for table tag
-      // use @sk-global/scrapeer lib to get table data and build annotation
-      const data = parseTable($, el);
-      if (data) {
-        // build annotation
-        const texts = [
-          `この下に、縦${data.totalRows}行、横${data.totalCols}列の表があります。`,
-          `表のタイトルは「${data.caption}」です。`,
-          ...data.rows.map((row) => {
-            if (row.index === 1) {
-              return [`データの1行目`, ...row.cols].join('、');
-            }
-            return [`${row.index}行目`, ...row.cols].join('、');
-          }),
-        ];
-        const text = texts.map((t) => `<p>${t}</p>`).join('');
-        wrapAnnotation($(el), text);
-      } else {
-        wrapAnnotation($(el), 'ここに表があります。');
-      }
-      // wrap with skg-style table and skip speaking
-      // $(el).wrap('<div class="uv_table" aria-hidden="true"></div>');
-      // set class for table
-      // $(el).addClass('uv_table');
+      buildTableAnnotation({
+        $,
+        el,
+        language,
+      });
     });
   }
 
