@@ -15,7 +15,6 @@ import {
   buildTableComponent,
   buildTextComponent,
   commonCssLinks,
-  uvCss,
 } from './utils/index';
 import * as url from 'url';
 
@@ -136,7 +135,7 @@ export class A11yConverter extends BasicConverter {
     this._removeUnnecessaryAttributes($);
 
     // apply a11y stylesheets and add specific stylesheet for specific project in addition to the common SKG stylesheet
-    this._applyCssRules($, []);
+    this._applyCssRules($, options.stylesheets || commonCssLinks);
 
     // apply a11y attributes
     this._applyAccessibilityAttributes($);
@@ -323,9 +322,6 @@ export class A11yConverter extends BasicConverter {
 
     const $body = $('body');
 
-    // TODO: apply common attributes
-    $body.attr('aria-label', 'SKG');
-
     // TODO: Should use class instead of id
     $body.attr('id', 'skg-style');
 
@@ -333,16 +329,8 @@ export class A11yConverter extends BasicConverter {
     $('link[rel="stylesheet"]').remove();
 
     // apply a11y stylesheets link
-    commonCssLinks.forEach((link) => {
+    cssRules.forEach((link) => {
       $('head').append(link);
-    });
-
-    // apply SKG template CSS
-    $('head').append(uvCss);
-
-    // apply CSS for this project only
-    cssRules.forEach((cssRule) => {
-      $('head').append(`<style>${cssRule}</style>`);
     });
   }
 

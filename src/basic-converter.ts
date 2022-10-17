@@ -113,6 +113,9 @@ export interface RequestsOptions {
 
   // extend function, used it do some custom logic
   extendFunction?: (options: any) => any;
+
+  // allow user custom style of the html
+  stylesheets?: string[];
 }
 
 export class BasicConverter {
