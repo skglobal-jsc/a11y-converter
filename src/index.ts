@@ -132,7 +132,6 @@ export class A11yConverter extends BasicConverter {
     options,
   }: {
     result: {
-      body: Buffer;
       isXml: boolean;
       response: IncomingMessage;
       contentType: {
@@ -151,9 +150,9 @@ export class A11yConverter extends BasicConverter {
     dom: any;
     $: cheerio.Root;
   }> {
-    const { body, isXml, response, contentType, dom, $ } = result;
+    const { isXml, response, contentType, dom, $ } = result;
 
-    options.loadedUrl = response.url;
+    options.loadedUrl = options.loadedUrl || response.url;
     // process the dom
     this._processDom({ $, options });
 
@@ -171,7 +170,7 @@ export class A11yConverter extends BasicConverter {
 
     return Promise.resolve({
       html: $.html(),
-      contentType: contentType.type,
+      contentType: contentType ? contentType.type : 'text/html',
       isXml,
       response,
       dom,
@@ -224,13 +223,14 @@ export class A11yConverter extends BasicConverter {
     options: RequestsOptions;
   }) {
     const { scrapingOptions = {}, loadedUrl } = options;
-    // get the head
-    const head = `<head>${$('head').html()}</head>`;
 
     // replace root element with html
     const { contentSelector = 'body', language = 'ja' } = scrapingOptions;
 
     const lang = $('html').attr('lang') || language;
+
+    // add lang attribute to html tag
+    $('html').attr('lang', lang);
 
     // scrape article content based on the contentSelector
     const $content = $(contentSelector);
@@ -250,14 +250,11 @@ export class A11yConverter extends BasicConverter {
     const $flattenedContent = $('<div></div>');
     $flattenedContent.append(text);
 
-    const contentHtml = `<body>${$flattenedContent.html() || ''}</body>`;
 
-    const html = `<!DOCTYPE html>
-
-<html lang="${lang}">${head}${contentHtml}</html>`;
-
-    // finally, replace all html with the new html
-    $.root().html(html);
+    // clean body and append flattened content
+    const $body = $('body');
+    $body.empty();
+    $body.append($flattenedContent);
   }
 
   private _removeUnnecessaryAttributes($: cheerio.CheerioAPI) {

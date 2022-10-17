@@ -6,6 +6,8 @@ import type {
   Options,
 } from 'got-scraping';
 
+import * as cheerio from 'cheerio';
+
 import iconv from 'iconv-lite';
 import * as contentTypeParser from 'content-type';
 
@@ -103,11 +105,13 @@ export interface ScrapingOptions {
   language?: string;
 }
 export interface RequestsOptions {
-  url: string;
+  url?: string;
   loadedUrl?: string;
   method: Method;
   headers?: IncomingHttpHeaders;
   payload?: string;
+
+  html?: string;
 
   scrapingOptions?: ScrapingOptions;
 
@@ -133,9 +137,16 @@ export class BasicConverter {
 
     const stats = {};
 
-    const result = await this._requestFunction({
-      options,
-    });
+    let result: any = null;
+    if (options.url) {
+      result = await this._requestFunction({
+        options,
+      });
+    } else if (options.html && options.loadedUrl) {
+      result = await this._convertFromHtml(options.html, options);
+    } else {
+      throw new Error('No URL or HTML provided');
+    }
 
     // start convert process
     let text: any = null;
@@ -193,7 +204,7 @@ export class BasicConverter {
     proxyUrl?: string;
     gotOptions?: OptionsInit;
   }): Promise<{
-    body: Buffer;
+    body?: Buffer;
     isXml: boolean;
     response: IncomingMessage;
     contentType: {
@@ -363,5 +374,23 @@ export class BasicConverter {
 
   protected async _clean(): Promise<void> {
     console.log('Cleaning...');
+  }
+
+  private async _convertFromHtml(
+    html: string,
+    options: RequestsOptions
+  ): Promise<any> {
+    const $ = cheerio.load(html);
+    const isXml = false;
+    return {
+      $,
+      isXml,
+      response: {
+        url: options.loadedUrl,
+      },
+      get body() {
+        return isXml ? $!.xml() : $!.html({ decodeEntities: false });
+      },
+    };
   }
 }
