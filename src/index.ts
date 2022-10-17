@@ -28,7 +28,31 @@ const ALLOWED_TEXT_TAG_TYPES = [
   'H4',
   'H5',
   'H6',
+  'P',
 ];
+
+export const replaceAbsoluteUrl = ($: cheerio.Root, baseUrl: string) => {
+  // find all image, a tag and replace relative path to absolute path
+  $('img').each((i, el) => {
+    const src = $(el).attr('src');
+    if (src) {
+      const parsedUrl = url.parse(src);
+      if (!parsedUrl.host) {
+        $(el).attr('src', url.resolve(baseUrl, src));
+      }
+    }
+  });
+
+  $('a').each((i, el) => {
+    const href = $(el).attr('href');
+    if (href) {
+      const parsedUrl = url.parse(href);
+      if (!parsedUrl.host) {
+        $(el).attr('href', url.resolve(baseUrl, href));
+      }
+    }
+  });
+};
 
 const cleanText = (text: string = '') => {
   const txt = text
@@ -53,45 +77,47 @@ const cleanDom = ($el: cheerio.Cheerio, options: RequestsOptions) => {
 
   // if there are no children, return the text
   if ($children.length === 0) {
-    textContent = cleanText($el.text());
-  }
+    textContent += cleanText($el.text());
+  } else {
+    // if there are children, get the text from each child
+    $children.each((i, child) => {
+      const $child = $el.children().eq(i);
+      // if the child is a text node, return the text
+      const tagName = $child.prop('tagName');
+      const className = $child.attr('class');
 
-  // if there are children, get the text from each child
-  $children.each((i, child) => {
-    const $child = $el.children().eq(i);
-    // if the child is a text node, return the text
-    const tagName = $child.prop('tagName');
-    if ($child.is('text')) {
-      textContent += cleanText($child.text());
-    } else if ($child.is('a')) {
-      textContent += Object.keys($child.attr()).reduce((acc, key) => {
-        return `${acc} ${key}="${$child.attr(key)}"`;
-      }, '<a');
-      textContent += `>${$child.html()}</a>`;
-    } else if ($child.is('img')) {
-      textContent += Object.keys($child.attr()).reduce((acc, key) => {
-        const value = $child.attr(key) || '';
-        if (key === 'src') {
-          // relative path to absolute path
-          const parsedUrl = url.parse(value);
-          if (!parsedUrl.host) {
-            return `${acc} ${key}="${url.resolve(loadedUrl!, value)}"`;
+      if ($child.is('text')) {
+        textContent += cleanText($child.text());
+      } else if ($child.is('a')) {
+        textContent += Object.keys($child.attr()).reduce((acc, key) => {
+          return `${acc} ${key}="${$child.attr(key)}"`;
+        }, '<a');
+        textContent += `>${$child.html()}</a>`;
+      } else if ($child.is('img')) {
+        textContent += Object.keys($child.attr()).reduce((acc, key) => {
+          const value = $child.attr(key) || '';
+          if (key === 'src') {
+            // relative path to absolute path
+            const parsedUrl = url.parse(value);
+            if (!parsedUrl.host) {
+              return `${acc} ${key}="${url.resolve(loadedUrl!, value)}"`;
+            }
+
+            return `${acc} ${key}="${value}"`;
           }
-
-          return `${acc} ${key}="${value}"`;
-        }
-        return `${acc} ${key}="${$child.attr(key)}"`;
-      }, '<img');
-      textContent += '/>';
-    } else if (ALLOWED_TEXT_TAG_TYPES.includes(tagName)) {
-      const tag = tagName.toLowerCase();
-      const html = `<${tag}>${$child.html()}</${tag}>`;
-      textContent += html;
-    } else {
-      // if the child is not a text node, return the text from the child
-      textContent += cleanDom($child, options);
-    }
-  });
+          return `${acc} ${key}="${$child.attr(key)}"`;
+        }, '<img');
+        textContent += '/>';
+      } else if (ALLOWED_TEXT_TAG_TYPES.includes(tagName)) {
+        const tag = tagName.toLowerCase();
+        const html = `<${tag}>${$child.html()}</${tag}>`;
+        textContent += html;
+      } else {
+        // if the child is not a text node, return the text from the child
+        textContent += cleanDom($child, options);
+      }
+    });
+  }
 
   return textContent;
 };
@@ -212,6 +238,9 @@ export class A11yConverter extends BasicConverter {
       console.warn('No content found for selector: ', contentSelector);
       throw new Error('No content found for selector: ' + contentSelector);
     }
+
+    // replace relative path to absolute path
+    replaceAbsoluteUrl($, loadedUrl!);
 
     // remove all scripts and styles
     $content.find('script, style').remove();
