@@ -159,6 +159,9 @@ export class A11yConverter extends BasicConverter {
     // remove unnecessary attributes
     this._removeUnnecessaryAttributes($);
 
+    // apply google analytics, if needed
+    this._applyGoogleAnalytics($, options);
+
     // apply a11y stylesheets and add specific stylesheet for specific project in addition to the common SKG stylesheet
     this._applyCssRules($, options.stylesheets || commonCssLinks);
 
@@ -339,6 +342,24 @@ export class A11yConverter extends BasicConverter {
           break;
       }
     });
+  }
+
+  private _applyGoogleAnalytics($: cheerio.CheerioAPI, opt: RequestsOptions) {
+    const { googleAnalyticsId } = opt;
+    if (googleAnalyticsId) {
+      const $head = $('head');
+      const $script = $('<script></script>');
+      $script.attr('async', 'true');
+      $script.attr('src', `https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`);
+      $head.append($script);
+
+      const $script2 = $('<script></script>');
+      $script2.text(`window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '${googleAnalyticsId}');`);
+      $head.append($script2);
+    }
   }
 
   private _applyCssRules($: cheerio.CheerioAPI, cssRules: string[]) {

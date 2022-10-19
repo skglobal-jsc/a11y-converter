@@ -1587,8 +1587,9 @@ import { writeFileSync } from 'fs';
     const res = await a11yConverter.convert({
       // url: 'https://www.jiji.com/jc/article?k=2022101700794&g=pol',
       html: orgHtml,
-      loadedUrl: 'https://www.jiji.com',
+      loadedUrl: 'https://www.jiji.com/jc/article?k=2022100501260&g=pol',
       method: 'GET',
+      googleAnalyticsId: 'UA-XXXXX-Y',
       scrapingOptions: {
         contentSelector: '#Main > div.MainInner.Individual > article',
       },

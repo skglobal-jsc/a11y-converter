@@ -120,6 +120,9 @@ export interface RequestsOptions {
 
   // allow user custom style of the html
   stylesheets?: string[];
+
+  // Google analytics
+  googleAnalyticsId?: string;
 }
 
 export class BasicConverter {
