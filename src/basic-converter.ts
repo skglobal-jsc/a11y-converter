@@ -123,6 +123,9 @@ export interface RequestsOptions {
 
   // Google analytics
   googleAnalyticsId?: string;
+
+  // enable or disable A11y player
+  enablePlayer?: boolean;
 }
 
 export class BasicConverter {

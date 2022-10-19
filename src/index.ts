@@ -372,7 +372,7 @@ export class A11yConverter extends BasicConverter {
     $body.attr('id', 'skg-style');
 
     const $head = $('head');
-    // remove all link of head tag, it will be added later
+    // remove all link of head addtag, it will be added later
     $head.find('link').remove();
 
     // apply some required css rules
