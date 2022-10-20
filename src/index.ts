@@ -239,7 +239,7 @@ export class A11yConverter extends BasicConverter {
     const $content = $(contentSelector);
     if ($content.length === 0) {
       console.warn('No content found for selector: ', contentSelector);
-      throw new Error('No content found for selector: ' + contentSelector);
+      // throw new Error('No content found for selector: ' + contentSelector);
     }
 
     // replace relative path to absolute path
@@ -272,15 +272,6 @@ export class A11yConverter extends BasicConverter {
   }
 
   private _applyAnnotation($: cheerio.CheerioAPI, language: string = 'ja') {
-    const wrapAnnotation = ($el: cheerio.Cheerio, child: any) => {
-      const $wrapper = $('<div></div>');
-      $wrapper.addClass(
-        'uv_annotation w3-panel w3-pale-red w3-leftbar w3-rightbar w3-border-red'
-      );
-      $wrapper.append(child);
-      $el.before($wrapper);
-    };
-
     $('img').each((i, el) => {
       // Use @sk-global/scrapeer lib to get image alt text
       // get alt text

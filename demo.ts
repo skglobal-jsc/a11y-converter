@@ -1591,7 +1591,7 @@ import { writeFileSync } from 'fs';
       method: 'GET',
       googleAnalyticsId: 'UA-XXXXX-Y',
       scrapingOptions: {
-        contentSelector: '#Main > div.MainInner.Individual > article',
+        contentSelector: '#11',
       },
       // extendFunction: async ({ html, $, contentType }) => {},
       extendFunction: ({ $ }) => {
