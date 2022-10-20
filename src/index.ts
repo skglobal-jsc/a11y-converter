@@ -253,6 +253,11 @@ export class A11yConverter extends BasicConverter {
     const $flattenedContent = $('<div></div>');
     $flattenedContent.append(text);
 
+    // Setting The Viewport, make responsive website
+    $('head').append(
+      '<meta name="viewport" content="width=device-width, initial-scale=1.0">'
+    );
+
     // clean body and append flattened content
     const $body = $('body');
     $body.empty();
@@ -350,7 +355,10 @@ export class A11yConverter extends BasicConverter {
       const $head = $('head');
       const $script = $('<script></script>');
       $script.attr('async', 'true');
-      $script.attr('src', `https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`);
+      $script.attr(
+        'src',
+        `https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`
+      );
       $head.append($script);
 
       const $script2 = $('<script></script>');

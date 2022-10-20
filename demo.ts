@@ -1599,6 +1599,7 @@ import { writeFileSync } from 'fs';
         // add class to table
         // $('table').addClass('uv_binh111');
       },
+      stylesheets: ['https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;1,300&display=swap']
     });
 
     const { html } = res;
