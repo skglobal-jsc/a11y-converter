@@ -100,9 +100,15 @@ function addResponsePropertiesToStream(stream: GotRequest) {
   return stream as unknown as IncomingMessage;
 }
 
+export interface SkipImageOptions {
+  minHeight?: number;
+  minWidth?: number;
+  matchName?: RegExp;
+}
 export interface ScrapingOptions {
   contentSelector?: string;
   language?: string;
+  skipImageOptions?: SkipImageOptions;
 }
 export interface RequestsOptions {
   url?: string;

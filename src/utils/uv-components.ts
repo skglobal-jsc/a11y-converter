@@ -130,7 +130,8 @@ export const buildTableAnnotation = ({
   language: string;
   el: cheerio.Element;
 }) => {
-  const data = parseTable($, el);
+  const item: any  = {};
+  const data = parseTable($, el, item);
   if (data) {
     // TODO: add support for each language
     const texts = [
@@ -159,14 +160,6 @@ export const buildImageAnnotation = ({
   language: string;
   el: cheerio.Element; // image element
 }) => {
-  // if image too small, skip it
-  const w = $(el).attr('width');
-  const h = $(el).attr('height');
-  if (w && h && parseInt(w) < 10 && parseInt(h) < 10) {
-    // remove image
-    $(el).remove();
-    return;
-  }
 
   const altText = $(el).attr('alt');
   // TODO: add support for each language

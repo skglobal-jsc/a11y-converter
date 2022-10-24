@@ -3,7 +3,11 @@ import type { IncomingMessage } from 'node:http';
 import * as cheerio from 'cheerio';
 import { DomHandler } from 'htmlparser2';
 import { WritableStream } from 'htmlparser2/lib/WritableStream';
-import { BasicConverter, RequestsOptions } from './basic-converter';
+import {
+  BasicConverter,
+  RequestsOptions,
+  ScrapingOptions,
+} from './basic-converter';
 
 import {
   buildHeadingComponent,
@@ -225,7 +229,12 @@ export class A11yConverter extends BasicConverter {
     $: cheerio.CheerioAPI;
     options: RequestsOptions;
   }) {
-    const { scrapingOptions = {}, loadedUrl } = options;
+    const { loadedUrl } = options;
+
+    const scrapingOptions: ScrapingOptions = options.scrapingOptions || {
+      contentSelector: 'body',
+      language: 'ja',
+    };
 
     // replace root element with html
     const { contentSelector = 'body', language = 'ja' } = scrapingOptions;
@@ -244,6 +253,16 @@ export class A11yConverter extends BasicConverter {
 
     // replace relative path to absolute path
     replaceAbsoluteUrl($, loadedUrl!);
+
+    // if image too small, remove it
+    $('img').each((i, el) => {
+      const $el = $(el);
+      const width = $el.attr('width');
+      const height = $el.attr('height');
+      if (width && height && parseInt(width) < 100 && parseInt(height) < 100) {
+        $el.remove();
+      }
+    });
 
     // remove all scripts and styles
     $content.find('script, style').remove();

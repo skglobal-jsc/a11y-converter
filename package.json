@@ -1,7 +1,7 @@
 {
   "name": "a11y-converter",
   "description": "Convert original HTML codes to a11y HTML",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "source": "src/index.ts",
   "main": "./dist/index.js",
   "module": "dist/index.module.js",
@@ -44,6 +44,9 @@
   "prettier": {
     "singleQuote": true
   },
+  "peerDependencies": {
+    "@sk-global/scrapeer": "^0.2.4"
+  },
   "contributors": [
     "Binh Bui <buithaibinh@gmail.com>"
   ],
@@ -57,7 +60,6 @@
   },
   "author": "SK-Global",
   "dependencies": {
-    "@sk-global/scrapeer": "^0.0.16",
     "cheerio": "^1.0.0-rc.12",
     "content-type": "^1.0.4",
     "got-scraping": "^3.2.11",
