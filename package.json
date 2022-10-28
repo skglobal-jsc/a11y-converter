@@ -15,7 +15,7 @@
     "node": ">=14.16"
   },
   "scripts": {
-    "dev": "ts-node demo.ts",
+    "dev": "ts-node dev.ts",
     "build": "microbundle --define PKG_VERSION=$npm_package_version",
     "watch": "microbundle watch --define PKG_VERSION=$npm_package_version",
     "test": "jest --coverage",
@@ -26,7 +26,6 @@
     "release": "npm run prepack && source .env && npx np"
   },
   "devDependencies": {
-    "@types/cheerio": "^0.22.31",
     "@types/content-type": "^1.1.5",
     "@types/html-to-text": "^8.1.1",
     "@types/inquirer": "^9.0.2",
