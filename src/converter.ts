@@ -27,7 +27,6 @@ const simplifyHtml = async (html: string) => {
     let children = $(el).children();
     let hasChildren = children.length > 0;
 
-
     console.group('processing:', tagName);
 
     // loop until no more children
@@ -42,6 +41,7 @@ const simplifyHtml = async (html: string) => {
 
       // if the child is a text tag, then unwrap it
       if (ALLOWED_TEXT_TAG_TYPES.includes(childTagName)) {
+        console.log('unwrap', childTagName);
         child.unwrap();
       }
 
@@ -58,6 +58,7 @@ const simplifyHtml = async (html: string) => {
 
       // if the element has no children, then we're done
       if (children.length === 0) {
+        console.log('No more children', childTagName);
         hasChildren = false;
       }
     }

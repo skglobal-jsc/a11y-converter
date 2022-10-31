@@ -27,7 +27,7 @@ const saveHtmlToFile = async (path: string, html: string): Promise<void> => {
 }
 
 (async () => {
-  const html = await loadHtmlFromFile('./data/test2.html');
+  const html = await loadHtmlFromFile('./data/test1.html');
 
   const res = await convertHtml(html);
 
