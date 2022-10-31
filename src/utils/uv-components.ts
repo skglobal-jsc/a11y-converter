@@ -1,7 +1,7 @@
 import { parseTable } from '@sk-global/scrapeer';
 import * as cheerio from 'cheerio';
 
-const wrapAnnotation = ($: cheerio.Root, $el: cheerio.Cheerio, child: any) => {
+const wrapAnnotation = ($: cheerio.CheerioAPI, $el: cheerio.Cheerio<any>, child: any) => {
   const $wrapper = $('<div></div>');
   $wrapper.addClass(
     'uv_annotation w3-panel w3-pale-red w3-leftbar w3-rightbar w3-border-red'
@@ -11,12 +11,11 @@ const wrapAnnotation = ($: cheerio.Root, $el: cheerio.Cheerio, child: any) => {
 };
 
 export const buildHeadingComponent = (
-  $heading: cheerio.Cheerio,
+  $heading: cheerio.Cheerio<any>,
   speechText?: string
 ) => {
   // apply a11y attributes
   $heading.attr('role', 'heading');
-  $heading.attr('aria-level', $heading.prop('tagName').replace('H', ''));
   $heading.attr('tabindex', '0');
   $heading.attr(
     'id',
@@ -30,7 +29,7 @@ export const buildHeadingComponent = (
 };
 
 export const buildTextComponent = (
-  $text: cheerio.Cheerio,
+  $text: cheerio.Cheerio<any>,
   speechText?: string
 ) => {
   // apply a11y attributes
@@ -49,7 +48,7 @@ export const buildTextComponent = (
 };
 
 export const buildImageComponent = (
-  $image: cheerio.Cheerio,
+  $image: cheerio.Cheerio<any>,
   speechText?: string
 ) => {
   // apply a11y attributes
@@ -71,7 +70,7 @@ export const buildImageComponent = (
 };
 
 export const buildListComponent = (
-  $list: cheerio.Cheerio,
+  $list: cheerio.Cheerio<any>,
   speechText?: string
 ) => {
   // apply a11y attributes
@@ -89,7 +88,7 @@ export const buildListComponent = (
   $list.addClass('uv_list');
 };
 
-export const buildTableComponent = ($table: cheerio.Cheerio) => {
+export const buildTableComponent = ($table: cheerio.Cheerio<any>) => {
   // apply a11y attributes
   $table.attr('role', 'table');
   $table.attr('tabindex', '0');
@@ -105,7 +104,7 @@ export const buildTableComponent = ($table: cheerio.Cheerio) => {
   $table.addClass('uv_table');
 };
 
-export const buildLinkComponent = ($link: cheerio.Cheerio) => {
+export const buildLinkComponent = ($link: cheerio.Cheerio<any>) => {
   // apply a11y attributes
   $link.attr('role', 'link');
   $link.attr('tabindex', '0');
@@ -126,7 +125,7 @@ export const buildTableAnnotation = ({
   language = 'ja',
   el,
 }: {
-  $: cheerio.Root;
+  $: cheerio.CheerioAPI;
   language: string;
   el: cheerio.Element;
 }) => {
@@ -156,7 +155,7 @@ export const buildImageAnnotation = ({
   language = 'ja',
   el,
 }: {
-  $: cheerio.Root;
+  $: cheerio.CheerioAPI;
   language: string;
   el: cheerio.Element; // image element
 }) => {

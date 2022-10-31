@@ -35,7 +35,7 @@ const ALLOWED_TEXT_TAG_TYPES = [
   'P',
 ];
 
-export const replaceAbsoluteUrl = ($: cheerio.Root, baseUrl: string) => {
+export const replaceAbsoluteUrl = ($: any, baseUrl: string) => {
   // find all image, a tag and replace relative path to absolute path
   $('img').each((i, el) => {
     const src = $(el).attr('src');
@@ -73,7 +73,7 @@ const cleanText = (text: string = '') => {
   return '';
 };
 
-const extractDom = ($el: cheerio.Cheerio, options: RequestsOptions) => {
+const extractDom = ($el: any, options: RequestsOptions) => {
   const { loadedUrl } = options;
   let textContent = '';
   // get children
@@ -152,7 +152,7 @@ export class A11yConverter extends BasicConverter {
     isXml: boolean;
     response: IncomingMessage;
     dom: any;
-    $: cheerio.Root;
+    $: cheerio.CheerioAPI;
   }> {
     const { isXml, response, contentType, dom, $ } = result;
 
@@ -204,7 +204,7 @@ export class A11yConverter extends BasicConverter {
         // and not good for scraping. It also does not have a great streaming interface.
         // Here we tell cheerio to use htmlparser2 for serialization, otherwise the conflict produces weird errors.
         _useHtmlParser2: true,
-      } as cheerio.CheerioParserOptions
+      } as cheerio.CheerioOptions
     );
 
     return {

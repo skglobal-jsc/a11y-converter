@@ -197,7 +197,7 @@ export class BasicConverter {
     isXml: boolean;
     response: IncomingMessage;
     dom: any;
-    $: cheerio.Root;
+    $: any;
   }> {
     throw new Error('Not implemented');
   }
