@@ -1,73 +1,120 @@
 import * as cheerio from 'cheerio';
 
-const ALLOWED_TEXT_TAG_TYPES = [
-  'H1',
-  'H2',
-  'H3',
-  'H4',
-  'H5',
-  'H6',
-  'P',
-  'TABLE',
-  'DIV',
-  'A',
-  'UL',
-  'OL',
-];
+const cleanText = (text: string = '') => {
+  const txt = text
+    .replace(/  *\n/g, '\n')
+    .replace(/\s+\n/g, '\n\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+
+  if (txt !== '') {
+    return `<p>${txt}</p>`;
+  }
+  return '';
+};
+
+const unwrapHtml = ($: cheerio.CheerioAPI, el: cheerio.Cheerio<any>) => {
+  const contents = el.contents();
+
+  let description = '';
+  contents
+    .filter((i, el) => {
+      // filter out empty text nodes
+      if (el.type === 'text' && el.data.trim() === '') {
+        return false;
+      }
+      return true;
+    })
+    .each((i, child) => {
+      const { type } = child;
+      const $child = $(child);
+      // if the element is a text node
+      if (type === 'text') {
+        description += cleanText($child.text());
+      }
+
+      // if the element is a tag
+      if (type === 'tag') {
+        // get the tag name
+        const tagName = child.name;
+        const attr = $child.attr();
+        console.group('+', tagName, JSON.stringify(attr));
+
+        switch (tagName) {
+          // if the tag is a paragraph
+          case 'p':
+            description += cleanText($child.text());
+            break;
+          // if the tag is a heading
+          case 'h1':
+          case 'h2':
+          case 'h3':
+          case 'h4':
+          case 'h5':
+          case 'h6':
+            description += $.html($child);
+            break;
+
+          // if the tag is a list
+          case 'span':
+          case 'td':
+          case 'th':
+          case 'ul':
+          case 'ol':
+          case 'li':
+          case 'dl':
+          case 'dd':
+          case 'dt':
+          case 'section':
+            description += $.html($child);
+            break;
+
+          // if the tag is a table
+          case 'table':
+            description += $.html($child);
+            break;
+          // if the tag is an image
+          case 'img':
+            description += $.html($child);
+            break;
+          default:
+            description += unwrapHtml($, $child);
+            break;
+        }
+
+        console.groupEnd();
+      }
+    });
+
+  return description;
+};
+
 const simplifyHtml = async (html: string) => {
   // this function is used to flatten the html to a single line
-  const $ = cheerio.load(html, { decodeEntities: false }, false);
+  const $ = cheerio.load(html, { decodeEntities: false }, true);
 
-  // https://cheerio.js.org/classes/Cheerio.html#unwrap
-  // loop through all the elements and unwrap them
-  $('*').each((i, el) => {
-    // get the tag name of the element
-    const tagName = $(el).prop('tagName');
-
-    let children = $(el).children();
-    let hasChildren = children.length > 0;
-
-    console.group('processing:', tagName);
-
-    // loop until no more children
-    while (hasChildren) {
-      // get the first child
-      const child = children.first();
-
-      // get the child's tag name
-      const childTagName = child.prop('tagName') || '';
-
-      console.log('child tag', childTagName);
-
-      // if the child is a text tag, then unwrap it
-      if (ALLOWED_TEXT_TAG_TYPES.includes(childTagName)) {
-        console.log('unwrap', childTagName);
-        child.unwrap();
+  // get all children of the body
+  const children = $('body').contents();
+  let description = '';
+  children
+    .filter((i, el) => {
+      // filter out empty text nodes
+      if (el.type === 'text' && el.data.trim() === '') {
+        return false;
       }
-
-      const newChildren = $(el).children();
-
-      // if the new children is the same as the old children, then we're done
-      if (newChildren.length === children.length) {
-        console.log('---DONE---');
-        hasChildren = false;
-      } else {
-        // otherwise, set the new children as the children
-        children = newChildren;
-      }
-
-      // if the element has no children, then we're done
-      if (children.length === 0) {
-        console.log('No more children', childTagName);
-        hasChildren = false;
-      }
-    }
-
-    console.groupEnd();
-  });
+      return true;
+    })
+    .each((i, el) => {
+      const { type } = el;
+      // get tag name of the element
+      console.group(`---ROOT CHILD ${i + 1}---`);
+      description += unwrapHtml($, $(el));
+      console.groupEnd();
+    });
 
   // return the html
-  return $.html();
+  // return $.html();
+  return description;
 };
 
 export default simplifyHtml;
