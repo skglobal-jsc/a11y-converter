@@ -37,8 +37,8 @@ const unwrapHtml = ($: cheerio.CheerioAPI, el: cheerio.Cheerio<any>) => {
       if (type === 'tag') {
         // get the tag name
         const tagName = child.name;
-        const attr = $child.attr();
-        console.group('+', tagName, JSON.stringify(attr));
+        // const attr = $child.attr();
+        // console.group('+', tagName, JSON.stringify(attr));
 
         switch (tagName) {
           // if the tag is a paragraph
@@ -81,8 +81,6 @@ const unwrapHtml = ($: cheerio.CheerioAPI, el: cheerio.Cheerio<any>) => {
             description += unwrapHtml($, $child);
             break;
         }
-
-        console.groupEnd();
       }
     });
 
@@ -107,9 +105,7 @@ const simplifyHtml = async (html: string) => {
     .each((i, el) => {
       const { type } = el;
       // get tag name of the element
-      console.group(`---ROOT CHILD ${i + 1}---`);
       description += unwrapHtml($, $(el));
-      console.groupEnd();
     });
 
   // return the html
