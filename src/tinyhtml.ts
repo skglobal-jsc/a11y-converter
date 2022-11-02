@@ -112,11 +112,39 @@ const reduceHtml = ($: cheerio.CheerioAPI) => {
           $(el).remove();
         }
       }
+
+      // if the element is a link then remove the link if it does not have href attribute
+      if (el.name === 'a') {
+        if (!el.attribs.href) {
+          $(el).replaceWith($(el).contents());
+        }
+      }
+
+      // if the element is a img then remove the img if it does not have src attribute
+      if (el.name === 'img') {
+        if (!el.attribs.src) {
+          $(el).remove();
+        }
+      }
+
     }
+
+
+      // if the element is comment then remove it
+      if (el.type === 'comment') {
+        $(el).remove();
+      }
   });
 
   // Removes: <script>, <style>, <link>, <meta>, <title>, <head>, <html>, <body>
-  $('script, style, link, meta, title, head, html, body').remove();
+  $('script, style, link, meta, title, head, html, body, comment').remove();
+
+  // Removes comments
+  $('*').contents().each((i, el) => {
+    if (el.type === 'comment') {
+      $(el).remove();
+    }
+  });
 };
 
 const tinyhtml = (html: string) => {
