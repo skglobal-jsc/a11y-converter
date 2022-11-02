@@ -24,6 +24,9 @@ const SECTION_TAGS = [
   'blockquote',
   'figure',
   'figcaption',
+  'button',
+  'summary',
+  'details',
 ];
 
 const SUPPORTED_BLOCK_TAGS = [
@@ -37,6 +40,16 @@ const SUPPORTED_BLOCK_TAGS = [
   'ul',
   'ol',
   'table',
+];
+
+const UN_SUPPORTED_STYLE_TAGS = [
+  'em',
+  'small',
+  'big', // deprecated
+  'sub', // deprecated
+  'strike',
+  'samp',
+  's',
 ];
 
 const removeAttributes = (el: cheerio.Element) => {
@@ -56,7 +69,7 @@ const reduceHtml = ($: cheerio.CheerioAPI) => {
       // Converts the markup to HTML5 (if it is XHTML for example)
       el.name = el.name.toLowerCase();
 
-      // Replaces: <article> with <div>, <aside> with <div>, <footer> with <div>, <header> with <div>, <nav> with <div>, <section> with <div> (if the tag is not supported by the browser)
+      // replace unsupported tags with p tag
       if (SECTION_TAGS.includes(el.name)) {
         el.name = 'p';
       }
@@ -77,6 +90,11 @@ const reduceHtml = ($: cheerio.CheerioAPI) => {
         }
       }
 
+      // if element is a style tag then keep children and remove the style tag
+      if (UN_SUPPORTED_STYLE_TAGS.includes(el.name)) {
+        $(el).replaceWith($(el).contents());
+      }
+
       // if span has only one child then unwrap the child
       if (el.name === 'span') {
         const children = $(el).children();
@@ -85,28 +103,20 @@ const reduceHtml = ($: cheerio.CheerioAPI) => {
         }
       }
 
-      // remove empty tags <span></span>, <div></div> etc (if the tag is empty and does not contain any attributes or text)
+      // remove empty tags <span></span>, <div></div> etc
       if (Object.keys(el.attribs).length === 0 && el.children.length === 0) {
-        console.log('removing empty tag', el.name);
-        $(el).remove();
+        // if the element is br then replace it with a space
+        if (el.name === 'br') {
+          // $(el).replaceWith(' ');
+        } else {
+          $(el).remove();
+        }
       }
     }
   });
 
   // Removes: <script>, <style>, <link>, <meta>, <title>, <head>, <html>, <body>
   $('script, style, link, meta, title, head, html, body').remove();
-
-  // Removes comments
-  $('*').contents().each((i, el) => {
-    if (el.type === 'comment') {
-      $(el).remove();
-    }
-
-    // if type is text and text is empty then remove the element
-    if (el.type === 'text' && el.data.trim() === '') {
-      $(el).remove();
-    }
-  });
 };
 
 const tinyhtml = (html: string) => {
@@ -132,7 +142,6 @@ const tinyhtml = (html: string) => {
     const children = $(el).children();
     const childrenBlockTags = children.filter('p');
     if (childrenBlockTags.length === 0) {
-      // Removes: <script>, <style>, <link>, <meta>, <title>, <head>, <html>, <body>
       const clone = $(el).clone();
       body.append(clone);
     }
