@@ -1,4 +1,4 @@
-import convertHtml from './src/converter';
+import convertHtml from './src/tinyhtml';
 
 import { readFile, writeFile } from 'fs';
 
