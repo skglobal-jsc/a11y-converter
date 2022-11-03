@@ -42,7 +42,8 @@ const SUPPORTED_BLOCK_TAGS = [
   'table',
   'p',
   'picture',
-  'img'
+  'img',
+  'a'
 ];
 
 const UN_SUPPORTED_STYLE_TAGS = [
