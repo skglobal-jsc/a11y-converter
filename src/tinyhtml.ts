@@ -56,7 +56,61 @@ const UN_SUPPORTED_STYLE_TAGS = [
   's',
 ];
 
-const reduceHtml = ($: cheerio.CheerioAPI) => {
+export interface ProcessOptions {
+  removeComments: boolean;
+  removeEmptyElements: boolean;
+  removeScriptTypeAttributes: boolean;
+  removeOptionalTags: string[];
+  removeSmallImages: {
+    minWidth: number;
+    minHeight: number;
+  };
+}
+
+const reduceHtml = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
+  // Removes: <script>, <style>, <link>, <meta>, <title>, <head>, <html>, <body>
+  if (opt.removeScriptTypeAttributes) {
+    $('script, style, link, meta, title, head, html, body, comment').remove();
+  }
+
+  $('*')
+    .contents()
+    .each((i, el) => {
+      // remove optional tags
+      if (el.type == 'tag' && opt.removeOptionalTags.includes(el.name)) {
+        $(el).remove();
+      }
+
+      if (opt.removeComments && el.type === 'comment') {
+        $(el).remove();
+      }
+
+      // remove empty tags with cheerio, but also keep images:
+      if (
+        opt.removeEmptyElements &&
+        el.type == 'tag' &&
+        el.tagName !== 'img' &&
+        $(el).find('img').length === 0 &&
+        $(el).text().trim().length === 0
+      ) {
+        $(el).remove();
+      }
+
+      // remove images with small width and height
+      if (el.type === 'tag' && el.tagName === 'img') {
+        const width = el.attribs.width;
+        const height = el.attribs.height;
+        if (
+          width &&
+          height &&
+          parseInt(width) < opt.removeSmallImages.minWidth &&
+          parseInt(height) < opt.removeSmallImages.minHeight
+        ) {
+          $(el).remove();
+        }
+      }
+    });
+
   $('*').each((i, el) => {
     if (el.type === 'tag') {
       // Converts the markup to HTML5 (if it is XHTML for example)
@@ -75,7 +129,7 @@ const reduceHtml = ($: cheerio.CheerioAPI) => {
       // remove unnecessary attributes
       const attributes = Object.keys(el.attribs);
       attributes.forEach((key) => {
-        if (!['href', 'src', 'alt'].includes(key)) {
+        if (!['href', 'src', 'alt', 'height', 'width'].includes(key)) {
           delete el.attribs[key];
         }
       });
@@ -119,44 +173,21 @@ const reduceHtml = ($: cheerio.CheerioAPI) => {
         }
       }
 
+      // remove all link javascript: links
+      if (el.name === 'a' && el.attribs.href.startsWith('javascript:')) {
+        $(el).replaceWith($(el).contents());
+      }
+
       // if the element is a img then remove the img if it does not have src attribute
       if (el.name === 'img') {
         if (!el.attribs.src) {
           $(el).remove();
         }
       }
-    }
 
-    // if the element is comment then remove it
-    if (el.type === 'comment') {
-      $(el).remove();
-    }
-  });
-
-  // Removes: <script>, <style>, <link>, <meta>, <title>, <head>, <html>, <body>
-  $('script, style, link, meta, title, head, html, body, comment').remove();
-
-  // loop all contents of the html and process them
-  $('*').each((i, el: any) => {
-    // process text nodes, if the text node is empty then remove it
-    if (el.type === 'text') {
-      const text = $(el).text().trim();
-      const parent = $(el).parent();
-      const parentName = parent[0].name;
-      // if the parent is a p tag then replace the text with a p tag
-      if (['div'].includes(parentName)) {
-        console.log('parent is div', text);
-        $(el).replaceWith(`<p>${text}</p>`);
-      }
-    }
-
-    // insert id attribute to all elements
-    if (el.type === 'tag') {
-      // if the element is a block element then add id attribute
       if (SUPPORTED_BLOCK_TAGS.includes(el.name)) {
         // get parent element
         const parent = $(el).parent();
-
         const parentId = parent.attr('id');
         if (!parentId) {
           const id = `mock-${i}`;
@@ -165,31 +196,21 @@ const reduceHtml = ($: cheerio.CheerioAPI) => {
       }
     }
   });
-
-  // remove all comments
-  const isComment = (index, node) => {
-    return node.type === 'comment';
-  };
-  $('*')
-    .contents()
-    .each((i, el) => {
-      if (isComment(i, el)) {
-        $(el).remove();
-      }
-
-      // remove empty text nodes
-      if (el.type === 'text') {
-        const text = $(el).text().trim();
-        if (text === '') {
-          $(el).remove();
-        }
-      }
-    });
 };
 
-const tinyhtml = (html: string) => {
-  // replace some escape characters with their actual characters
-  // &nbsp; => ' ', &amp; => '&', &quot; => '"', &lt; => '<', &gt; => '>'
+const tinyhtml = (html: string, opt?: ProcessOptions) => {
+  const options: ProcessOptions = {
+    removeComments: true,
+    removeEmptyElements: true,
+    removeSmallImages: {
+      minWidth: 100,
+      minHeight: 100,
+    },
+    removeOptionalTags: [],
+    removeScriptTypeAttributes: true,
+    ...opt,
+  };
+
   const cleanedHtml = html
     .replace(/\xA0/g, ' ')
     .replace(/&amp;/g, '&')
@@ -200,7 +221,7 @@ const tinyhtml = (html: string) => {
   const $ = cheerio.load(cleanedHtml, { decodeEntities: false }, false);
 
   // clean and reduce html
-  reduceHtml($);
+  reduceHtml($, options);
 
   // create a empty html document
   const doc = cheerio.load(
@@ -213,16 +234,10 @@ const tinyhtml = (html: string) => {
   const body = doc('body');
 
   // find supported block tags and append them to the body
-  $('*').each((i, el: any) => {
-    const attributes = el.attribs;
-    // get id attribute
-    const id = attributes.id || '';
-    if (id.startsWith('mock-')) {
-      const clone = $(el).clone();
-      // remove id attribute
-      delete clone[0].attribs.id;
-      body.append($(clone));
-    }
+  $('[id^=mock-]').each((i, el: any) => {
+    const clone = $(el).clone();
+    clone.removeAttr('id');
+    body.append($(clone));
   });
 
   return doc.html();
