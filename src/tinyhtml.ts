@@ -41,9 +41,9 @@ const SUPPORTED_BLOCK_TAGS = [
   'ol',
   'table',
   'p',
-  'picture',
-  'img',
   'a',
+  'img',
+  'picture',
 ];
 
 const UN_SUPPORTED_STYLE_TAGS = [
@@ -137,26 +137,50 @@ const reduceHtml = ($: cheerio.CheerioAPI) => {
   $('script, style, link, meta, title, head, html, body, comment').remove();
 
   // loop all contents of the html and process them
+  $('*').each((i, el: any) => {
+    // process text nodes, if the text node is empty then remove it
+    if (el.type === 'text') {
+      const text = $(el).text().trim();
+      const parent = $(el).parent();
+      const parentName = parent[0].name;
+      // if the parent is a p tag then replace the text with a p tag
+      if (['div'].includes(parentName)) {
+        console.log('parent is div', text);
+        $(el).replaceWith(`<p>${text}</p>`);
+      }
+    }
+
+    // insert id attribute to all elements
+    if (el.type === 'tag') {
+      // if the element is a block element then add id attribute
+      if (SUPPORTED_BLOCK_TAGS.includes(el.name)) {
+        // get parent element
+        const parent = $(el).parent();
+        const parentId = parent.attr('id');
+        if (!parentId) {
+          const id = `mock-${i}`;
+          $(el).attr('id', id);
+        }
+      }
+    }
+  });
+
+  // remove all comments
+  const isComment = (index, node) => {
+    return node.type === 'comment';
+  };
   $('*')
     .contents()
-    .each((i, el: any) => {
-      if (el.type === 'comment') {
+    .each((i, el) => {
+      if (isComment(i, el)) {
         $(el).remove();
       }
 
-      // process text nodes, if the text node is empty then remove it
+      // remove empty text nodes
       if (el.type === 'text') {
         const text = $(el).text().trim();
         if (text === '') {
           $(el).remove();
-        } else {
-          const parent = $(el).parent();
-          const parentName = parent[0].name;
-          // if the parent is a p tag then replace the text with a p tag
-          if (['div'].includes(parentName)) {
-            console.log('parent is div', text);
-            $(el).replaceWith(`<p>${text}</p>`);
-          }
         }
       }
     });
@@ -187,14 +211,16 @@ const tinyhtml = (html: string) => {
   // append the reduced html to the empty document
   const body = doc('body');
 
-  // from this, DOM elements is cleaned and reduced. It is ready to be converted to EditorJS format
-  // loop all children of the reduced html and append them to the empty document
-  const children = $('*').children();
-  children.each((i, el) => {
-    // if the element is a block tag then append it to the body
-    if (el.type === 'tag' && SUPPORTED_BLOCK_TAGS.includes(el.name)) {
+  // find supported block tags and append them to the body
+  $('*').each((i, el: any) => {
+    const attributes = el.attribs;
+    // get id attribute
+    const id = attributes.id || '';
+    if (id.startsWith('mock-')) {
       const clone = $(el).clone();
-      body.append(clone);
+      // remove id attribute
+      delete clone[0].attribs.id;
+      body.append($(clone));
     }
   });
 
