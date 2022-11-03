@@ -1,5 +1,7 @@
 import * as cheerio from 'cheerio';
 
+import { _applyCssRules, _applyMeta, _applyAccessibilityAttributes } from './utils/css';
+
 const UN_SUPPORTED_TAGS = [
   'audio',
   'canvas',
@@ -65,6 +67,8 @@ export interface ProcessOptions {
     minWidth: number;
     minHeight: number;
   };
+  cssLinks?: string[];
+  meta?: {};
 }
 
 const reduceHtml = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
@@ -119,6 +123,14 @@ const reduceHtml = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
       // replace unsupported tags with p tag
       if (SECTION_TAGS.includes(el.name)) {
         el.name = 'div';
+      }
+
+      // table tags
+      if (el.name === 'table') {
+        // if there is any a tag inside table, replace it with div
+        $(el).find('a').each((i, a) => {
+          $(a).replaceWith($(a).html() || '');
+        });
       }
 
       // Removes: <audio>, <canvas>, <embed>, <iframe>, <map>, <object>, <svg>, <video>
@@ -239,6 +251,15 @@ const tinyhtml = (html: string, opt?: ProcessOptions) => {
     clone.removeAttr('id');
     body.append($(clone));
   });
+
+  // apply meta tags
+  _applyMeta(doc, options.meta);
+
+  // apply css
+  _applyCssRules(doc, options.cssLinks);
+
+  // _apply accessibility attributes
+  _applyAccessibilityAttributes(doc);
 
   return doc.html();
 };
