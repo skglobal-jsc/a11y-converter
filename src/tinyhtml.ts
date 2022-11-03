@@ -156,6 +156,7 @@ const reduceHtml = ($: cheerio.CheerioAPI) => {
       if (SUPPORTED_BLOCK_TAGS.includes(el.name)) {
         // get parent element
         const parent = $(el).parent();
+
         const parentId = parent.attr('id');
         if (!parentId) {
           const id = `mock-${i}`;
