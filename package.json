@@ -1,8 +1,8 @@
 {
-  "name": "a11y-converter",
-  "description": "Convert original HTML codes to a11y HTML",
-  "version": "0.3.3",
-  "source": "src/converter.ts",
+  "name": "minhtml",
+  "description": "A tiny HTML parser, written in TypeScript",
+  "version": "0.1.0",
+  "source": "src/tinyhtml.ts",
   "main": "./dist/index.js",
   "module": "dist/index.module.js",
   "unpkg": "dist/index.umd.js",

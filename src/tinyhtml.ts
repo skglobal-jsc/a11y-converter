@@ -29,8 +29,8 @@ const SECTION_TAGS = [
   'details',
 ];
 
+// this is total block tags supported by EditorJS
 const SUPPORTED_BLOCK_TAGS = [
-  'p',
   'h1',
   'h2',
   'h3',
@@ -40,6 +40,9 @@ const SUPPORTED_BLOCK_TAGS = [
   'ul',
   'ol',
   'table',
+  'p',
+  'picture',
+  'img'
 ];
 
 const UN_SUPPORTED_STYLE_TAGS = [
@@ -52,17 +55,6 @@ const UN_SUPPORTED_STYLE_TAGS = [
   's',
 ];
 
-const removeAttributes = (el: cheerio.Element) => {
-  if (el.type === 'tag') {
-    const attributes = Object.keys(el.attribs);
-    attributes.forEach((key) => {
-      if (!['href', 'src', 'alt'].includes(key)) {
-        delete el.attribs[key];
-      }
-    });
-  }
-};
-
 const reduceHtml = ($: cheerio.CheerioAPI) => {
   $('*').each((i, el) => {
     if (el.type === 'tag') {
@@ -71,7 +63,7 @@ const reduceHtml = ($: cheerio.CheerioAPI) => {
 
       // replace unsupported tags with p tag
       if (SECTION_TAGS.includes(el.name)) {
-        el.name = 'p';
+        el.name = 'div';
       }
 
       // Removes: <audio>, <canvas>, <embed>, <iframe>, <map>, <object>, <svg>, <video>
@@ -80,8 +72,14 @@ const reduceHtml = ($: cheerio.CheerioAPI) => {
       }
 
       // remove unnecessary attributes
-      removeAttributes(el);
+      const attributes = Object.keys(el.attribs);
+      attributes.forEach((key) => {
+        if (!['href', 'src', 'alt'].includes(key)) {
+          delete el.attribs[key];
+        }
+      });
 
+      // -----SOME CLEANING-----
       // if picture inside [picture] tag then unwrap img from picture
       if (el.name === 'picture') {
         const img = $(el).find('img');
@@ -126,29 +124,54 @@ const reduceHtml = ($: cheerio.CheerioAPI) => {
           $(el).remove();
         }
       }
-
     }
 
-
-      // if the element is comment then remove it
-      if (el.type === 'comment') {
-        $(el).remove();
-      }
+    // if the element is comment then remove it
+    if (el.type === 'comment') {
+      $(el).remove();
+    }
   });
 
   // Removes: <script>, <style>, <link>, <meta>, <title>, <head>, <html>, <body>
   $('script, style, link, meta, title, head, html, body, comment').remove();
 
-  // Removes comments
-  $('*').contents().each((i, el) => {
-    if (el.type === 'comment') {
-      $(el).remove();
-    }
-  });
+  // loop all contents of the html and process them
+  $('*')
+    .contents()
+    .each((i, el: any) => {
+      if (el.type === 'comment') {
+        $(el).remove();
+      }
+
+      // process text nodes, if the text node is empty then remove it
+      if (el.type === 'text') {
+        const text = $(el).text().trim();
+        if (text === '') {
+          $(el).remove();
+        } else {
+          const parent = $(el).parent();
+          const parentName = parent[0].name;
+          // if the parent is a p tag then replace the text with a p tag
+          if (['div'].includes(parentName)) {
+            console.log('parent is div', text);
+            $(el).replaceWith(`<p>${text}</p>`);
+          }
+        }
+      }
+    });
 };
 
 const tinyhtml = (html: string) => {
-  const $ = cheerio.load(html, { decodeEntities: false }, false);
+  // replace some escape characters with their actual characters
+  // &nbsp; => ' ', &amp; => '&', &quot; => '"', &lt; => '<', &gt; => '>'
+  const cleanedHtml = html
+    .replace(/\xA0/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>');
+
+  const $ = cheerio.load(cleanedHtml, { decodeEntities: false }, false);
 
   // clean and reduce html
   reduceHtml($);
