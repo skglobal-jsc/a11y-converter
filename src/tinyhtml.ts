@@ -43,7 +43,7 @@ const SUPPORTED_BLOCK_TAGS = [
   'p',
   'picture',
   'img',
-  'a'
+  'a',
 ];
 
 const UN_SUPPORTED_STYLE_TAGS = [
@@ -187,13 +187,12 @@ const tinyhtml = (html: string) => {
   // append the reduced html to the empty document
   const body = doc('body');
 
-  // find supported block tags and append them to the body
-  const supportedBlockTags = SUPPORTED_BLOCK_TAGS.join(',');
-  $(supportedBlockTags).each((i, el) => {
-    // get children of the element, if children doest not contain any p tag then append the element to the body
-    const children = $(el).children();
-    const childrenBlockTags = children.filter('p');
-    if (childrenBlockTags.length === 0) {
+  // from this, DOM elements is cleaned and reduced. It is ready to be converted to EditorJS format
+  // loop all children of the reduced html and append them to the empty document
+  const children = $('*').children();
+  children.each((i, el) => {
+    // if the element is a block tag then append it to the body
+    if (el.type === 'tag' && SUPPORTED_BLOCK_TAGS.includes(el.name)) {
       const clone = $(el).clone();
       body.append(clone);
     }
