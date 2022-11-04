@@ -24,6 +24,9 @@ export const _applyCssRules = ($: cheerio.CheerioAPI, cssRules?: string[]) => {
 
   const $body = $('body');
 
+  // remove all attributes of body
+  $body.removeAttr('class id style');
+
   // TODO: Should use class instead of id
   $body.attr('id', 'skg-style');
 
@@ -58,6 +61,15 @@ export const _applyMeta = ($: cheerio.CheerioAPI, meta?: any) => {
       $head.append(`<meta name="${key}" content="${meta[key]}">`);
     });
   }
+
+  // default social meta
+  // $head.append('<meta property="og:title" content="SK Global News" />');
+  // $head.append('<meta property="og:type" content="article" />');
+  // $head.append('<meta property="og:url" content="https://news.crawler.sk-global.io" />');
+  // $head.append('<meta property="og:image" content="https://news.crawler.sk-global.io/news/images/sk-global-logo.png" />');
+  // $head.append('<meta property="og:description" content="SK Global News" />');
+  // $head.append('<meta property="og:site_name" content="SK Global News" />');
+  // $head.append('<meta property="og:locale" content="en_US" />');
 };
 
 export const _applyAccessibilityAttributes = ($: cheerio.CheerioAPI) => {

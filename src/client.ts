@@ -1,27 +1,25 @@
 import type { IncomingHttpHeaders, IncomingMessage } from 'node:http';
-import type {
-  OptionsInit,
-  Method,
-  Request as GotRequest,
-  Options,
-} from 'got-scraping';
-
-import * as cheerio from 'cheerio';
-
 import iconv from 'iconv-lite';
 import * as contentTypeParser from 'content-type';
 
 import { extname } from 'node:path';
 import * as mime from 'mime-types';
-import { gotScraping, TimeoutError } from 'got-scraping';
-import { concatStreamToBuffer } from './utils/index';
+import {
+  gotScraping,
+  TimeoutError,
+  OptionsInit,
+  Method,
+  Request as GotRequest,
+  Options,
+} from 'got-scraping';
+import { readStreamToString } from './utils/streams_utilities';
 
-const HTML_AND_XML_MIME_TYPES = [
-  'text/html',
-  'text/xml',
-  'application/xhtml+xml',
-  'application/xml',
-];
+export interface RequestsOptions {
+  url?: string;
+  method: Method;
+  headers?: IncomingHttpHeaders;
+  payload?: string;
+}
 
 /**
  * Gets parsed content type from response object
@@ -100,106 +98,15 @@ function addResponsePropertiesToStream(stream: GotRequest) {
   return stream as unknown as IncomingMessage;
 }
 
-export interface SkipImageOptions {
-  minHeight?: number;
-  minWidth?: number;
-  matchName?: RegExp;
-}
-export interface ScrapingOptions {
-  contentSelector?: string;
-  language?: string;
-  skipImageOptions?: SkipImageOptions;
-}
-export interface RequestsOptions {
-  url?: string;
-  loadedUrl?: string;
-  method: Method;
-  headers?: IncomingHttpHeaders;
-  payload?: string;
-
-  html?: string;
-
-  scrapingOptions?: ScrapingOptions;
-
-  // extend function, used it do some custom logic
-  extendFunction?: (options: any) => any;
-
-  // allow user custom style of the html
-  stylesheets?: string[];
-
-  // Google analytics
-  googleAnalyticsId?: string;
-
-  // enable or disable A11y player
-  enablePlayer?: boolean;
-}
-
-export class BasicConverter {
-  protected requestHandlerTimeoutMillis!: number;
-  protected ignoreSslErrors: boolean = false;
-
-  constructor() {}
-
-  async convert(opt: RequestsOptions): Promise<any> {
-    const options = {
-      ...opt,
-      method: opt.method || 'GET',
-    };
-    await this._init();
-
-    const stats = {};
-
-    let result: any = null;
-    if (options.url) {
-      result = await this._requestFunction({
-        options,
-      });
-    } else if (options.html && options.loadedUrl) {
-      result = await this._convertFromHtml(options.html, options);
-    } else {
-      throw new Error('No URL or HTML provided');
-    }
-
-    // start convert process
-    let text: any = null;
-    if (result) {
-      const { html, contentType, $ } = await this._convertHtml({
-        result,
-        options,
-      });
-
-      // execute extend function if it exists
-      if (options.extendFunction) {
-        await options.extendFunction({ html, $, contentType });
-      }
-
-      // finally, get html
-      text = $ ? $.html() : html;
-    }
-
-    await this._clean();
-    return { html: text, stats };
-  }
-
-  /**
-   * Converts standard html to a11y html
-   * @param param0
-   */
-  protected async _convertHtml({
-    result,
-    options,
-  }: {
-    result: any;
-    options: RequestsOptions;
-  }): Promise<{
-    html: string;
-    contentType: string;
-    isXml: boolean;
-    response: IncomingMessage;
-    dom: any;
-    $: any;
-  }> {
-    throw new Error('Not implemented');
+export class Client {
+  private requestHandlerTimeoutMillis: number;
+  constructor(
+    private options: RequestsOptions,
+    private ignoreSslErrors?: boolean
+  ) {
+    this.options = options;
+    this.ignoreSslErrors = ignoreSslErrors || false;
+    this.requestHandlerTimeoutMillis = 60000;
   }
 
   /**
@@ -207,24 +114,15 @@ export class BasicConverter {
    * on the request such as only downloading the request body if the
    * received content type matches text/html, application/xml, application/xhtml+xml.
    */
-  protected async _requestFunction({
-    options,
-    proxyUrl,
-    gotOptions,
-  }: {
-    options: RequestsOptions;
-    proxyUrl?: string;
-    gotOptions?: OptionsInit;
-  }): Promise<{
-    body?: Buffer;
+  public async getHtml(): Promise<{
+    body?: string;
     isXml: boolean;
-    response: IncomingMessage;
     contentType: {
       type: string;
       encoding: string;
     };
   }> {
-    const opts = this._getRequestOptions(options, proxyUrl, gotOptions);
+    const opts = this._getRequestOptions(this.options);
 
     try {
       const responseStream = await this._requestAsBrowser(opts);
@@ -236,7 +134,7 @@ export class BasicConverter {
       );
 
       const { response, encoding } = this._encodeResponse(
-        options,
+        this.options,
         responseStream,
         charset
       );
@@ -246,51 +144,34 @@ export class BasicConverter {
         throw new Error(
           `${statusCode} - Internal Server Error. ${response.url}`
         );
-      } else if (HTML_AND_XML_MIME_TYPES.includes(type)) {
-        const isXml = type.includes('xml');
-        const parsed = await this._parseHTML(response, isXml);
-        return { ...parsed, isXml, response, contentType };
       } else {
-        const body = await concatStreamToBuffer(response);
-        return { body, response, contentType, isXml: false };
+        const isXml = type.includes('xml');
+        const body = await readStreamToString(response);
+        return { body, isXml, contentType };
       }
     } catch (e) {
       if (e instanceof TimeoutError) {
         this._handleRequestTimeout();
       }
-
       throw e;
     }
-  }
-
-  protected async _parseHTML(
-    response: IncomingMessage,
-    _isXml: boolean
-  ): Promise<any> {
-    return {
-      body: await concatStreamToBuffer(response),
-    };
   }
 
   /**
    * Combines the provided `requestOptions` with mandatory (non-overridable) values.
    */
-  protected _getRequestOptions(
-    options: RequestsOptions,
-    proxyUrl?: string,
-    gotOptions?: OptionsInit
-  ) {
+  protected _getRequestOptions(options: RequestsOptions) {
     const requestOptions: OptionsInit & { isStream: true } = {
       url: options.url,
       method: options.method as Method,
-      proxyUrl,
-      ...gotOptions,
-      headers: { ...options.headers, ...gotOptions?.headers },
+      headers: { ...options.headers },
       https: {
-        ...gotOptions?.https,
         rejectUnauthorized: !this.ignoreSslErrors,
       },
       isStream: true,
+      timeout: {
+        request: this.requestHandlerTimeoutMillis * 1000,
+      },
     };
 
     // Delete any possible lowercased header for cookie as they are merged in _applyCookies under the uppercase Cookie header
@@ -300,17 +181,6 @@ export class BasicConverter {
       requestOptions.body = options.payload ?? '';
 
     return requestOptions;
-  }
-
-  /**
-   * Handles timeout request
-   */
-  protected _handleRequestTimeout() {
-    throw new Error(
-      `request timed out after ${
-        this.requestHandlerTimeoutMillis / 1000
-      } seconds.`
-    );
   }
 
   /**
@@ -380,29 +250,14 @@ export class BasicConverter {
     );
   }
 
-  protected async _init(): Promise<void> {
-    console.log('Initializing...');
-  }
-
-  protected async _clean(): Promise<void> {
-    console.log('Cleaning...');
-  }
-
-  private async _convertFromHtml(
-    html: string,
-    options: RequestsOptions
-  ): Promise<any> {
-    const $ = cheerio.load(html);
-    const isXml = false;
-    return {
-      $,
-      isXml,
-      response: {
-        url: options.loadedUrl,
-      },
-      get body() {
-        return isXml ? $!.xml() : $!.html({ decodeEntities: false });
-      },
-    };
+  /**
+   * Handles timeout request
+   */
+  protected _handleRequestTimeout() {
+    throw new Error(
+      `request timed out after ${
+        this.requestHandlerTimeoutMillis / 1000
+      } seconds.`
+    );
   }
 }

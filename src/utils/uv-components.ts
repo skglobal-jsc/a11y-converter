@@ -22,7 +22,7 @@ export const buildHeadingComponent = (
     $heading.attr('id') || `heading-${Math.random().toString(36).substr(2, 9)}`
   );
   // accessibility aria-label
-  $heading.attr('aria-label', speechText || $heading.text());
+  // $heading.attr('aria-label', speechText || $heading.text());
 
   // apply a11y styles
   $heading.addClass('uv_heading');
@@ -41,7 +41,7 @@ export const buildTextComponent = (
   );
 
   // accessibility aria-label
-  $text.attr('aria-label', speechText || $text.text());
+  // $text.attr('aria-label', speechText || $text.text());
 
   // apply a11y styles
   $text.addClass('uv_text');
@@ -54,15 +54,10 @@ export const buildImageComponent = (
   // apply a11y attributes
   $image.attr('role', 'img');
   $image.attr('tabindex', '0');
+
   $image.attr(
     'id',
     $image.attr('id') || `img-${Math.random().toString(36).substr(2, 9)}`
-  );
-
-  // accessibility aria-label
-  $image.attr(
-    'aria-label',
-    speechText || $image.attr('alt') || $image.attr('title') || ''
   );
 
   // apply a11y styles
@@ -80,9 +75,6 @@ export const buildListComponent = (
     'id',
     $list.attr('id') || `list-${Math.random().toString(36).substr(2, 9)}`
   );
-
-  // accessibility aria-label
-  $list.attr('aria-label', speechText || $list.text());
 
   // apply a11y styles
   $list.addClass('uv_list');

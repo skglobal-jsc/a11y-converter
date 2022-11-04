@@ -1,4 +1,5 @@
 import * as cheerio from 'cheerio';
+import { Client, RequestsOptions } from './client';
 
 import {
   _applyCssRules,
@@ -15,6 +16,9 @@ const UN_SUPPORTED_TAGS = [
   'object',
   'svg',
   'video',
+  'noscript',
+  'script',
+  'style',
 ];
 
 const SECTION_TAGS = [
@@ -76,31 +80,27 @@ const EDITOR_BLOCK_TAGS = [
 ];
 
 export interface ProcessOptions {
-  removeComments: boolean;
-  removeEmptyElements: boolean;
-  removeScriptTypeAttributes: boolean;
-  removeOptionalTags: string[];
-  removeSmallImages: {
+  removeComments?: boolean;
+  removeEmptyElements?: boolean;
+  removeScriptTypeAttributes?: boolean;
+  removeOptionalTags?: string[];
+  removeSmallImages?: {
     minWidth: number;
     minHeight: number;
   };
+
   cssLinks?: string[];
   meta?: {};
+  lang?: string;
+  url?: string; // url of the page
+  contentSelectors?: string[]; // selector of the content
 }
 
 const reduceHtml = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
-  if (opt.removeScriptTypeAttributes) {
-    const $head = $('head');
-    $head.find('link').remove();
-    $head.find('script').remove();
-    $head.find('style').remove();
-  }
-
-  $('body *')
+  $('*')
     .contents()
     .each((i, el) => {
       if (el.type === 'tag') {
-
         // Converts the markup to HTML5 (if it is XHTML for example)
         el.name = el.name.toLowerCase();
 
@@ -114,7 +114,10 @@ const reduceHtml = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
           $(el).replaceWith($(el).contents());
         }
         // remove optional tags
-        if (opt.removeOptionalTags.includes(el.name)) {
+        if (
+          opt.removeOptionalTags &&
+          opt.removeOptionalTags.includes(el.name)
+        ) {
           $(el).remove();
         }
 
@@ -136,19 +139,14 @@ const reduceHtml = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
 
         // if element is EDITOR_BLOCK_TAGS and parent is div then unwrap the element
         if (EDITOR_BLOCK_TAGS.includes(el.name)) {
+          let child = $(el);
           if ($(el).parent().is('div')) {
             $(el).unwrap();
           }
-        }
-
-        // remove empty tags with cheerio, but also keep images:
-        if (
-          opt.removeEmptyElements &&
-          el.name !== 'img' &&
-          $(el).find('img').length === 0 &&
-          $(el).text().trim().length === 0
-        ) {
-          $(el).remove();
+          // while (child.parent().is('div')) {
+          //   child.unwrap();
+          //   child = child.parent();
+          // }
         }
 
         // remove unnecessary attributes
@@ -160,6 +158,16 @@ const reduceHtml = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
         });
 
         // TODO: some cleanup is required here
+        // remove empty tags with cheerio, but also keep images:
+        if (
+          opt.removeEmptyElements &&
+          el.name !== 'img' &&
+          $(el).find('img').length === 0 &&
+          $(el).text().trim().length === 0
+        ) {
+          $(el).remove();
+        }
+
         // if picture inside [picture] tag then unwrap img from picture
         if (el.name === 'picture') {
           const img = $(el).find('img');
@@ -169,7 +177,7 @@ const reduceHtml = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
         }
 
         // remove images with small width and height
-        if (el.name === 'img') {
+        if (el.name === 'img' && opt.removeSmallImages) {
           const width = el.attribs.width;
           const height = el.attribs.height;
           if (
@@ -194,31 +202,33 @@ const reduceHtml = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
       } else {
         // other types of elements are not supported, e.g. script, style, etc.
         $(el).remove();
+
+        console.warn(`Unsupported element type: ${el.type}`);
       }
     });
 
   // step 2: after cleaning the html, the DOM now cleaned
-  $('body')
-    .children()
-    .each((i, el) => {
-      // if element is SECTION_TAGS then unwrap children of the element
-      if (SECTION_TAGS.includes(el.name)) {
-        $(el).replaceWith($(el).contents());
-      }
-    });
+  $('body *').each((i, el) => {
+    // if element is SECTION_TAGS then unwrap children of the element
+    if (SECTION_TAGS.includes(el.name)) {
+      $(el).replaceWith($(el).contents());
+    }
+  });
 };
 
-const tinyhtml = (html: string, opt?: ProcessOptions) => {
+const tinyhtml = async (html: string, opt?: ProcessOptions) => {
   console.time('tinyhtml');
   const options: ProcessOptions = {
     removeComments: true,
-    removeEmptyElements: false,
+    removeEmptyElements: true,
     removeSmallImages: {
       minWidth: 100,
       minHeight: 100,
     },
     removeOptionalTags: [],
     removeScriptTypeAttributes: true,
+    lang: 'en',
+    contentSelectors: ['body'],
     ...opt,
   };
 
@@ -231,37 +241,63 @@ const tinyhtml = (html: string, opt?: ProcessOptions) => {
 
   const $ = cheerio.load(cleanedHtml, { decodeEntities: true }, true);
 
+  // select the content
+  const $content = $(options.contentSelectors!.join(','));
+  // create new body
+  const $body = cheerio.load('<body></body>', { decodeEntities: true }, true);
+  // append the content to the new body
+  $body('body').append($content);
+
+  // replace the body with the new body
+  $('body').replaceWith($body('body'));
+
   // clean and reduce html
   reduceHtml($, options);
 
-  // create a empty html document
-  const doc = cheerio.load(
-    '<!DOCTYPE html><html><head></head><body></body></html>',
-    { decodeEntities: false },
-    true
-  );
+  // add lang attribute to html tag
+  $('html').attr('lang', $('html').attr('lang') || options.lang || 'en');
 
-  // append the reduced html to the empty document
-  const body = doc('body');
-
-  // find supported block tags and append them to the body
-  // $('[id^=mock-]').each((i, el: any) => {
-  //   const clone = $(el).clone();
-  //   clone.removeAttr('id');
-  //   body.append($(clone));
-  // });
+  // namespace html tag
+  $('html').attr('xmlns', 'http://www.w3.org/1999/xhtml');
 
   // apply meta tags
-  // _applyMeta(doc, options.meta);
+  _applyMeta($, options.meta);
 
   // apply css
-  // _applyCssRules(doc, options.cssLinks);
+  _applyCssRules($, options.cssLinks);
 
   // _apply accessibility attributes
-  // _applyAccessibilityAttributes(doc);
+  _applyAccessibilityAttributes($);
 
   console.timeEnd('tinyhtml');
-  return $.html();
+
+  // add doctype
+  const doctype = '<!DOCTYPE html>';
+
+  // append doctype to html
+  const htmlString = doctype + $.html();
+
+  return htmlString;
 };
 
-export default tinyhtml;
+const fromUrl = async ({
+  url,
+  requestOpt,
+  opt,
+}: {
+  url: string;
+  requestOpt?: RequestsOptions;
+  opt?: ProcessOptions;
+}) => {
+  const requestOptions: RequestsOptions = {
+    url,
+    method: requestOpt?.method || 'GET',
+    headers: requestOpt?.headers || {},
+    payload: requestOpt?.payload,
+  };
+  const client = new Client(requestOptions);
+  const { body = '' } = await client.getHtml();
+  return tinyhtml(body, opt);
+};
+
+export { tinyhtml, fromUrl };
