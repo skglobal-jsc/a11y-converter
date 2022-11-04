@@ -212,7 +212,7 @@ const tinyhtml = (html: string, opt?: ProcessOptions) => {
   console.time('tinyhtml');
   const options: ProcessOptions = {
     removeComments: true,
-    removeEmptyElements: true,
+    removeEmptyElements: false,
     removeSmallImages: {
       minWidth: 100,
       minHeight: 100,
