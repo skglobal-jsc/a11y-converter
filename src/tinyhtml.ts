@@ -1,11 +1,11 @@
 import * as cheerio from 'cheerio';
-import { Client, RequestsOptions } from './client';
-import * as url from 'url';
+import { Client, RequestsOptions } from './utils/client';
 
 import {
   _applyCssRules,
   _applyMeta,
   _applyAccessibilityAttributes,
+  _applyGoogleAnalytics,
 } from './utils/css';
 import { convertRelativeUrlsToAbsolute } from './utils/helper';
 
@@ -96,6 +96,12 @@ export interface ProcessOptions {
   lang?: string;
   url?: string; // url of the page
   contentSelectors?: string[]; // selector of the content
+  googleAnalyticsId?: string;
+
+  hooks?: {
+    beforeProcess?($: cheerio.CheerioAPI): Promise<void>;
+    afterProcess?($: cheerio.CheerioAPI): Promise<void>;
+  };
 }
 
 const reduceHtml = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
@@ -272,6 +278,13 @@ const tinyhtml = async (html: string, opt?: ProcessOptions) => {
 
   const $ = cheerio.load(cleanedHtml, { decodeEntities: true }, true);
 
+  // hook to process the DOM
+  if (options.hooks?.beforeProcess) {
+    console.time('hooks.beforeProcess');
+    await options.hooks.beforeProcess($);
+    console.timeEnd('hooks.beforeProcess');
+  }
+
   // select the content of the page using contentSelectors. If doesn't exist then select the whole body
   if (options.contentSelectors && options.contentSelectors.length > 0) {
     const $content = $(options.contentSelectors!.join(','));
@@ -294,6 +307,11 @@ const tinyhtml = async (html: string, opt?: ProcessOptions) => {
   // apply meta tags
   _applyMeta($, options.meta);
 
+  // apply google analytics, if needed
+  if (options.googleAnalyticsId) {
+    _applyGoogleAnalytics($, options.googleAnalyticsId);
+  }
+
   // apply css
   _applyCssRules($, options.cssLinks);
 
@@ -301,6 +319,12 @@ const tinyhtml = async (html: string, opt?: ProcessOptions) => {
   _applyAccessibilityAttributes($);
 
   console.timeEnd('tinyhtml');
+
+  if (options.hooks?.afterProcess) {
+    console.time('hooks.afterProcess');
+    await options.hooks.afterProcess($);
+    console.timeEnd('hooks.afterProcess');
+  }
 
   // append doctype to html
   const htmlString = $.html();

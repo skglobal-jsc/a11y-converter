@@ -12,7 +12,7 @@ import {
   Request as GotRequest,
   Options,
 } from 'got-scraping';
-import { readStreamToString } from './utils/streams_utilities';
+import { readStreamToString } from './streams_utilities';
 
 export interface RequestsOptions {
   url?: string;

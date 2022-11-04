@@ -34,6 +34,10 @@ const saveHtmlToFile = async (path: string, html: string): Promise<void> => {
     opt: {
       contentSelectors: ['main'],
       url,
+      hooks: {
+        beforeProcess: async ($) => {},
+        afterProcess: async ($) => {},
+      },
     },
   });
   await saveHtmlToFile('./data/test1-out.html', res);
