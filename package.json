@@ -1,12 +1,12 @@
 {
   "name": "htmltiny",
   "description": "A tiny HTML parser, written in TypeScript",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "source": "src/tinyhtml.ts",
   "main": "./dist/index.js",
   "module": "dist/index.module.js",
   "unpkg": "dist/index.umd.js",
-  "types": "dist/index.d.ts",
+  "types": "dist/tinyhtml.d.ts",
   "files": [
     "dist/**.js*",
     "dist/**/*.ts"
