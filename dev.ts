@@ -27,14 +27,13 @@ const saveHtmlToFile = async (path: string, html: string): Promise<void> => {
 };
 
 (async () => {
+  const url =
+    'https://www.city.fukuoka.lg.jp/hofuku/coronavaccine/wakutin.html';
   const res = await fromUrl({
-    url: 'https://vnexpress.net/g7-va-australia-nhat-tri-ap-gia-co-dinh-voi-dau-nga-4532045.html',
+    url,
     opt: {
-      contentSelectors: [
-        '#dark_theme > section.section.page-detail.top-detail > div > div.sidebar-1 > h1',
-        '#dark_theme > section.section.page-detail.top-detail > div > div.sidebar-1 > p',
-        '#dark_theme > section.section.page-detail.top-detail > div > div.sidebar-1 > article'
-      ],
+      contentSelectors: ['.wb-contents'],
+      url,
     },
   });
   await saveHtmlToFile('./data/test1-out.html', res);

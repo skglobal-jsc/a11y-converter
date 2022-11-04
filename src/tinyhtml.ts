@@ -1,11 +1,13 @@
 import * as cheerio from 'cheerio';
 import { Client, RequestsOptions } from './client';
+import * as url from 'url';
 
 import {
   _applyCssRules,
   _applyMeta,
   _applyAccessibilityAttributes,
 } from './utils/css';
+import { convertRelativeUrlsToAbsolute } from './utils/helper';
 
 const UN_SUPPORTED_TAGS = [
   'audio',
@@ -143,10 +145,6 @@ const reduceHtml = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
           if ($(el).parent().is('div')) {
             $(el).unwrap();
           }
-          // while (child.parent().is('div')) {
-          //   child.unwrap();
-          //   child = child.parent();
-          // }
         }
 
         // remove unnecessary attributes
@@ -202,8 +200,7 @@ const reduceHtml = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
       } else {
         // other types of elements are not supported, e.g. script, style, etc.
         $(el).remove();
-
-        console.warn(`Unsupported element type: ${el.type}`);
+        // console.warn(`Unsupported element type: ${el.type}`);
       }
     });
 
@@ -212,6 +209,18 @@ const reduceHtml = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
     // if element is SECTION_TAGS then unwrap children of the element
     if (SECTION_TAGS.includes(el.name)) {
       $(el).replaceWith($(el).contents());
+    }
+
+    // some image has src is relative path, so we need to add domain to it
+    if (el.name === 'img' && opt.url) {
+      const src = el.attribs.src;
+      el.attribs.src = convertRelativeUrlsToAbsolute(opt.url, src);
+    }
+
+    // some links has href is relative path, so we need to add domain to it
+    if (el.name === 'a' && opt.url) {
+      const href = el.attribs.href;
+      el.attribs.href = convertRelativeUrlsToAbsolute(opt.url, href);
     }
   });
 };
@@ -228,7 +237,6 @@ const tinyhtml = async (html: string, opt?: ProcessOptions) => {
     removeOptionalTags: [],
     removeScriptTypeAttributes: true,
     lang: 'en',
-    contentSelectors: ['body'],
     ...opt,
   };
 
@@ -241,15 +249,15 @@ const tinyhtml = async (html: string, opt?: ProcessOptions) => {
 
   const $ = cheerio.load(cleanedHtml, { decodeEntities: true }, true);
 
-  // select the content
-  const $content = $(options.contentSelectors!.join(','));
-  // create new body
-  const $body = cheerio.load('<body></body>', { decodeEntities: true }, true);
-  // append the content to the new body
-  $body('body').append($content);
-
-  // replace the body with the new body
-  $('body').replaceWith($body('body'));
+  // select the content of the page using contentSelectors. If doesn't exist then select the whole body
+  if (options.contentSelectors && options.contentSelectors.length > 0) {
+    const $content = $(options.contentSelectors!.join(','));
+    const $body = cheerio.load('<body></body>', { decodeEntities: true }, true);
+    // append the content to the new body
+    $body('body').append($content);
+    // replace the body with the new body
+    $('body').replaceWith($body('body'));
+  }
 
   // clean and reduce html
   reduceHtml($, options);
