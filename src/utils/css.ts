@@ -108,3 +108,26 @@ export const _applyAccessibilityAttributes = ($: cheerio.CheerioAPI) => {
     }
   });
 };
+
+export const _applyGoogleAnalytics = (
+  $: cheerio.CheerioAPI,
+  googleAnalyticsId: string
+) => {
+  if (googleAnalyticsId) {
+    const $head = $('head');
+    const $script = $('<script></script>');
+    $script.attr('async', 'true');
+    $script.attr(
+      'src',
+      `https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`
+    );
+    $head.append($script);
+
+    const $script2 = $('<script></script>');
+    $script2.text(`window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', '${googleAnalyticsId}');`);
+    $head.append($script2);
+  }
+};

@@ -1,6 +1,10 @@
 import * as cheerio from 'cheerio';
 
-import { _applyCssRules, _applyMeta, _applyAccessibilityAttributes } from './utils/css';
+import {
+  _applyCssRules,
+  _applyMeta,
+  _applyAccessibilityAttributes,
+} from './utils/css';
 
 const UN_SUPPORTED_TAGS = [
   'audio',
@@ -31,8 +35,32 @@ const SECTION_TAGS = [
   'details',
 ];
 
-// this is total block tags supported by EditorJS
-const SUPPORTED_BLOCK_TAGS = [
+// this is total block tags
+const BLOCK_TAGS = [
+  'h1',
+  'h2',
+  'h3',
+  'h4',
+  'h5',
+  'h6',
+  'ul',
+  'ol',
+  'table',
+  'p',
+];
+
+const UN_SUPPORTED_STYLE_TAGS = [
+  'em',
+  'small',
+  'big', // deprecated
+  'sub', // deprecated
+  'strike',
+  'samp',
+  's',
+];
+
+// this is total block tags
+const EDITOR_BLOCK_TAGS = [
   'h1',
   'h2',
   'h3',
@@ -45,17 +73,6 @@ const SUPPORTED_BLOCK_TAGS = [
   'p',
   'a',
   'img',
-  'picture',
-];
-
-const UN_SUPPORTED_STYLE_TAGS = [
-  'em',
-  'small',
-  'big', // deprecated
-  'sub', // deprecated
-  'strike',
-  'samp',
-  's',
 ];
 
 export interface ProcessOptions {
@@ -72,145 +89,127 @@ export interface ProcessOptions {
 }
 
 const reduceHtml = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
-  // Removes: <script>, <style>, <link>, <meta>, <title>, <head>, <html>, <body>
   if (opt.removeScriptTypeAttributes) {
-    $('script, style, link, meta, title, head, html, body, comment').remove();
+    const $head = $('head');
+    $head.find('link').remove();
+    $head.find('script').remove();
+    $head.find('style').remove();
   }
 
-  $('*')
+  $('body *')
     .contents()
     .each((i, el) => {
-      // remove optional tags
-      if (el.type == 'tag' && opt.removeOptionalTags.includes(el.name)) {
-        $(el).remove();
-      }
+      if (el.type === 'tag') {
 
-      if (opt.removeComments && el.type === 'comment') {
-        $(el).remove();
-      }
+        // Converts the markup to HTML5 (if it is XHTML for example)
+        el.name = el.name.toLowerCase();
 
-      // remove empty tags with cheerio, but also keep images:
-      if (
-        opt.removeEmptyElements &&
-        el.type == 'tag' &&
-        el.tagName !== 'img' &&
-        $(el).find('img').length === 0 &&
-        $(el).text().trim().length === 0
-      ) {
-        $(el).remove();
-      }
+        // remove unsupported tags
+        if (UN_SUPPORTED_TAGS.includes(el.name)) {
+          $(el).remove();
+        }
 
-      // remove images with small width and height
-      if (el.type === 'tag' && el.tagName === 'img') {
-        const width = el.attribs.width;
-        const height = el.attribs.height;
+        // if element is a style tag then keep children and remove the style tag
+        if (UN_SUPPORTED_STYLE_TAGS.includes(el.name)) {
+          $(el).replaceWith($(el).contents());
+        }
+        // remove optional tags
+        if (opt.removeOptionalTags.includes(el.name)) {
+          $(el).remove();
+        }
+
+        // fix dom: make sure inside p tag there is no any block tags
+        if (el.name === 'p') {
+          $(el)
+            .contents()
+            .each((i, el) => {
+              if (el.type === 'tag' && BLOCK_TAGS.includes(el.name)) {
+                $(el).replaceWith($(el).contents());
+              }
+            });
+        }
+
+        // replace section tags with div. section tags are not supported by EditorJS
+        if (SECTION_TAGS.includes(el.name)) {
+          el.name = 'div';
+        }
+
+        // if element is EDITOR_BLOCK_TAGS and parent is div then unwrap the element
+        if (EDITOR_BLOCK_TAGS.includes(el.name)) {
+          if ($(el).parent().is('div')) {
+            $(el).unwrap();
+          }
+        }
+
+        // remove empty tags with cheerio, but also keep images:
         if (
-          width &&
-          height &&
-          parseInt(width) < opt.removeSmallImages.minWidth &&
-          parseInt(height) < opt.removeSmallImages.minHeight
+          opt.removeEmptyElements &&
+          el.name !== 'img' &&
+          $(el).find('img').length === 0 &&
+          $(el).text().trim().length === 0
         ) {
           $(el).remove();
         }
+
+        // remove unnecessary attributes
+        const attributes = Object.keys(el.attribs);
+        attributes.forEach((key) => {
+          if (!['href', 'src', 'alt', 'height', 'width', 'id'].includes(key)) {
+            delete el.attribs[key];
+          }
+        });
+
+        // TODO: some cleanup is required here
+        // if picture inside [picture] tag then unwrap img from picture
+        if (el.name === 'picture') {
+          const img = $(el).find('img');
+          if (img.length > 0) {
+            $(img).unwrap();
+          }
+        }
+
+        // remove images with small width and height
+        if (el.name === 'img') {
+          const width = el.attribs.width;
+          const height = el.attribs.height;
+          if (
+            width &&
+            height &&
+            parseInt(width) < opt.removeSmallImages.minWidth &&
+            parseInt(height) < opt.removeSmallImages.minHeight
+          ) {
+            $(el).remove();
+          }
+        }
+      } else if (el.type === 'text') {
+        // if the element is text and parent is div then wrap it with p tag
+        const text = $(el).text().trim();
+        if (text && el.parent?.type === 'tag' && el.parent?.name == 'div') {
+          $(el).wrap('<p></p>');
+        }
+      } else if (el.type === 'comment') {
+        if (opt.removeComments) {
+          $(el).remove();
+        }
+      } else {
+        // other types of elements are not supported, e.g. script, style, etc.
+        $(el).remove();
       }
     });
 
-  $('*').each((i, el) => {
-    if (el.type === 'tag') {
-      // Converts the markup to HTML5 (if it is XHTML for example)
-      el.name = el.name.toLowerCase();
-
-      // replace unsupported tags with p tag
+  // step 2: after cleaning the html, the DOM now cleaned
+  $('body')
+    .children()
+    .each((i, el) => {
+      // if element is SECTION_TAGS then unwrap children of the element
       if (SECTION_TAGS.includes(el.name)) {
-        el.name = 'div';
-      }
-
-      // table tags
-      if (el.name === 'table') {
-        // if there is any a tag inside table, replace it with div
-        $(el).find('a').each((i, a) => {
-          $(a).replaceWith($(a).html() || '');
-        });
-      }
-
-      // Removes: <audio>, <canvas>, <embed>, <iframe>, <map>, <object>, <svg>, <video>
-      if (UN_SUPPORTED_TAGS.includes(el.name)) {
-        $(el).remove();
-      }
-
-      // remove unnecessary attributes
-      const attributes = Object.keys(el.attribs);
-      attributes.forEach((key) => {
-        if (!['href', 'src', 'alt', 'height', 'width'].includes(key)) {
-          delete el.attribs[key];
-        }
-      });
-
-      // -----SOME CLEANING-----
-      // if picture inside [picture] tag then unwrap img from picture
-      if (el.name === 'picture') {
-        const img = $(el).find('img');
-        if (img.length > 0) {
-          $(img).unwrap();
-        }
-      }
-
-      // if element is a style tag then keep children and remove the style tag
-      if (UN_SUPPORTED_STYLE_TAGS.includes(el.name)) {
         $(el).replaceWith($(el).contents());
       }
-
-      // if span has only one child then unwrap the child
-      if (el.name === 'span') {
-        const children = $(el).children();
-        if (children.length === 1) {
-          $(children).unwrap();
-        }
-      }
-
-      // remove empty tags <span></span>, <div></div> etc
-      if (Object.keys(el.attribs).length === 0 && el.children.length === 0) {
-        // if the element is br then replace it with a space
-        if (el.name === 'br') {
-          // $(el).replaceWith(' ');
-        } else {
-          $(el).remove();
-        }
-      }
-
-      // if the element is a link then remove the link if it does not have href attribute
-      if (el.name === 'a') {
-        if (!el.attribs.href) {
-          $(el).replaceWith($(el).contents());
-        }
-      }
-
-      // remove all link javascript: links
-      if (el.name === 'a' && el.attribs.href.startsWith('javascript:')) {
-        $(el).replaceWith($(el).contents());
-      }
-
-      // if the element is a img then remove the img if it does not have src attribute
-      if (el.name === 'img') {
-        if (!el.attribs.src) {
-          $(el).remove();
-        }
-      }
-
-      if (SUPPORTED_BLOCK_TAGS.includes(el.name)) {
-        // get parent element
-        const parent = $(el).parent();
-        const parentId = parent.attr('id');
-        if (!parentId) {
-          const id = `mock-${i}`;
-          $(el).attr('id', id);
-        }
-      }
-    }
-  });
+    });
 };
 
 const tinyhtml = (html: string, opt?: ProcessOptions) => {
+  console.time('tinyhtml');
   const options: ProcessOptions = {
     removeComments: true,
     removeEmptyElements: true,
@@ -230,7 +229,7 @@ const tinyhtml = (html: string, opt?: ProcessOptions) => {
     .replace(/&lt;/g, '<')
     .replace(/&gt;/g, '>');
 
-  const $ = cheerio.load(cleanedHtml, { decodeEntities: false }, false);
+  const $ = cheerio.load(cleanedHtml, { decodeEntities: true }, true);
 
   // clean and reduce html
   reduceHtml($, options);
@@ -246,22 +245,23 @@ const tinyhtml = (html: string, opt?: ProcessOptions) => {
   const body = doc('body');
 
   // find supported block tags and append them to the body
-  $('[id^=mock-]').each((i, el: any) => {
-    const clone = $(el).clone();
-    clone.removeAttr('id');
-    body.append($(clone));
-  });
+  // $('[id^=mock-]').each((i, el: any) => {
+  //   const clone = $(el).clone();
+  //   clone.removeAttr('id');
+  //   body.append($(clone));
+  // });
 
   // apply meta tags
-  _applyMeta(doc, options.meta);
+  // _applyMeta(doc, options.meta);
 
   // apply css
-  _applyCssRules(doc, options.cssLinks);
+  // _applyCssRules(doc, options.cssLinks);
 
   // _apply accessibility attributes
-  _applyAccessibilityAttributes(doc);
+  // _applyAccessibilityAttributes(doc);
 
-  return doc.html();
+  console.timeEnd('tinyhtml');
+  return $.html();
 };
 
 export default tinyhtml;
