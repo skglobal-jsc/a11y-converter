@@ -99,7 +99,22 @@ export interface ProcessOptions {
 }
 
 const reduceHtml = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
-  $('*')
+  // clean head first
+  $('head')
+    .contents()
+    .each((i, el) => {
+      if (el.type === 'tag') {
+        // remove  all except title
+        // we need to keep title because it is used to generate the slug
+        if (el.name !== 'title') {
+          $(el).remove();
+        }
+      } else {
+        $(el).remove();
+      }
+    });
+
+  $('body *')
     .contents()
     .each((i, el) => {
       if (el.type === 'tag') {
@@ -214,13 +229,21 @@ const reduceHtml = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
     // some image has src is relative path, so we need to add domain to it
     if (el.name === 'img' && opt.url) {
       const src = el.attribs.src;
-      el.attribs.src = convertRelativeUrlsToAbsolute(opt.url, src);
+      if (src) {
+        el.attribs.src = convertRelativeUrlsToAbsolute(opt.url, src);
+      } else {
+        $(el).remove();
+      }
     }
 
     // some links has href is relative path, so we need to add domain to it
     if (el.name === 'a' && opt.url) {
       const href = el.attribs.href;
-      el.attribs.href = convertRelativeUrlsToAbsolute(opt.url, href);
+      if (href) {
+        el.attribs.href = convertRelativeUrlsToAbsolute(opt.url, href);
+      } else {
+        $(el).remove();
+      }
     }
   });
 };
@@ -279,11 +302,8 @@ const tinyhtml = async (html: string, opt?: ProcessOptions) => {
 
   console.timeEnd('tinyhtml');
 
-  // add doctype
-  const doctype = '<!DOCTYPE html>';
-
   // append doctype to html
-  const htmlString = doctype + $.html();
+  const htmlString = $.html();
 
   return htmlString;
 };

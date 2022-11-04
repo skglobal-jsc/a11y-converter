@@ -30,7 +30,13 @@ export const _applyCssRules = ($: cheerio.CheerioAPI, cssRules?: string[]) => {
   // TODO: Should use class instead of id
   $body.attr('id', 'skg-style');
 
-  const $head = $('head');
+  let $head = $('head');
+
+  // check find head tag
+  if ($head.length === 0) {
+    console.warn('head tag not found, create new head tag');
+  }
+
   // remove all link of head addtag, it will be added later
   $head.find('link').remove();
 

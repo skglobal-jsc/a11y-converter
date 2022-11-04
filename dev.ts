@@ -28,11 +28,11 @@ const saveHtmlToFile = async (path: string, html: string): Promise<void> => {
 
 (async () => {
   const url =
-    'https://www.city.fukuoka.lg.jp/hofuku/coronavaccine/wakutin.html';
+    'https://skg-development-dev.s3.ap-southeast-1.amazonaws.com/public/original.html';
   const res = await fromUrl({
     url,
     opt: {
-      contentSelectors: ['.wb-contents'],
+      contentSelectors: ['main'],
       url,
     },
   });
