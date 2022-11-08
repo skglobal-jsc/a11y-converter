@@ -258,7 +258,6 @@ const reduceHtml = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
 };
 
 const tinyhtml = async (html: string, opt?: ProcessOptions) => {
-  console.time('tinyhtml');
   const options: ProcessOptions = {
     removeComments: true,
     removeEmptyElements: true,
@@ -283,10 +282,8 @@ const tinyhtml = async (html: string, opt?: ProcessOptions) => {
 
   // hook to process the DOM
   if (options.hooks?.before) {
-    console.time('hooks.beforeProcess');
     // execute the hook
     await executeHookFn(options.hooks.before, $);
-    console.timeEnd('hooks.beforeProcess');
   }
 
   // select the content of the page using contentSelectors. If doesn't exist then select the whole body
@@ -322,13 +319,9 @@ const tinyhtml = async (html: string, opt?: ProcessOptions) => {
   // _apply accessibility attributes
   _applyAccessibilityAttributes($);
 
-  console.timeEnd('tinyhtml');
-
   if (options.hooks?.after) {
-    console.time('hooks.afterProcess');
     // execute the hook
     await executeHookFn(options.hooks.after, $);
-    console.timeEnd('hooks.afterProcess');
   }
 
   // append doctype to html
