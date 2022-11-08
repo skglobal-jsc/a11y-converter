@@ -349,7 +349,7 @@ const fromUrl = async ({
   };
   const client = new Client(requestOptions);
   const { body = '' } = await client.getHtml();
-  return tinyhtml(body, opt);
+  return tinyhtml(body, { ...opt, url });
 };
 
 export { tinyhtml, fromUrl };

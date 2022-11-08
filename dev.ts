@@ -33,7 +33,6 @@ const saveHtmlToFile = async (path: string, html: string): Promise<void> => {
     url,
     opt: {
       contentSelectors: ['main'],
-      url,
       hooks: {
         beforeProcess: async ($) => {},
         afterProcess: async ($) => {},
