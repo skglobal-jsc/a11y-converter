@@ -1,4 +1,3 @@
-import { parseTable } from '@sk-global/scrapeer';
 import * as cheerio from 'cheerio';
 
 const wrapAnnotation = ($: cheerio.CheerioAPI, $el: cheerio.Cheerio<any>, child: any) => {
@@ -110,55 +109,4 @@ export const buildLinkComponent = ($link: cheerio.Cheerio<any>) => {
 
   // apply a11y styles
   $link.addClass('uv_link');
-};
-
-export const buildTableAnnotation = ({
-  $,
-  language = 'ja',
-  el,
-}: {
-  $: cheerio.CheerioAPI;
-  language: string;
-  el: cheerio.Element;
-}) => {
-  const item: any  = {};
-  const data = parseTable($, el, item);
-  if (data) {
-    // TODO: add support for each language
-    const texts = [
-      `この下に、縦${data.totalRows}行、横${data.totalCols}列の表があります。`,
-      `表のタイトルは「${data.caption}」です。`,
-      ...data.rows.map((row) => {
-        if (row.index === 1) {
-          return [`データの1行目`, ...row.cells].join('、');
-        }
-        return [`${row.index}行目`, ...row.cells].join('、');
-      }),
-    ];
-    const text = texts.map((t) => `<p>${t}</p>`).join('');
-    wrapAnnotation($, $(el), text);
-  } else {
-    wrapAnnotation($, $(el), 'ここに表があります。');
-  }
-};
-
-export const buildImageAnnotation = ({
-  $,
-  language = 'ja',
-  el,
-}: {
-  $: cheerio.CheerioAPI;
-  language: string;
-  el: cheerio.Element; // image element
-}) => {
-
-  const altText = $(el).attr('alt');
-  // TODO: add support for each language
-  if (altText) {
-    // apply annotation for img tag
-    wrapAnnotation($, $(el), `ここに「${altText}」の画像があります。`);
-  } else {
-    // apply annotation for img tag
-    wrapAnnotation($, $(el), 'ここに画像があります。');
-  }
 };

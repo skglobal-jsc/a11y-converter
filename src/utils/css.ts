@@ -9,11 +9,9 @@ export const commonCssLinks = [
 
 import {
   buildHeadingComponent,
-  buildImageAnnotation,
   buildImageComponent,
   buildLinkComponent,
   buildListComponent,
-  buildTableAnnotation,
   buildTableComponent,
   buildTextComponent,
 } from './uv-components';
