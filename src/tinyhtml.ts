@@ -7,7 +7,7 @@ import {
   _applyAccessibilityAttributes,
   _applyGoogleAnalytics,
 } from './utils/css';
-import { convertRelativeUrlsToAbsolute } from './utils/helper';
+import { convertRelativeUrlsToAbsolute, executeHookFn } from './utils/helper';
 
 const UN_SUPPORTED_TAGS = [
   'audio',
@@ -99,8 +99,8 @@ export interface ProcessOptions {
   googleAnalyticsId?: string;
 
   hooks?: {
-    beforeProcess?($: cheerio.CheerioAPI): Promise<void>;
-    afterProcess?($: cheerio.CheerioAPI): Promise<void>;
+    before?: string;
+    after?: string;
   };
 }
 
@@ -279,9 +279,10 @@ const tinyhtml = async (html: string, opt?: ProcessOptions) => {
   const $ = cheerio.load(cleanedHtml, { decodeEntities: true }, true);
 
   // hook to process the DOM
-  if (options.hooks?.beforeProcess) {
+  if (options.hooks?.before) {
     console.time('hooks.beforeProcess');
-    await options.hooks.beforeProcess($);
+    // execute the hook
+    await executeHookFn($, options.hooks.before);
     console.timeEnd('hooks.beforeProcess');
   }
 
@@ -320,9 +321,10 @@ const tinyhtml = async (html: string, opt?: ProcessOptions) => {
 
   console.timeEnd('tinyhtml');
 
-  if (options.hooks?.afterProcess) {
+  if (options.hooks?.after) {
     console.time('hooks.afterProcess');
-    await options.hooks.afterProcess($);
+    // execute the hook
+    await executeHookFn($, options.hooks.after);
     console.timeEnd('hooks.afterProcess');
   }
 

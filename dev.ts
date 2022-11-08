@@ -27,6 +27,12 @@ const saveHtmlToFile = async (path: string, html: string): Promise<void> => {
 };
 
 (async () => {
+  const beforeFn = ` ($) => {
+    console.log('beforeFn hook');
+  }`;
+  const afterFn = ` ($) => {
+    console.log('afterrr hook');
+  }`;
   const url =
     'https://skg-development-dev.s3.ap-southeast-1.amazonaws.com/public/original.html';
   const res = await fromUrl({
@@ -34,8 +40,8 @@ const saveHtmlToFile = async (path: string, html: string): Promise<void> => {
     opt: {
       contentSelectors: ['main'],
       hooks: {
-        beforeProcess: async ($) => {},
-        afterProcess: async ($) => {},
+        before: beforeFn,
+        after: afterFn,
       },
     },
   });
