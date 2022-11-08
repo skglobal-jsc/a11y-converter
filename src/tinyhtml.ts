@@ -7,7 +7,10 @@ import {
   _applyAccessibilityAttributes,
   _applyGoogleAnalytics,
 } from './utils/css';
-import { convertRelativeUrlsToAbsolute, executeHookFn } from './utils/helper';
+import {
+  convertRelativeUrlsToAbsolute,
+  executeHookFn,
+} from './utils/helper';
 
 const UN_SUPPORTED_TAGS = [
   'audio',
@@ -282,7 +285,7 @@ const tinyhtml = async (html: string, opt?: ProcessOptions) => {
   if (options.hooks?.before) {
     console.time('hooks.beforeProcess');
     // execute the hook
-    await executeHookFn($, options.hooks.before);
+    await executeHookFn(options.hooks.before, $);
     console.timeEnd('hooks.beforeProcess');
   }
 
@@ -324,7 +327,7 @@ const tinyhtml = async (html: string, opt?: ProcessOptions) => {
   if (options.hooks?.after) {
     console.time('hooks.afterProcess');
     // execute the hook
-    await executeHookFn($, options.hooks.after);
+    await executeHookFn(options.hooks.after, $);
     console.timeEnd('hooks.afterProcess');
   }
 

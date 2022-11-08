@@ -12,31 +12,33 @@ export const convertRelativeUrlsToAbsolute = (
   return href;
 };
 
-export const executeHookFn = async (
-  $: cheerio.CheerioAPI,
-  fnString: string
-) => {
-  const evaluateFunction = async (fnString: string) => {
-    const fn = eval(fnString);
+const evalFunction = (extendOutputFunction: string) => {
+  let extendOutputFunctionEvaled: any;
+  if (extendOutputFunction) {
     try {
-      const userResult = await fn($);
-      return {
-        userResult,
-      };
-    } catch (e: any) {
-      return {
-        error: e.toString(),
-      };
+      extendOutputFunctionEvaled = eval(extendOutputFunction);
+    } catch (e) {
+      throw new Error(
+        `extendOutputFunction is not a valid JavaScript! Error: ${e}`
+      );
     }
-  };
+    if (typeof extendOutputFunctionEvaled !== 'function') {
+      throw new Error(
+        `extendOutputFunction is not a function! Please fix it or use just default output!`
+      );
+    }
+  }
+  return extendOutputFunctionEvaled;
+};
 
-  const resultOrError = await evaluateFunction(fnString);
-  if (resultOrError.error) {
+export const executeHookFn = async (extendOutputFunction: string, $: cheerio.CheerioAPI) => {
+  try {
+    const fn = evalFunction(extendOutputFunction);
+    await fn($);
+  } catch (e) {
     console.warn(
-      `extendOutputFunctionfailed. Returning default output. Error: ${resultOrError.error}`
+      `extendOutputFunction crashed! Pushing default output. Please fix your function if you want to update the output. Error: ${e}`
     );
-    throw new Error(resultOrError.error);
-  } else {
-    return resultOrError.userResult;
+    throw e;
   }
 };

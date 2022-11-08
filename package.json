@@ -1,7 +1,7 @@
 {
   "name": "htmltiny",
   "description": "A tiny HTML parser, written in TypeScript",
-  "version": "0.2.22",
+  "version": "0.2.23",
   "source": "src/tinyhtml.ts",
   "main": "./dist/index.js",
   "module": "dist/index.module.js",
