@@ -1,7 +1,7 @@
 {
   "name": "htmltiny",
   "description": "A tiny HTML parser, written in TypeScript",
-  "version": "0.2.23",
+  "version": "0.3.0",
   "source": "src/tinyhtml.ts",
   "main": "./dist/index.js",
   "module": "dist/index.module.js",
@@ -43,9 +43,6 @@
   },
   "prettier": {
     "singleQuote": true
-  },
-  "peerDependencies": {
-    "@sk-global/scrapeer": "^0.2.4"
   },
   "contributors": [
     "Binh Bui <buithaibinh@gmail.com>"
