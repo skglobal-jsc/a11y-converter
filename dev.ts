@@ -1,4 +1,6 @@
-import { tinyhtml, fromUrl, editorJson2A11yHtml } from './src/tinyhtml';
+import { tinyhtml, fromUrl, editorJson2A11yHtml } from './src/index';
+
+import { renderHtmlToEditor } from './src/api';
 
 import { readFile, writeFile } from 'fs';
 
@@ -46,4 +48,8 @@ const saveHtmlToFile = async (path: string, html: string): Promise<void> => {
     },
   });
   await saveHtmlToFile('./data/test1-out.html', html || '');
+
+  const data = await renderHtmlToEditor(body || '');
+
+  console.log(data);
 })();
