@@ -1,16 +1,15 @@
 import * as cheerio from 'cheerio';
 import { Client, RequestsOptions } from './utils/client';
 
+import { editorJson2A11yHtml, ragtJson2text } from './utils/converter';
+
 import {
   _applyCssRules,
   _applyMeta,
   _applyAccessibilityAttributes,
   _applyGoogleAnalytics,
 } from './utils/css';
-import {
-  convertRelativeUrlsToAbsolute,
-  executeHookFn,
-} from './utils/helper';
+import { convertRelativeUrlsToAbsolute, executeHookFn } from './utils/helper';
 
 const UN_SUPPORTED_TAGS = [
   'audio',
@@ -327,7 +326,10 @@ const tinyhtml = async (html: string, opt?: ProcessOptions) => {
   // append doctype to html
   const htmlString = $.html();
 
-  return htmlString;
+  return {
+    html: htmlString,
+    body: $('body').html(),
+  };
 };
 
 const fromUrl = async ({
@@ -350,4 +352,4 @@ const fromUrl = async ({
   return tinyhtml(body, { ...opt, url });
 };
 
-export { tinyhtml, fromUrl };
+export { tinyhtml, fromUrl, editorJson2A11yHtml, ragtJson2text };

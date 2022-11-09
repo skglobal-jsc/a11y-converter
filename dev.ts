@@ -1,4 +1,4 @@
-import { tinyhtml, fromUrl } from './src/tinyhtml';
+import { tinyhtml, fromUrl, editorJson2A11yHtml } from './src/tinyhtml';
 
 import { readFile, writeFile } from 'fs';
 
@@ -35,7 +35,7 @@ const saveHtmlToFile = async (path: string, html: string): Promise<void> => {
   }`;
   const url =
     'https://skg-development-dev.s3.ap-southeast-1.amazonaws.com/public/original.html';
-  const res = await fromUrl({
+  const { html, body } = await fromUrl({
     url,
     opt: {
       contentSelectors: ['main'],
@@ -45,5 +45,5 @@ const saveHtmlToFile = async (path: string, html: string): Promise<void> => {
       },
     },
   });
-  await saveHtmlToFile('./data/test1-out.html', res);
+  await saveHtmlToFile('./data/test1-out.html', html || '');
 })();
