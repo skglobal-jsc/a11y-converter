@@ -36,11 +36,11 @@ const saveHtmlToFile = async (path: string, html: string): Promise<void> => {
     console.log('afterrr hook');
   }`;
   const url =
-    'https://skg-development-dev.s3.ap-southeast-1.amazonaws.com/public/original.html';
+    'https://www.city.fukuoka.lg.jp/hofuku/coronavaccine/wakutin.html';
   const { html, body } = await fromUrl({
     url,
     opt: {
-      contentSelectors: ['main'],
+      contentSelectors: ['.wb-contents'],
       hooks: {
         before: beforeFn,
         after: afterFn,
@@ -51,5 +51,10 @@ const saveHtmlToFile = async (path: string, html: string): Promise<void> => {
 
   const data = await renderHtmlToEditor(body || '');
 
-  console.log(data);
+  const { html: a11yHtml, meta } = editorJson2A11yHtml(data);
+
+  // save meta data
+  await saveHtmlToFile('./data/test1-meta.json', JSON.stringify(meta));
+
+  await saveHtmlToFile('./data/test2-ragt.html', a11yHtml || '');
 })();

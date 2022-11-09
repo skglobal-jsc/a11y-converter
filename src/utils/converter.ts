@@ -33,7 +33,7 @@ const getMetaByDfs = (root, parentId, arr) => {
         ssml: '',
         user: '',
         actions: [...sentence.matchAll(aTagRegex)].map(
-          (item) => item.groups.href
+          (item) => item.groups?.href
         ),
       });
     });
@@ -211,7 +211,7 @@ const editorJson2ragtJson = (editorJson, lang = 'en') => {
           ssml: '',
           user: '',
           actions: [...sentence.matchAll(aTagRegex)].map(
-            (item) => item.groups.href
+            (item) => item.groups?.href
           ),
         };
       });
@@ -411,7 +411,10 @@ const editorJson2A11yHtml = (data) => {
   // Convert ragt JSON to A11y HTML
   const a11yHtml = ragtJson2a11y(ragJson);
 
-  return a11yHtml;
+  return {
+    html: a11yHtml,
+    meta: ragJson,
+  };
 };
 
 export { editorJson2A11yHtml, ragtJson2text };
