@@ -246,7 +246,7 @@ const editorJson2ragtJson = (editorJson, lang = 'en') => {
   };
 };
 
-const ragtJson2a11y = (ragtJson, metaOpt: MetaOptions) => {
+const ragtJson2a11y = (ragtJson, metaOpt: MetaOptions = {}) => {
   const htmlDefault = `<!DOCTYPE html><html><head></head><body></body></html>`;
 
   const $ = cheerio.load(htmlDefault);
