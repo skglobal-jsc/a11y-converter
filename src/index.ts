@@ -96,14 +96,8 @@ export interface ProcessOptions {
     minWidth: number;
     minHeight: number;
   };
-
-  cssLinks?: string[];
-  meta?: {};
-  lang?: string;
   url?: string; // url of the page
   contentSelectors?: string[]; // selector of the content
-  googleAnalyticsId?: string;
-
   hooks?: {
     before?: string;
     after?: string;
@@ -270,7 +264,6 @@ const tinyhtml = async (html: string, opt?: ProcessOptions) => {
     },
     removeOptionalTags: [],
     removeScriptTypeAttributes: true,
-    lang: 'en',
     ...opt,
   };
 
@@ -283,24 +276,8 @@ const tinyhtml = async (html: string, opt?: ProcessOptions) => {
 
   const $ = cheerio.load(cleanedHtml, { decodeEntities: true }, true);
 
-  // Build meta option content
-  const meta = {
-    lang: $('html')?.attr('lang'),
-    title:
-      $('title')?.text() ?? $('meta[property="og:title"]')?.attr('content'),
-    description:
-      $('meta[name="description"]')?.attr('content') ??
-      $('meta[property="og:description"]')?.attr('content'),
-    keywords: $('meta[name="keywords"]')?.attr('content'),
-    favicon: $('link[rel="icon"]')?.attr('href'),
-    image: $('meta[property="og:image"]')?.attr('content'),
-    type: $('meta[property="og:type"]')?.attr('content'),
-  };
-  const metaOpts = buildMetaOptions(meta);
-
-  // hook to process the DOM
+  // execute the cleaning process
   if (options.hooks?.before) {
-    // execute the hook
     await executeHookFn(options.hooks.before, $);
   }
 
@@ -317,38 +294,14 @@ const tinyhtml = async (html: string, opt?: ProcessOptions) => {
   // clean and reduce html
   reduceHtml($, options);
 
-  // add lang attribute to html tag
-  $('html').attr('lang', $('html').attr('lang') || options.lang || 'en');
-
-  // namespace html tag
-  $('html').attr('xmlns', 'http://www.w3.org/1999/xhtml');
-
-  // apply meta tags
-  _applyMeta($, options.meta);
-
-  // apply google analytics, if needed
-  if (options.googleAnalyticsId) {
-    _applyGoogleAnalytics($, options.googleAnalyticsId);
-  }
-
-  // apply css
-  _applyCssRules($, options.cssLinks);
-
-  // _apply accessibility attributes
-  _applyAccessibilityAttributes($);
-
+  // execute the after hook
   if (options.hooks?.after) {
-    // execute the hook
     await executeHookFn(options.hooks.after, $);
   }
 
-  // append doctype to html
-  const htmlString = $.html();
-
   return {
-    html: htmlString,
+    html: $.html(),
     body: $('body').html(),
-    metaOpts: metaOpts,
   };
 };
 

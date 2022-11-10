@@ -3,6 +3,7 @@ import { tinyhtml, fromUrl, editorJson2A11yHtml } from './src/index';
 import { renderHtmlToEditor } from './src/api';
 
 import { readFile, writeFile } from 'fs';
+import { MetaOptions } from './src/utils/converter';
 
 const loadHtmlFromFile = async (path: string): Promise<string> => {
   return new Promise((resolve, reject) => {
@@ -37,7 +38,7 @@ const saveHtmlToFile = async (path: string, html: string): Promise<void> => {
   }`;
   const url =
     'https://www.city.fukuoka.lg.jp/hofuku/coronavaccine/wakutin.html';
-  const { html, body, metaOpts } = await fromUrl({
+  const { html, body } = await fromUrl({
     url,
     opt: {
       contentSelectors: ['.wb-contents'],
@@ -50,6 +51,8 @@ const saveHtmlToFile = async (path: string, html: string): Promise<void> => {
   await saveHtmlToFile('./data/test1-out.html', html || '');
 
   const data = await renderHtmlToEditor(body || '');
+
+  const metaOpts: MetaOptions = {};
 
   const { html: a11yHtml, meta } = editorJson2A11yHtml(data, metaOpts);
 

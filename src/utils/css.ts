@@ -46,6 +46,7 @@ export const _applyCssRules = ($: cheerio.CheerioAPI, cssRules?: string[]) => {
 
   // apply a11y stylesheets link
   (cssRules || commonCssLinks).forEach((link) => {
+    console.log('link', link);
     $head.append(`<link rel="stylesheet" href="${link}">`);
   });
 };

@@ -7,6 +7,7 @@ import {
   _applyAccessibilityAttributes,
   _applyGoogleAnalytics,
 } from './css';
+
 export interface MetaOptions {
   title?: string;
   cssLinks?: string[];
@@ -247,6 +248,7 @@ const editorJson2ragtJson = (editorJson, lang = 'en') => {
 
 const ragtJson2a11y = (ragtJson, metaOpt: MetaOptions) => {
   const htmlDefault = `<!DOCTYPE html><html><head></head><body></body></html>`;
+
   const $ = cheerio.load(htmlDefault);
 
   // add lang attribute to html tag
@@ -275,8 +277,10 @@ const ragtJson2a11y = (ragtJson, metaOpt: MetaOptions) => {
   if (metaOpt.googleAnalyticsId) {
     _applyGoogleAnalytics($, metaOpt.googleAnalyticsId);
   }
+
   // apply css
   _applyCssRules($, metaOpt.cssLinks);
+
   ragtJson.blocks.forEach((block) => {
     //TODO: Paragraph
     if (block.type === BLOCK_TYPE.PARAGRAPH) {
