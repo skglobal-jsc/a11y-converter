@@ -380,7 +380,7 @@ const ragtJson2text = (ragtJson) => {
  * @param data EditorJS JSON
  * @returns A11y HTML
  */
-const editorJson2A11yHtml = (data, metaHtml: MetaOptions) => {
+const editorJson2A11yHtml = (data, metaHtml: MetaOptions = {}) => {
   // Convert editorjs JSON to ragt JSON
   const ragJson = editorJson2ragtJson(data, metaHtml.lang);
 

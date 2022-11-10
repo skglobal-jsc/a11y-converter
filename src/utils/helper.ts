@@ -46,31 +46,3 @@ export const executeHookFn = async (
     throw e;
   }
 };
-
-export const buildMetaOptions = (opt: {
-  lang?: string;
-  title?: string;
-  description?: string;
-  keywords?: string;
-  favicon?: string;
-  image?: string;
-  type?: string;
-}): MetaOptions => {
-  const metaOptions: MetaOptions = {
-    lang: opt?.lang ?? '',
-  };
-  metaOptions.meta = {
-    ...(!!opt.description && { description: opt.description }),
-    ...(!!opt.keywords && { keywords: opt.keywords }),
-  };
-  metaOptions.socialMeta = {
-    ...(!!opt.title && { 'og:title': opt.title }),
-    ...(!!opt.description && { 'og:description': opt.description }),
-    ...(!!opt.image && { 'og:image': opt.image }),
-    ...(!!opt.type && { 'og:type': opt.type }),
-  };
-  !!opt.title && (metaOptions.title = opt.title);
-  !!opt.favicon && (metaOptions.favicon = opt.favicon);
-
-  return metaOptions;
-};

@@ -10,7 +10,6 @@ import {
   _applyGoogleAnalytics,
 } from './utils/css';
 import {
-  buildMetaOptions,
   convertRelativeUrlsToAbsolute,
   executeHookFn,
 } from './utils/helper';
