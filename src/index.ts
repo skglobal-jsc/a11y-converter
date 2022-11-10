@@ -9,7 +9,11 @@ import {
   _applyAccessibilityAttributes,
   _applyGoogleAnalytics,
 } from './utils/css';
-import { convertRelativeUrlsToAbsolute, executeHookFn } from './utils/helper';
+import {
+  buildMetaOptions,
+  convertRelativeUrlsToAbsolute,
+  executeHookFn,
+} from './utils/helper';
 
 const UN_SUPPORTED_TAGS = [
   'audio',
@@ -279,6 +283,21 @@ const tinyhtml = async (html: string, opt?: ProcessOptions) => {
 
   const $ = cheerio.load(cleanedHtml, { decodeEntities: true }, true);
 
+  // Build meta option content
+  const meta = {
+    lang: $('html')?.attr('lang'),
+    title:
+      $('title')?.text() ?? $('meta[property="og:title"]')?.attr('content'),
+    description:
+      $('meta[name="description"]')?.attr('content') ??
+      $('meta[property="og:description"]')?.attr('content'),
+    keywords: $('meta[name="keywords"]')?.attr('content'),
+    favicon: $('link[rel="icon"]')?.attr('href'),
+    image: $('meta[property="og:image"]')?.attr('content'),
+    type: $('meta[property="og:type"]')?.attr('content'),
+  };
+  const metaOpts = buildMetaOptions(meta);
+
   // hook to process the DOM
   if (options.hooks?.before) {
     // execute the hook
@@ -329,6 +348,7 @@ const tinyhtml = async (html: string, opt?: ProcessOptions) => {
   return {
     html: htmlString,
     body: $('body').html(),
+    metaOpts: metaOpts,
   };
 };
 

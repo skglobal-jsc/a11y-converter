@@ -37,7 +37,7 @@ const saveHtmlToFile = async (path: string, html: string): Promise<void> => {
   }`;
   const url =
     'https://www.city.fukuoka.lg.jp/hofuku/coronavaccine/wakutin.html';
-  const { html, body } = await fromUrl({
+  const { html, body, metaOpts } = await fromUrl({
     url,
     opt: {
       contentSelectors: ['.wb-contents'],
@@ -51,7 +51,7 @@ const saveHtmlToFile = async (path: string, html: string): Promise<void> => {
 
   const data = await renderHtmlToEditor(body || '');
 
-  const { html: a11yHtml, meta } = editorJson2A11yHtml(data);
+  const { html: a11yHtml, meta } = editorJson2A11yHtml(data, metaOpts);
 
   // save meta data
   await saveHtmlToFile('./data/test1-meta.json', JSON.stringify(meta));

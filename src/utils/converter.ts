@@ -1,5 +1,22 @@
 import * as cheerio from 'cheerio';
 
+import {
+  _applyCssRules,
+  _applyMeta,
+  _applySocialMeta,
+  _applyAccessibilityAttributes,
+  _applyGoogleAnalytics,
+} from './css';
+export interface MetaOptions {
+  title?: string;
+  cssLinks?: string[];
+  meta?: {};
+  socialMeta?: {};
+  lang?: string;
+  favicon?: string;
+  googleAnalyticsId?: string;
+}
+
 //TODO: Define constant
 const BLOCK_TYPE = {
   PARAGRAPH: 'paragraph',
@@ -42,7 +59,7 @@ const getMetaByDfs = (root, parentId, arr) => {
     getMetaByDfs(item, id, arr);
   });
 };
-const splitSentences = (rawText) => {
+const splitSentences = (rawText, lang = 'en') => {
   const htmlElementRegex =
     /<(?:([A-Za-z0-9][A-Za-z0-9]*)\b[^>]*>(?:.*?)<\/\1>|[A-Za-z0-9][A-Za-z0-9]*\b[^>]*\/>)/gm;
   const htmlElements = rawText.match(htmlElementRegex) ?? [];
@@ -50,9 +67,13 @@ const splitSentences = (rawText) => {
   htmlElements.forEach(
     (element, idx) => (noHtml = noHtml.replace(element, `htmlElementNo${idx}`))
   );
-  const noHtmlSentences = noHtml.split(
-    /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?|\:|\!|\n)\s/g
-  );
+  const regexSplitSentences =
+    lang === 'ja'
+      ? /(?<!\w\.\w.)(?<=\。|\？|\！|\：|\n)/g
+      : /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?|\:|\!|\n)\s/g;
+  const noHtmlSentences = noHtml
+    .split(regexSplitSentences)
+    .filter((sentences) => !!sentences);
   const sentences = noHtmlSentences.map((sentence) => {
     htmlElements.forEach(
       (element, idx) =>
@@ -61,58 +82,6 @@ const splitSentences = (rawText) => {
     return sentence;
   });
   return sentences;
-
-  //   const htmlElementRegex =
-  //     /<(?:([A-Za-z0-9][A-Za-z0-9]*)\b[^>]*>(?:.*?)<\/\1>|[A-Za-z0-9][A-Za-z0-9]*\b[^>]*\/>)/gm;
-  //   const componentRegex =
-  //     /<(?:([A-Za-z0-9][A-Za-z0-9]*)\b[^>]*>(?:.*?)<\/\1>|[A-Za-z0-9][A-Za-z0-9]*\b[^>]*\/>)|[^<>]+/gm;
-
-  //   /* TODO: Split by html tag
-  //     ['Sample of',
-  //     ' ',
-  //     '<mark class="cdx-marker">highlight</mark> ',
-  //     ' ',
-  //     '<a href="https://sk-global.biz">link</a> ',
-  //     ' ',
-  //     '<a href="tel:0934123456">phone</a> ',
-  //     '<a href="https://www.google.co.jp/maps/place/74-truong-quoc-dung">map. Hello</a>',
-  //     'world. Yeah!']
-  //   */
-  //   const components = rawText.match(componentRegex);
-
-  //   /* TODO: Trim each item, split sentence
-  //     [
-  //       'Sample of',
-  //       '<mark class="cdx-marker">highlight</mark>',
-  //       '<a href="https://sk-global.biz">link</a>',
-  //       '<a href="tel:0934123456">phone</a>',
-  //       '<a href="https://www.google.co.jp/maps/place/74-truong-quoc-dung">map. Hello</a>',
-  //       'world.',
-  //       'Yeah!'
-  //     ]
-  // ]
-  //   */
-  //   const sentences = components.reduce((pre, cur) => {
-  //     if (htmlElementRegex.test(cur)) {
-  //       return [...pre, cur];
-  //     } else {
-  //       //TODO: Trim data
-  //       const cleaned = cur.trim();
-  //       if (!!cleaned) {
-  //         //TODO: Split sentence
-  //         return [
-  //           ...pre,
-  //           ...cleaned.split(
-  //             /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?|\:|\!|\n)\s/g
-  //           ),
-  //         ];
-  //       } else {
-  //         //TODO: Ignore empty element
-  //         return [...pre];
-  //       }
-  //     }
-  //   }, []);
-  //   return sentences;
 };
 
 const editorJson2ragtJson = (editorJson, lang = 'en') => {
@@ -121,6 +90,13 @@ const editorJson2ragtJson = (editorJson, lang = 'en') => {
     dfsTree(data, itemsArr);
 
     itemsArr = itemsArr.filter((item) => item);
+    if (lang === 'ja') {
+      return `This ${
+        data.style === 'ordered' ? 'Numbered' : 'Bulleted'
+      } list, there are ${data.items.length} items and ${
+        itemsArr.length - data.items.length
+      } sub items`;
+    }
     return `This ${
       data.style === 'ordered' ? 'Numbered' : 'Bulleted'
     } list, there are ${data.items.length} items and ${
@@ -128,13 +104,10 @@ const editorJson2ragtJson = (editorJson, lang = 'en') => {
     } sub items`;
   };
   const getImageAnnotation = (alt) => {
-    switch (lang) {
-      case 'ja':
-        return `This image is about ${alt}.`;
-      case 'en':
-      default:
-        return `This image is about ${alt}.`;
+    if (lang === 'ja') {
+      return `This image is about ${alt}.`;
     }
+    return `This image is about ${alt}.`;
   };
 
   const getTableAnnotation = (content, withHeadings) => {
@@ -200,7 +173,7 @@ const editorJson2ragtJson = (editorJson, lang = 'en') => {
     let meta: any = [];
     //TODO: Paragraph, Header
     if ([BLOCK_TYPE.HEADER, BLOCK_TYPE.PARAGRAPH].includes(block.type)) {
-      const sentences = splitSentences(block.data.text);
+      const sentences = splitSentences(block.data.text, lang);
       meta = sentences.map((sentence) => {
         const htmlTagRegex = /<\/?[a-z][a-z0-9]*[^<>]*>|<!--.*?-->/gim;
         const aTagRegex =
@@ -272,39 +245,38 @@ const editorJson2ragtJson = (editorJson, lang = 'en') => {
   };
 };
 
-const ragtJson2a11y = (ragtJson) => {
-  const htmlDefault = `<!DOCTYPE html>
-  <html lang="en">
-    <head>
-      <meta charset="UTF-8" />
-      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <!-- HTML Meta Tags -->
-      <title></title>
-      <meta name="description" content="" />
-
-      <!-- Google / Search Engine Tags -->
-      <meta itemprop="name" content="" />
-      <meta itemprop="description" content="" />
-      <meta itemprop="image" content="" />
-
-      <!-- Facebook Meta Tags -->
-      <meta property="og:url" content="" />
-      <meta property="og:type" content="website" />
-      <meta property="og:title" content="" />
-      <meta property="og:description" content="" />
-      <meta property="og:image" content="" />
-
-      <!-- Twitter Meta Tags -->
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content="" />
-      <meta name="twitter:description" content="" />
-      <meta name="twitter:image" content="" />
-    </head>
-    <body></body>
-  </html>
-  `;
+const ragtJson2a11y = (ragtJson, metaOpt: MetaOptions) => {
+  const htmlDefault = `<!DOCTYPE html><html><head></head><body></body></html>`;
   const $ = cheerio.load(htmlDefault);
+
+  // add lang attribute to html tag
+  $('html').attr('lang', $('html').attr('lang') || metaOpt.lang || 'en');
+
+  // namespace html tag
+  $('html').attr('xmlns', 'http://www.w3.org/1999/xhtml');
+
+  // add title attribute to head tag
+  if (metaOpt.title) {
+    $('head').append(`<title>${metaOpt.title}</title>`);
+  }
+
+  // add favicon attribute to head tag
+  if (metaOpt.favicon) {
+    $('head').append(
+      `<link rel="icon" type="image/x-icon" href="${metaOpt.favicon}">`
+    );
+  }
+
+  // apply meta tags
+  _applyMeta($, metaOpt.meta);
+  _applySocialMeta($, metaOpt.socialMeta);
+
+  // apply google analytics, if needed
+  if (metaOpt.googleAnalyticsId) {
+    _applyGoogleAnalytics($, metaOpt.googleAnalyticsId);
+  }
+  // apply css
+  _applyCssRules($, metaOpt.cssLinks);
   ragtJson.blocks.forEach((block) => {
     //TODO: Paragraph
     if (block.type === BLOCK_TYPE.PARAGRAPH) {
@@ -404,12 +376,12 @@ const ragtJson2text = (ragtJson) => {
  * @param data EditorJS JSON
  * @returns A11y HTML
  */
-const editorJson2A11yHtml = (data) => {
+const editorJson2A11yHtml = (data, metaHtml: MetaOptions) => {
   // Convert editorjs JSON to ragt JSON
-  const ragJson = editorJson2ragtJson(data);
+  const ragJson = editorJson2ragtJson(data, metaHtml.lang);
 
   // Convert ragt JSON to A11y HTML
-  const a11yHtml = ragtJson2a11y(ragJson);
+  const a11yHtml = ragtJson2a11y(ragJson, metaHtml);
 
   return {
     html: a11yHtml,

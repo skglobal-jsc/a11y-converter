@@ -7,118 +7,16 @@ const options: jsdom.ConstructorOptions = {
   includeNodeLocations: true,
 };
 
-const { window } = new JSDOM(
-  `<!DOCTYPE html>
-<div id="editorJs"></div>
-<script src="https://d3javs2py746ea.cloudfront.net/ragt-editor/tools/header/dist/bundle.js"></script><!-- Header -->
-  <script src="https://d3javs2py746ea.cloudfront.net/ragt-editor/tools/simple-image/dist/bundle.js"></script><!-- Image -->
-  <script src="https://d3javs2py746ea.cloudfront.net/ragt-editor/tools/image/dist/bundle.js"></script><!-- Image -->
-  <script src="https://d3javs2py746ea.cloudfront.net/ragt-editor/tools/delimiter/dist/bundle.js"></script><!-- Delimiter -->
-  <script src="https://d3javs2py746ea.cloudfront.net/ragt-editor/tools/list/dist/bundle.js"></script>
-  <script src="https://d3javs2py746ea.cloudfront.net/ragt-editor/tools/nested-list/dist/nested-list.js"></script><!-- Nested List -->
-  <script src="https://d3javs2py746ea.cloudfront.net/ragt-editor/tools/checklist/dist/bundle.js"></script><!-- Checklist -->
-  <script src="https://d3javs2py746ea.cloudfront.net/ragt-editor/tools/quote/dist/bundle.js"></script><!-- Quote -->
-  <script src="https://d3javs2py746ea.cloudfront.net/ragt-editor/tools/code/dist/bundle.js"></script><!-- Code -->
-  <script src="https://d3javs2py746ea.cloudfront.net/ragt-editor/tools/embed/dist/bundle.js"></script><!-- Embed -->
-  <script src="https://d3javs2py746ea.cloudfront.net/ragt-editor/tools/table/dist/table.js"></script><!-- Table -->
-  <script src="https://d3javs2py746ea.cloudfront.net/ragt-editor/tools/link/dist/bundle.js"></script><!-- Link -->
-  <script src="https://d3javs2py746ea.cloudfront.net/ragt-editor/tools/raw/dist/bundle.js"></script><!-- Raw -->
-  <script src="https://d3javs2py746ea.cloudfront.net/ragt-editor/tools/warning/dist/bundle.js"></script><!-- Warning -->
-  <script src="https://d3javs2py746ea.cloudfront.net/ragt-editor/tools/paragraph/dist/bundle.js"></script><!-- Warning -->
+let window: JSDOM['window'];
 
-  <script src="https://d3javs2py746ea.cloudfront.net/ragt-editor/tools/marker/dist/bundle.js"></script><!-- Marker -->
-  <script src="https://d3javs2py746ea.cloudfront.net/ragt-editor/tools/inline-code/dist/bundle.js"></script><!-- Inline Code -->
-
-  <!-- Load Editor.js's Core -->
-  <script src="https://d3javs2py746ea.cloudfront.net/ragt-editor/editor.js"></script>
-<script>
-
-
-  const editor = new EditorJS({
-          holder: 'editorJs',
-          tools: {
-            paragraph: {
-              class: Paragraph,
-              inlineToolbar: ["marker", "link"],
-            },
-            header: {
-              class: Header,
-              inlineToolbar: ["marker", "link"],
-              config: {
-                placeholder: "Header",
-              },
-              shortcut: "CMD+SHIFT+H",
-            },
-
-            /**
-             * Or pass class directly without any configuration
-             */
-            image: {
-              class: ImageTool,
-              config: {
-                uploader: {
-                  uploadByUrl(url) {
-                    return new Promise((resolve) => {
-                      resolve({
-                        success: 1,
-                        file: {
-                          url
-                        }
-                      })
-                    })
-                  }
-                }
-              }
-            },
-
-            list: {
-              class: NestedList,
-              inlineToolbar: ["marker", "link"],
-              shortcut: "CMD+SHIFT+L",
-            },
-
-            marker: {
-              class: Marker,
-              shortcut: "CMD+SHIFT+M",
-            },
-
-            embed: Embed,
-
-            table: {
-              class: Table,
-              inlineToolbar: true,
-              shortcut: "CMD+ALT+T",
-            },
-          }
-  })
-  let me = this
-  editor.isReady.then(()=>{
-      me.editor = editor
-  })
-</script>`,
-  { ...options }
-);
-
-const sleep = async (ms: number) => {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-};
-
-const waitUtilEditorReady = async (ms: number) => {
-  // wait util editor is ready or 5 seconds
-  let i = 0;
-  while (!window.editor && i < ms) {
-    console.log('waiting for editor to be ready');
-    await sleep(100);
-    i += 100;
-  }
-
-  console.log('editor is ready, take time ', i);
-};
+JSDOM.fromURL(
+  'https://d3javs2py746ea.cloudfront.net/ragt-editor/a11y.html',
+  options
+).then(async (dom) => {
+  window = dom.window;
+});
 
 export const renderHtmlToEditor = async (html: string) => {
-  // wait util editor is ready
-  await waitUtilEditorReady(2000);
-
   // render the html
   window.editor.blocks.renderFromHTML(html);
 
