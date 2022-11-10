@@ -25,7 +25,7 @@ if (!window) {
   // re-use the same window for all tests in order to save time
   console.log('Creating new JSDOM instance...');
   JSDOM.fromURL(
-    'https://d3javs2py746ea.cloudfront.net/ragt-editor/a11y.html',
+    'https://d3javs2py746ea.cloudfront.net/ragt-editor/ragt.html',
     options
   ).then(async (dom) => {
     window = dom.window;
