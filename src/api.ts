@@ -34,7 +34,7 @@ if (!window) {
 
 export const renderHtmlToEditor = async (html: string) => {
   // wait until the window is ready
-  await waitUntil(() => !!window);
+  await waitUntil(() => !!window?.editor);
 
   // render the html
   window?.editor.blocks.renderFromHTML(html);

@@ -1,4 +1,5 @@
 import * as cheerio from 'cheerio';
+import * as sanitizeHtml from 'sanitize-html';
 
 import {
   _applyCssRules,
@@ -7,6 +8,7 @@ import {
   _applyAccessibilityAttributes,
   _applyGoogleAnalytics,
 } from './css';
+import { buildMetaOptions } from './helper';
 
 export interface MetaOptions {
   title?: string;
@@ -25,6 +27,29 @@ const BLOCK_TYPE = {
   LIST: 'list',
   IMAGE: 'image',
   TABLE: 'table',
+};
+const BLOCK_TAGS = [
+  'h1',
+  'h2',
+  'h3',
+  'h4',
+  'h5',
+  'h6',
+  'ul',
+  'ol',
+  'table',
+  'p',
+  'img',
+];
+
+const HEADER_LEVEL = {
+  h1: 1,
+  h2: 2,
+  h3: 3,
+};
+const LIST_STYLE = {
+  ul: 'unordered',
+  ol: 'ordered',
 };
 
 //TODO: Util functions
@@ -92,13 +117,20 @@ const editorJson2ragtJson = (editorJson, lang = 'en') => {
 
     itemsArr = itemsArr.filter((item) => item);
     if (lang === 'ja') {
-      return `This ${
-        data.style === 'ordered' ? 'Numbered' : 'Bulleted'
-      } list, there are ${data.items.length} items and ${
+      return `これは${
+        data.style === 'ordered' ? '番号付き' : '箇条書きの'
+      }リストで, ${data.items.length}個の項目と${
         itemsArr.length - data.items.length
-      } sub items`;
+      }個のサブ項目があります。`;
     }
-    return `This ${
+    if (lang === 'vi') {
+      return `Đây là danh sách được ${
+        data.style === 'ordered' ? 'đánh số' : 'gạch đầu dòng'
+      }, danh sách có ${data.items.length} mục chính và ${
+        itemsArr.length - data.items.length
+      } mục phụ.`;
+    }
+    return `This is ${
       data.style === 'ordered' ? 'Numbered' : 'Bulleted'
     } list, there are ${data.items.length} items and ${
       itemsArr.length - data.items.length
@@ -106,62 +138,111 @@ const editorJson2ragtJson = (editorJson, lang = 'en') => {
   };
   const getImageAnnotation = (alt) => {
     if (lang === 'ja') {
-      return `This image is about ${alt}.`;
+      return `このイメージは${alt}についてです。`;
+    }
+    if (lang === 'vi') {
+      return `Đây là hình ảnh về ${alt}`;
     }
     return `This image is about ${alt}.`;
   };
 
   const getTableAnnotation = (content, withHeadings) => {
+    const totalRows = content?.length ?? 0;
+    const totalCols = content[0]?.length ?? 0;
     if (lang === 'ja') {
       //Japan annotation
       // TODO: BinhBV - 2021/09/01 - Add Japanese annotation
       const annotations = [
-        `Below this is a table with ${content.length} vertical rows and ${content[0].length} horizontal columns.`,
+        `この下に、縦${totalRows}行、横${totalCols}列の表があります。`,
       ];
       if (withHeadings) {
-        annotations.push(
-          `The heading rows are, from left to right, ${content[0].join(', ')}.`
-        );
+        annotations.push(`見出し行は左から${content[0].join('、')}です。`);
         for (let i = 1; i < content.length; i++) {
-          i === 1
-            ? annotations.push(
-                `The first line of data is ${content[i].join(', ')}.`
-              )
-            : annotations.push(`line ${i}, ${content[i].join(', ')}.`);
+          if (i === 1) {
+            annotations.push(`データの1行目、${content[i].join('、')}、`);
+          } else if (i === content.length - 1) {
+            annotations.push(`${i}行目、${content[i].join('、')}です。`);
+          } else {
+            annotations.push(`${i}行目、${content[i].join('、')}、`);
+          }
         }
       } else {
         for (let i = 0; i < content.length; i++) {
-          i === 0
-            ? annotations.push(
-                `The first line of data is ${content[i].join(', ')}.`
-              )
-            : annotations.push(`Line ${i + 1}, ${content[i].join(', ')}.`);
+          if (i === 0) {
+            annotations.push(`データの1行目、${content[i].join('、')}、`);
+          } else if (i === content.length - 1) {
+            annotations.push(`${i + 1}行目、${content[i].join('、')}です。`);
+          } else {
+            annotations.push(`${i + 1}行目、${content[i].join('、')}、`);
+          }
         }
       }
-      annotations.push('End of table.');
+      annotations.push('表の終わりです。');
+      return annotations.join('');
+    } else if (lang === 'vi') {
+      const annotations = [
+        `Dưới đây là bảng bao gồm ${totalRows} hàng và ${totalCols} cột.`,
+      ];
+      if (withHeadings) {
+        annotations.push(
+          `Tiêu đề từ trái sang phải, ${content[0]?.join(', ')}.`
+        );
+        for (let i = 1; i < content.length; i++) {
+          if (i === 1) {
+            annotations.push(
+              `Dữ liệu hàng thứ nhất là ${content[i].join(', ')},`
+            );
+          } else if (i === content.length - 1) {
+            annotations.push(`hàng thứ ${i}, ${content[i].join(', ')}.`);
+          } else {
+            annotations.push(`hàng thứ ${i}, ${content[i].join(', ')},`);
+          }
+        }
+      } else {
+        for (let i = 0; i < content.length; i++) {
+          if (i === 0) {
+            annotations.push(
+              `Dữ liệu hàng thứ nhất là ${content[i].join(', ')},`
+            );
+          } else if (i === content.length - 1) {
+            annotations.push(`hàng thứ ${i + 1}, ${content[i].join(', ')}.`);
+          } else {
+            annotations.push(`hàng thứ ${i + 1}, ${content[i].join(', ')},`);
+          }
+        }
+      }
+      annotations.push('Kết thúc bảng.');
       return annotations.join(' ');
     } else {
       const annotations = [
-        `Below this is a table with ${content.length} vertical rows and ${content[0].length} horizontal columns.`,
+        `Below this is a table with ${totalRows} vertical rows and ${totalCols} horizontal columns.`,
       ];
       if (withHeadings) {
         annotations.push(
-          `The heading rows are, from left to right, ${content[0].join(', ')}.`
+          `The heading rows are, from left to right, ${content[0]?.join(', ')}.`
         );
         for (let i = 1; i < content.length; i++) {
-          i === 1
-            ? annotations.push(
-                `The first line of data is ${content[i].join(', ')}.`
-              )
-            : annotations.push(`line ${i}, ${content[i].join(', ')}.`);
+          if (i === 1) {
+            annotations.push(
+              `The first line of data is ${content[i].join(', ')},`
+            );
+          } else if (i === content.length - 1) {
+            annotations.push(`line ${i}, ${content[i].join(', ')}.`);
+          } else {
+            annotations.push(`line ${i}, ${content[i].join(', ')},`);
+          }
         }
       } else {
         for (let i = 0; i < content.length; i++) {
-          i === 0
-            ? annotations.push(
-                `The first line of data is ${content[i].join(', ')}.`
-              )
-            : annotations.push(`Line ${i + 1}, ${content[i].join(', ')}.`);
+          if (i === 0) {
+            annotations.push(
+              `The first line of data is ${content[i].join(', ')},`
+            );
+          } else if (i === content.length - 1) {
+            annotations.push(`line ${i + 1}, ${content[i].join(', ')}.`);
+          } else {
+            annotations.push(`line ${i + 1}, ${content[i].join(', ')},`);
+          }
         }
       }
       annotations.push('End of table.');
@@ -383,7 +464,6 @@ const ragtJson2text = (ragtJson) => {
 const editorJson2A11yHtml = (data, metaHtml: MetaOptions = {}) => {
   // Convert editorjs JSON to ragt JSON
   const ragJson = editorJson2ragtJson(data, metaHtml.lang);
-
   // Convert ragt JSON to A11y HTML
   const a11yHtml = ragtJson2a11y(ragJson, metaHtml);
 
@@ -393,4 +473,144 @@ const editorJson2A11yHtml = (data, metaHtml: MetaOptions = {}) => {
   };
 };
 
-export { editorJson2A11yHtml, ragtJson2text };
+const parseListItems = ($, items) => {
+  const res: any[] = [];
+  items.forEach((item) => {
+    if (item.name === 'li') {
+      res.push({
+        content: cleanInline($(item).html()),
+        items: [],
+      });
+    }
+    if (['ul', 'ol'].includes(item.name)) {
+      res[res.length - 1].items.push(...parseListItems($, item.children));
+    }
+  });
+  return res;
+};
+
+const cleanInline = (html) => {
+  return sanitizeHtml(html, {
+    allowedTags: ['a', 'mark'],
+  });
+};
+
+const html2editorJson = (html) => {
+  let res: { blocks: any[] } = {
+    blocks: [],
+  };
+  // Build meta option content
+  const $ = cheerio.load(html);
+  const meta = {
+    lang: $('html')?.attr('lang'),
+    title:
+      $('title')?.text() ?? $('meta[property="og:title"]')?.attr('content'),
+    description:
+      $('meta[name="description"]')?.attr('content') ??
+      $('meta[property="og:description"]')?.attr('content'),
+    keywords: $('meta[name="keywords"]')?.attr('content'),
+    favicon: $('link[rel="icon"]')?.attr('href'),
+    image: $('meta[property="og:image"]')?.attr('content'),
+    type: $('meta[property="og:type"]')?.attr('content'),
+  };
+  const metaOpts = buildMetaOptions(meta);
+  $('body')
+    .contents()
+    .each((i, el) => {
+      if (el.type === 'tag') {
+        // random attribute id
+        const id = Math.random().toString(36).substring(7);
+
+        if (BLOCK_TAGS.includes(el.name)) {
+          //TODO: Paragraph
+          if (el.name === 'p') {
+            res.blocks.push({
+              id,
+              type: BLOCK_TYPE.PARAGRAPH,
+              data: {
+                text: cleanInline($(el).html()),
+              },
+            });
+          }
+          //TODO: Header
+          if (['h1', 'h2', 'h3'].includes(el.name)) {
+            res.blocks.push({
+              id,
+              type: BLOCK_TYPE.HEADER,
+              data: {
+                text: cleanInline($(el).html()),
+                level: HEADER_LEVEL[el.name],
+              },
+            });
+          }
+          //TODO: List
+          if (['ul', 'ol'].includes(el.name)) {
+            const items = parseListItems($, el.children);
+            res.blocks.push({
+              id,
+              type: BLOCK_TYPE.LIST,
+              data: {
+                style: LIST_STYLE[el.name],
+                items,
+              },
+            });
+          }
+          //TODO: Image
+          if (el.name === 'img') {
+            res.blocks.push({
+              id,
+              type: BLOCK_TYPE.IMAGE,
+              data: {
+                file: {
+                  url: $(el).attr('src'),
+                },
+                caption: $(el).attr('alt'),
+                withBorder: false,
+                stretched: false,
+                withBackground: false,
+              },
+            });
+          }
+
+          //TODO: Table
+          if (el.name === 'table') {
+            const firstRowHeading = $(el).find('th')?.length;
+            const content = Array.from($(el).find('tr')).map((row) =>
+              [...$(row).find('th'), ...$(row).find('td')].map((cell) =>
+                $(cell).html()
+              )
+            );
+            const data = {
+              withHeadings: !!firstRowHeading,
+              content,
+            };
+            res.blocks.push({
+              id,
+              type: BLOCK_TYPE.TABLE,
+              data,
+            });
+          }
+        } else {
+          //Parse to Paragraph in case not supporting
+          res.blocks.push({
+            id,
+            type: BLOCK_TYPE.PARAGRAPH,
+            data: {
+              text: cleanInline($.html(el)),
+            },
+          });
+        }
+      }
+    });
+  return {
+    json: res,
+    meta: metaOpts,
+  };
+};
+
+export {
+  html2editorJson,
+  editorJson2A11yHtml,
+  ragtJson2text,
+  editorJson2ragtJson,
+};

@@ -1,4 +1,9 @@
-import { tinyhtml, fromUrl, editorJson2A11yHtml } from './src/index';
+import {
+  tinyhtml,
+  fromUrl,
+  editorJson2A11yHtml,
+  html2editorJson,
+} from './src/index';
 
 import { renderHtmlToEditor } from './src/api';
 
@@ -38,6 +43,7 @@ const saveHtmlToFile = async (path: string, html: string): Promise<void> => {
   }`;
   const url =
     'https://www.city.fukuoka.lg.jp/hofuku/coronavaccine/wakutin.html';
+  // 'https://www.city.fukuoka.lg.jp/soki/kokusai/shisei/COVID19vaccine_VI.html';
   const { html, body } = await fromUrl({
     url,
     opt: {
@@ -52,11 +58,21 @@ const saveHtmlToFile = async (path: string, html: string): Promise<void> => {
 
   const data = await renderHtmlToEditor(body || '');
 
-  const metaOpts: MetaOptions = {};
+  // const metaOpts: MetaOptions = {
+  //   lang: 'en',
+  // };
+
+  const { json, meta: metaOpts } = html2editorJson(html);
+
+  const { html: a11yHtml1 } = editorJson2A11yHtml(json, metaOpts);
 
   const { html: a11yHtml, meta } = editorJson2A11yHtml(data, metaOpts);
 
   // save meta data
+  await saveHtmlToFile('./data/test1-json.json', JSON.stringify(json));
+
+  await saveHtmlToFile('./data/test1-ragt.html', a11yHtml1 || '');
+
   await saveHtmlToFile('./data/test1-meta.json', JSON.stringify(meta));
 
   await saveHtmlToFile('./data/test2-ragt.html', a11yHtml || '');

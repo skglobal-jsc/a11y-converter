@@ -1,7 +1,12 @@
 import * as cheerio from 'cheerio';
 import { Client, RequestsOptions } from './utils/client';
 
-import { editorJson2A11yHtml, ragtJson2text } from './utils/converter';
+import {
+  html2editorJson,
+  editorJson2A11yHtml,
+  ragtJson2text,
+  editorJson2ragtJson,
+} from './utils/converter';
 
 import {
   _applyCssRules,
@@ -9,10 +14,7 @@ import {
   _applyAccessibilityAttributes,
   _applyGoogleAnalytics,
 } from './utils/css';
-import {
-  convertRelativeUrlsToAbsolute,
-  executeHookFn,
-} from './utils/helper';
+import { convertRelativeUrlsToAbsolute, executeHookFn } from './utils/helper';
 
 const UN_SUPPORTED_TAGS = [
   'audio',
@@ -324,4 +326,11 @@ const fromUrl = async ({
   return tinyhtml(body, { ...opt, url });
 };
 
-export { tinyhtml, fromUrl, editorJson2A11yHtml, ragtJson2text };
+export {
+  tinyhtml,
+  fromUrl,
+  html2editorJson,
+  editorJson2A11yHtml,
+  ragtJson2text,
+  editorJson2ragtJson,
+};
