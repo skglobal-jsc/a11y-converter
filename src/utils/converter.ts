@@ -1,5 +1,5 @@
 import * as cheerio from 'cheerio';
-import * as sanitizeHtml from 'sanitize-html';
+const sanitizeHtml = require('sanitize-html');
 
 import {
   _applyCssRules,
