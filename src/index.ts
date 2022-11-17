@@ -6,6 +6,7 @@ import {
   editorJson2A11yHtml,
   ragtJson2text,
   editorJson2ragtJson,
+  ragtJson2a11y,
 } from './utils/converter';
 
 import {
@@ -333,4 +334,5 @@ export {
   editorJson2A11yHtml,
   ragtJson2text,
   editorJson2ragtJson,
+  ragtJson2a11y,
 };
