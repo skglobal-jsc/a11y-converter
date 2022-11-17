@@ -576,10 +576,12 @@ const html2editorJson = (html) => {
           if (el.name === 'table') {
             const firstRowHeading = $(el).find('th')?.length;
             const content = Array.from($(el).find('tr')).map((row) =>
-              [...$(row).find('th'), ...$(row).find('td')].map((cell) =>
-                $(cell).html()
-              )
+              [
+                ...Array.from($(row).find('th')),
+                ...Array.from($(row).find('td')),
+              ].map((cell) => $(cell).html())
             );
+            console.log(content);
             const data = {
               withHeadings: !!firstRowHeading,
               content,
