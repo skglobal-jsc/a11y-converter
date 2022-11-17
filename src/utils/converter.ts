@@ -619,4 +619,5 @@ export {
   editorJson2A11yHtml,
   ragtJson2text,
   editorJson2ragtJson,
+  ragtJson2a11y,
 };
