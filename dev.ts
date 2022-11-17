@@ -1,14 +1,6 @@
-import {
-  tinyhtml,
-  fromUrl,
-  editorJson2A11yHtml,
-  html2editorJson,
-} from './src/index';
-
-import { renderHtmlToEditor } from './src/api';
+import { fromUrl, editorJson2A11yHtml, html2editorJson } from './src/index';
 
 import { readFile, writeFile } from 'fs';
-import { MetaOptions } from './src/utils/converter';
 
 const loadHtmlFromFile = async (path: string): Promise<string> => {
   return new Promise((resolve, reject) => {
@@ -56,17 +48,9 @@ const saveHtmlToFile = async (path: string, html: string): Promise<void> => {
   });
   await saveHtmlToFile('./data/test1-out.html', html || '');
 
-  const data = await renderHtmlToEditor(body || '');
-
-  // const metaOpts: MetaOptions = {
-  //   lang: 'en',
-  // };
-
   const { json, meta: metaOpts } = html2editorJson(html);
 
-  const { html: a11yHtml1 } = editorJson2A11yHtml(json, metaOpts);
-
-  const { html: a11yHtml, meta } = editorJson2A11yHtml(data, metaOpts);
+  const { html: a11yHtml1, meta } = editorJson2A11yHtml(json, metaOpts);
 
   // save meta data
   await saveHtmlToFile('./data/test1-json.json', JSON.stringify(json));
@@ -74,6 +58,4 @@ const saveHtmlToFile = async (path: string, html: string): Promise<void> => {
   await saveHtmlToFile('./data/test1-ragt.html', a11yHtml1 || '');
 
   await saveHtmlToFile('./data/test1-meta.json', JSON.stringify(meta));
-
-  await saveHtmlToFile('./data/test2-ragt.html', a11yHtml || '');
 })();

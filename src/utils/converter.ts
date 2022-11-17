@@ -514,14 +514,25 @@ const html2editorJson = (html) => {
     type: $('meta[property="og:type"]')?.attr('content'),
   };
   const metaOpts = buildMetaOptions(meta);
+  let groupUnSupportTag: string[] = [];
   $('body')
     .contents()
     .each((i, el) => {
       if (el.type === 'tag') {
         // random attribute id
         const id = Math.random().toString(36).substring(7);
-
+        // Wrap group other tag into paragraph
         if (BLOCK_TAGS.includes(el.name)) {
+          if (groupUnSupportTag.length) {
+            res.blocks.push({
+              id,
+              type: BLOCK_TYPE.PARAGRAPH,
+              data: {
+                text: cleanInline(groupUnSupportTag.join('')),
+              },
+            });
+            groupUnSupportTag = [];
+          }
           //TODO: Paragraph
           if (el.name === 'p') {
             res.blocks.push({
@@ -581,7 +592,6 @@ const html2editorJson = (html) => {
                 ...Array.from($(row).find('td')),
               ].map((cell) => $(cell).html())
             );
-            console.log(content);
             const data = {
               withHeadings: !!firstRowHeading,
               content,
@@ -593,14 +603,8 @@ const html2editorJson = (html) => {
             });
           }
         } else {
-          //Parse to Paragraph in case not supporting
-          res.blocks.push({
-            id,
-            type: BLOCK_TYPE.PARAGRAPH,
-            data: {
-              text: cleanInline($.html(el)),
-            },
-          });
+          //Group tag in case not supporting
+          groupUnSupportTag.push($.html(el));
         }
       }
     });

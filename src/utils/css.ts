@@ -1,11 +1,19 @@
 import * as cheerio from 'cheerio';
 
-export const commonCssLinks = [
-  'https://www.w3schools.com/w3css/4/w3.css',
-  'https://unpkg.com/a11y-css-reset/combo.css',
-  'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;300;400;500;700;900&display=swap',
-  'https://news.crawler.sk-global.io/news/styles/common.css',
-];
+export const commonCssLinks = {
+  ja: [
+    'https://www.w3schools.com/w3css/4/w3.css',
+    'https://unpkg.com/a11y-css-reset/combo.css',
+    'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;300;400;500;700;900&display=swap',
+    'https://news.crawler.sk-global.io/news/styles/common.css',
+  ],
+  en: [
+    'https://www.w3schools.com/w3css/4/w3.css',
+    'https://unpkg.com/a11y-css-reset/combo.css',
+    'https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100;300;400;500;700;900&display=swap',
+    'https://news.crawler.sk-global.io/news/styles/common.css',
+  ],
+};
 
 import {
   buildHeadingComponent,
@@ -44,9 +52,11 @@ export const _applyCssRules = ($: cheerio.CheerioAPI, cssRules?: string[]) => {
     '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
   );
 
+  // detect lang for import font style
+  const lang = $('html')?.attr('lang') === 'ja' ? 'ja' : 'en';
+
   // apply a11y stylesheets link
-  (cssRules || commonCssLinks).forEach((link) => {
-    console.log('link', link);
+  (cssRules || commonCssLinks[lang]).forEach((link) => {
     $head.append(`<link rel="stylesheet" href="${link}">`);
   });
 };
