@@ -34,8 +34,8 @@ const saveHtmlToFile = async (path: string, html: string): Promise<void> => {
     console.log('afterrr hook');
   }`;
   const url =
-    'https://www.city.fukuoka.lg.jp/hofuku/coronavaccine/wakutin.html';
-  // 'https://www.city.fukuoka.lg.jp/soki/kokusai/shisei/COVID19vaccine_VI.html';
+    // 'https://www.city.fukuoka.lg.jp/hofuku/coronavaccine/wakutin.html';
+    'https://www.city.fukuoka.lg.jp/soki/kokusai/shisei/COVID19vaccine_VI.html';
   const { html, body } = await fromUrl({
     url,
     opt: {
