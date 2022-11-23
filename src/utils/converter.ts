@@ -303,8 +303,16 @@ const editorJson2ragtJson = (editorJson, lang = 'en') => {
 
     //TODO: Table
     if (block.type === BLOCK_TYPE.TABLE) {
+      let ui = '<table><tr>';
+      block.data.content?.[0]?.forEach((cell) => {
+        ui = block.data.withHeadings
+          ? ui.concat(`<th>${cell}</th>`)
+          : ui.concat(`<td>${cell}</td>`);
+      });
+      ui = ui.concat('</tr></table>');
       meta = [
         {
+          ui,
           polly: getTableAnnotation(
             block.data.content,
             block.data.withHeadings
