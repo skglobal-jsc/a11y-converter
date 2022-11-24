@@ -2,16 +2,14 @@ import * as cheerio from 'cheerio';
 
 export const commonCssLinks = {
   ja: [
-    'https://www.w3schools.com/w3css/4/w3.css',
     'https://unpkg.com/a11y-css-reset/combo.css',
     'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;300;400;500;700;900&display=swap',
-    'https://dev-ragt-api.vercel.app/styles/ja.css',
+    'https://s3-univoice-dev.s3.ap-southeast-1.amazonaws.com/ragt-convertor/ja.css',
   ],
   en: [
-    'https://www.w3schools.com/w3css/4/w3.css',
     'https://unpkg.com/a11y-css-reset/combo.css',
     'https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100;300;400;500;700;900&display=swap',
-    'https://dev-ragt-api.vercel.app/styles/en.css',
+    'https://s3-univoice-dev.s3.ap-southeast-1.amazonaws.com/ragt-convertor/en.css',
   ],
 };
 
