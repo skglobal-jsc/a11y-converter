@@ -61,9 +61,9 @@ const dfsTree = (root, arr) => {
 };
 
 const getMetaByDfs = (root, parentId, arr) => {
-  // random attribute id
-  const id = Math.random().toString(36).substring(7);
   if (root.content) {
+    // random attribute id
+    const id = Math.random().toString(36).substring(7);
     const sentences = splitSentences(root.content);
     sentences.forEach((sentence) => {
       const htmlTagRegex = /<\/?[a-z][a-z0-9]*[^<>]*>|<!--.*?-->/gim;
@@ -80,10 +80,14 @@ const getMetaByDfs = (root, parentId, arr) => {
         ),
       });
     });
+    root.items.forEach((item) => {
+      getMetaByDfs(item, id, arr);
+    });
+  } else {
+    root.items.forEach((item) => {
+      getMetaByDfs(item, 'root', arr);
+    });
   }
-  root.items.forEach((item) => {
-    getMetaByDfs(item, id, arr);
-  });
 };
 const splitSentences = (rawText, lang = 'en') => {
   const htmlElementRegex =
