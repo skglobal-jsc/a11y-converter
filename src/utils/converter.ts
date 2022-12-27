@@ -271,7 +271,7 @@ const editorJson2ragtJson = (editorJson, lang = 'en') => {
           user: '',
           actions: [...sentence.matchAll(aTagRegex)].map(
             (item) => item.groups?.href
-          ),
+          ).filter(item => !!item),
         };
       });
     }
