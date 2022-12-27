@@ -77,7 +77,7 @@ const getMetaByDfs = (root, parentId, arr) => {
         user: '',
         actions: [...sentence.matchAll(aTagRegex)].map(
           (item) => item.groups?.href
-        ),
+        ).filter(item => !!item),
       });
     });
     root.items.forEach((item) => {
