@@ -220,6 +220,8 @@ const reduceHtml = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
         if (opt.removeComments) {
           $(el).remove();
         }
+      } else if (el.type === 'root') {
+        // do nothing when element is root
       } else {
         // other types of elements are not supported, e.g. script, style, etc.
         $(el).remove();
