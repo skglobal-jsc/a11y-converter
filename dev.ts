@@ -35,16 +35,17 @@ const saveHtmlToFile = async (path: string, html: string): Promise<void> => {
   }`;
   const url =
     // 'https://www.city.fukuoka.lg.jp/hofuku/coronavaccine/wakutin.html';
-    'https://newsdig.tbs.co.jp/articles/-/257448?display=1';
+    // 'https://newsdig.tbs.co.jp/articles/-/257448?display=1';
+    'https://www.freecodecamp.org/news/html-tables-table-tutorial-with-css-example-code/';
   const { html, body } = await fromUrl({
     url,
-    // opt: {
-    //   contentSelectors: ['.l-main'],
-    //   hooks: {
-    //     before: beforeFn,
-    //     after: afterFn,
-    //   },
-    // },
+    opt: {
+      contentSelectors: ['.post-content'],
+      hooks: {
+        before: beforeFn,
+        after: afterFn,
+      },
+    },
   });
   await saveHtmlToFile('./data/test1-out.html', html || '');
 
