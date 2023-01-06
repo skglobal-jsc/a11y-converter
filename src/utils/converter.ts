@@ -159,14 +159,25 @@ const editorJson2ragtJson = (editorJson, lang = 'en') => {
     return `This image is about ${alt}.`;
   };
 
-  const buildMetaTable = (content, withHeadings) => {
+  const buildMetaTable = (data) => {
+    const content = [...data.content];
+    const withHeadings = data.withHeadings;
     const totalRows = content?.length ?? 0;
     const totalCols = content[0]?.length ?? 0;
     if (lang === 'ja') {
+      let annotation = `この下に、縦${totalRows}行、横${totalCols}列の表があります。\n`;
+      if (data.caption) {
+        annotation += `表のタイトルは${data.caption}、です。\n`;
+      }
+      if (data.headers?.length) {
+        annotation += `見出し行は左から${data.headers.join('、')}です。`;
+      } else if (withHeadings) {
+        annotation += `見出し行は左から${content[0].join('、')}です。`;
+      }
       const meta: MetaItem[] = [
         {
-          ui: `この下に、 縦${totalRows}行、 横${totalCols}列の表があります。`,
-          polly: `この下に、 縦${totalRows}行、 横${totalCols}列の表があります。`,
+          ui: annotation,
+          polly: annotation,
           ssml: '',
           user: '',
           actions: [],
@@ -176,8 +187,10 @@ const editorJson2ragtJson = (editorJson, lang = 'en') => {
       content.forEach((row, idx) => {
         const polly =
           idx === 0
-            ? `データの1行目、${idx + 1}: ${row.join('、')}。`
-            : `${idx + 1}行目、${row.join('、')}。`;
+            ? `データの1行目、${row.join('、')}、`
+            : idx === row.length - 1
+            ? `${idx + 1}行目、${row.join('、')}です。`
+            : `${idx + 1}行目、${row.join('、')}、`;
         let ui = `<tr tabindex="0" aria-label="${polly}">`;
         row.forEach((cell) => {
           ui =
@@ -204,10 +217,19 @@ const editorJson2ragtJson = (editorJson, lang = 'en') => {
       });
       return meta;
     } else if (lang === 'vi') {
+      let annotation = `Đây là dữ liệu dạng bảng, có ${totalRows} dòng, ${totalCols} cột.\n`;
+      if (data.caption) {
+        annotation += `Tiêu đề của bảng là ${data.caption}.\n`;
+      }
+      if (data.headers?.length) {
+        annotation += `Các ô tiêu đề của bảng là ${data.headers.join(', ')}.`;
+      } else if (withHeadings) {
+        annotation += `Các ô tiêu đề của bảng là ${content[0].join(', ')}.`;
+      }
       const meta: MetaItem[] = [
         {
-          ui: `Đây là dữ liệu dạng bảng, có ${totalRows} dòng, ${totalCols} cột.`,
-          polly: `Đây là dữ liệu dạng bảng, có ${totalRows} dòng, ${totalCols} cột.`,
+          ui: annotation,
+          polly: annotation,
           ssml: '',
           user: '',
           actions: [],
@@ -215,7 +237,10 @@ const editorJson2ragtJson = (editorJson, lang = 'en') => {
         },
       ];
       content.forEach((row, idx) => {
-        const polly = `Dòng thứ ${idx + 1}: ${row.join(', ')}.`;
+        const polly =
+          idx === 0
+            ? `Dữ liệu hàng thứ nhất là ${row.join(', ')}.`
+            : `Hàng thứ ${idx + 1}: ${row.join(', ')}.`;
         let ui = `<tr tabindex="0" aria-label="${polly}">`;
         row.forEach((cell) => {
           ui =
@@ -242,10 +267,19 @@ const editorJson2ragtJson = (editorJson, lang = 'en') => {
       });
       return meta;
     } else {
+      let annotation = `This is table with ${totalRows} rows, ${totalCols} columns.\n`;
+      if (data.caption) {
+        annotation += `The title of the table is ${data.caption}.\n`;
+      }
+      if (data.headers?.length) {
+        annotation += `The table headers are ${data.headers.join(', ')}.`;
+      } else if (withHeadings) {
+        annotation += `The table headers are ${content[0].join(', ')}.`;
+      }
       const meta: MetaItem[] = [
         {
-          ui: `This is table have ${totalRows} row and ${totalCols} column.`,
-          polly: `This is table have ${totalRows} row and ${totalCols} column.`,
+          ui: annotation,
+          polly: annotation,
           ssml: '',
           user: '',
           actions: [],
@@ -253,7 +287,10 @@ const editorJson2ragtJson = (editorJson, lang = 'en') => {
         },
       ];
       content.forEach((row, idx) => {
-        const polly = `Line ${idx + 1}: ${row.join(', ')}.`;
+        const polly =
+          idx === 0
+            ? `The first line of data is ${row.join(', ')}.`
+            : `Line ${idx + 1}: ${row.join(', ')}.`;
         let ui = `<tr tabindex="0" aria-label="${polly}">`;
         row.forEach((cell) => {
           ui =
@@ -323,10 +360,9 @@ const editorJson2ragtJson = (editorJson, lang = 'en') => {
 
     //TODO: Image
     if (block.type === BLOCK_TYPE.IMAGE) {
-      block.data.caption = getImageAnnotation(block.data.caption);
       meta = [
         {
-          polly: block.data.caption,
+          polly: getImageAnnotation(block.data.caption),
           ssml: '',
           user: '',
           actions: [],
@@ -336,10 +372,14 @@ const editorJson2ragtJson = (editorJson, lang = 'en') => {
 
     //TODO: Table
     if (block.type === BLOCK_TYPE.TABLE) {
-      meta = buildMetaTable(block.data.content, block.data.withHeadings);
+      meta = buildMetaTable(block.data);
     }
     return {
       ...block,
+      data: {
+        withHeadings: block.data.heading,
+        content: block.data.content,
+      },
       meta,
     };
   });
@@ -440,7 +480,9 @@ const ragtJson2a11y = (ragtJson, metaOpt: MetaOptions = {}) => {
 
     //TODO: Table
     if (block.type === BLOCK_TYPE.TABLE) {
-      $('body').append(`<p tabindex="0">${block.meta[0].polly}</p>`);
+      $('body').append(
+        `<p tabindex="0" class="annotation">${block.meta[0].polly}</p>`
+      );
       const bodyTable = block.meta.reduce((res, cur, idx) => {
         if (idx !== 0 && idx !== block.meta.length - 1) {
           return res.concat(cur.ui);
@@ -451,7 +493,9 @@ const ragtJson2a11y = (ragtJson, metaOpt: MetaOptions = {}) => {
       const table = `<table id="${block.id}">${bodyTable}</table>`;
       $('body').append(table);
       $('body').append(
-        `<p tabindex="0">${block.meta[block.meta.length - 1].polly}</p>`
+        `<p tabindex="0" class="annotation">${
+          block.meta[block.meta.length - 1].polly
+        }</p>`
       );
     }
   });
@@ -603,16 +647,40 @@ const html2editorJson = (html) => {
 
           //TODO: Table
           if (el.name === 'table') {
-            const firstRowHeading = $(el).find('th')?.length;
-            const content = Array.from($(el).find('tr')).map((row) =>
-              [
-                ...Array.from($(row).find('th')),
-                ...Array.from($(row).find('td')),
-              ].map((cell) => $(cell).html())
+            const captionElement = $(el).find('caption');
+            const firstRow = $(el).find('tr')?.[0];
+            const rows = Array.from($(el).find('tr'));
+            let totalCols = 0;
+            const content = rows
+              .map((row) => {
+                const cols = [
+                  ...Array.from($(row).find('th')),
+                  ...Array.from($(row).find('td')),
+                ];
+                if (cols.length > totalCols) {
+                  totalCols = cols.length;
+                }
+                return cols.map((cell) => $(cell).html());
+              })
+              .map((row) => {
+                return row.length < totalCols
+                  ? Array(totalCols)
+                      .fill('')
+                      .map((_, i) => (row[i] ? row[i] : ''))
+                  : row;
+              });
+            const firstRowHeading =
+              $(firstRow)?.find('th')?.length === totalCols;
+            const headers = Array.from($(el).find('th'))?.map((th) =>
+              $(th)?.html()
             );
             const data = {
               withHeadings: !!firstRowHeading,
               content,
+              ...(captionElement.length && {
+                caption: $(captionElement).html()?.trim(),
+              }),
+              headers,
             };
             res.blocks.push({
               id,
