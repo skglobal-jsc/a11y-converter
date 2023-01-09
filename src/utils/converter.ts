@@ -21,6 +21,7 @@ export interface MetaOptions {
 }
 
 declare type MetaItem = {
+  id?: string;
   ui?: string;
   polly?: string;
   ssml?: string;
@@ -176,6 +177,7 @@ const editorJson2ragtJson = (editorJson, lang = 'en') => {
       }
       const meta: MetaItem[] = [
         {
+          id: Math.random().toString(36).substring(7),
           ui: annotation,
           polly: annotation,
           ssml: '',
@@ -208,6 +210,7 @@ const editorJson2ragtJson = (editorJson, lang = 'en') => {
         });
       });
       meta.push({
+        id: Math.random().toString(36).substring(7),
         ui: `表の終わりです。`,
         polly: `表の終わりです。`,
         ssml: '',
@@ -228,6 +231,7 @@ const editorJson2ragtJson = (editorJson, lang = 'en') => {
       }
       const meta: MetaItem[] = [
         {
+          id: Math.random().toString(36).substring(7),
           ui: annotation,
           polly: annotation,
           ssml: '',
@@ -258,6 +262,7 @@ const editorJson2ragtJson = (editorJson, lang = 'en') => {
         });
       });
       meta.push({
+        id: Math.random().toString(36).substring(7),
         ui: `Kết thúc bảng.`,
         polly: `Kết thúc bảng.`,
         ssml: '',
@@ -278,6 +283,7 @@ const editorJson2ragtJson = (editorJson, lang = 'en') => {
       }
       const meta: MetaItem[] = [
         {
+          id: Math.random().toString(36).substring(7),
           ui: annotation,
           polly: annotation,
           ssml: '',
@@ -308,6 +314,7 @@ const editorJson2ragtJson = (editorJson, lang = 'en') => {
         });
       });
       meta.push({
+        id: Math.random().toString(36).substring(7),
         ui: `End table.`,
         polly: `End table.`,
         ssml: '',
@@ -481,7 +488,7 @@ const ragtJson2a11y = (ragtJson, metaOpt: MetaOptions = {}) => {
     //TODO: Table
     if (block.type === BLOCK_TYPE.TABLE) {
       $('body').append(
-        `<p tabindex="0" class="annotation">${block.meta[0].polly}</p>`
+        `<p id="${block.meta[0].id}" tabindex="0" class="annotation">${block.meta[0].polly}</p>`
       );
       const bodyTable = block.meta.reduce((res, cur, idx) => {
         if (idx !== 0 && idx !== block.meta.length - 1) {
@@ -493,7 +500,9 @@ const ragtJson2a11y = (ragtJson, metaOpt: MetaOptions = {}) => {
       const table = `<table id="${block.id}">${bodyTable}</table>`;
       $('body').append(table);
       $('body').append(
-        `<p tabindex="0" class="annotation">${
+        `<p id="${
+          block.meta[block.meta.length - 1].id
+        }" tabindex="0" class="annotation">${
           block.meta[block.meta.length - 1].polly
         }</p>`
       );
