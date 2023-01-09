@@ -151,7 +151,7 @@ const editorJson2ragtJson = (editorJson, lang = 'en') => {
   };
   const getImageAnnotation = (alt) => {
     if (lang === 'ja') {
-      return `このイメージは${alt}についてです。`;
+      return `ここに「${alt}」の画像があります。`;
     }
     if (lang === 'vi') {
       return `Đây là hình ảnh về ${alt}`;
