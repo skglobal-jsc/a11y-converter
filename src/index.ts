@@ -115,9 +115,9 @@ const reduceHtml = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
       if (el.type === 'tag') {
         // remove  all except title
         // we need to keep title because it is used to generate the slug
-        if (el.name !== 'title') {
-          $(el).remove();
-        }
+        // if (el.name !== 'title') {
+        //   $(el).remove();
+        // }
       } else {
         $(el).remove();
       }
