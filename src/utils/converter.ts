@@ -380,13 +380,13 @@ const editorJson2ragtJson = (editorJson, lang = 'en') => {
     //TODO: Table
     if (block.type === BLOCK_TYPE.TABLE) {
       meta = buildMetaTable(block.data);
+      block.data = {
+        withHeadings: block.data.heading,
+        content: block.data.content,
+      };
     }
     return {
       ...block,
-      data: {
-        withHeadings: block.data.heading,
-        content: block.data.content,
-      },
       meta,
     };
   });
@@ -476,7 +476,7 @@ const ragtJson2a11y = (ragtJson, metaOpt: MetaOptions = {}) => {
     //TODO: Image
     if (block.type === BLOCK_TYPE.IMAGE) {
       $('body').append(
-        `<p tabindex="0" class="annotation">${block.data.caption}</p>`
+        `<p tabindex="0" class="annotation">${block.meta[0].polly}</p>`
       );
       $('body').append(
         `<img id="${block.id}" src="${block.data?.file?.url || ''}" alt="${
@@ -554,6 +554,12 @@ const parseListItems = ($, items) => {
       });
     }
     if (['ul', 'ol'].includes(item.name)) {
+      if (!res[res.length - 1]?.items) {
+        res.push({
+          content: '',
+          items: [],
+        });
+      }
       res[res.length - 1].items.push(...parseListItems($, item.children));
     }
   });
@@ -580,7 +586,7 @@ const html2editorJson = (html) => {
       $('meta[name="description"]')?.attr('content') ??
       $('meta[property="og:description"]')?.attr('content'),
     keywords: $('meta[name="keywords"]')?.attr('content'),
-    favicon: $('link[rel="icon"]')?.attr('href'),
+    favicon: $('link[rel*="icon"]')?.attr('href'),
     image: $('meta[property="og:image"]')?.attr('content'),
     type: $('meta[property="og:type"]')?.attr('content'),
   };
@@ -595,8 +601,9 @@ const html2editorJson = (html) => {
         // Wrap group other tag into paragraph
         if (BLOCK_TAGS.includes(el.name)) {
           if (groupUnSupportTag.length) {
+            const unsupportedId = Math.random().toString(36).substring(7);
             res.blocks.push({
-              id,
+              id: unsupportedId,
               type: BLOCK_TYPE.PARAGRAPH,
               data: {
                 text: cleanInline(groupUnSupportTag.join('')),
@@ -644,9 +651,9 @@ const html2editorJson = (html) => {
               type: BLOCK_TYPE.IMAGE,
               data: {
                 file: {
-                  url: $(el).attr('src'),
+                  url: $(el)?.attr('src') ?? '',
                 },
-                caption: $(el).attr('alt'),
+                caption: $(el)?.attr('alt') ?? '',
                 withBorder: false,
                 stretched: false,
                 withBackground: false,
@@ -700,6 +707,20 @@ const html2editorJson = (html) => {
         } else {
           //Group tag in case not supporting
           groupUnSupportTag.push($.html(el));
+        }
+      }
+      if (el.type === 'text') {
+        // random attribute id
+        const id = Math.random().toString(36).substring(7);
+        const text = $(el).text().trim();
+        if (!!text) {
+          res.blocks.push({
+            id,
+            type: BLOCK_TYPE.PARAGRAPH,
+            data: {
+              text: text,
+            },
+          });
         }
       }
     });

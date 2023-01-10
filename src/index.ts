@@ -47,6 +47,7 @@ const SECTION_TAGS = [
   'button',
   'summary',
   'details',
+  'form',
 ];
 
 // this is total block tags
@@ -144,6 +145,16 @@ const reduceHtml = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
           opt.removeOptionalTags.includes(el.name)
         ) {
           $(el).remove();
+        }
+        //table 1 cell is not table
+        if (el.name === 'table') {
+          const rows = $(el).find('tr:not(tr tr)').length;
+          const cols = $(el).find('td:not(tr tr td), th:not(tr tr th)').length;
+          if (rows === 1 && cols === 1) {
+            $(el).replaceWith(
+              $(el).find('td:not(tr tr td), th:not(tr tr th)').contents()
+            );
+          }
         }
 
         // fix dom: make sure inside p tag there is no any block tags
@@ -253,6 +264,15 @@ const reduceHtml = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
         el.attribs.href = convertRelativeUrlsToAbsolute(opt.url, href);
       } else {
         $(el).remove();
+      }
+    }
+    if (el.name === 'table') {
+      const rows = $(el).find('tr:not(tr tr)').length;
+      const cols = $(el).find('td:not(tr tr td), th:not(tr tr th)').length;
+      if (rows === 1 && cols === 1) {
+        $(el).replaceWith(
+          $(el).find('td:not(tr tr td), th:not(tr tr th)').contents()
+        );
       }
     }
   });
