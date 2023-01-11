@@ -24,7 +24,11 @@
       "*": ["src/@custom_types/*"]
     },
     "allowJs": true,
-    "typeRoots": ["./node_modules/@types", "src/@custom_types", "src/@types/*"]
+    "typeRoots": [
+      "./node_modules/@types",
+      "src/@custom_types",
+      "src/@types/index.d.ts"
+    ]
   },
   "ts-node": {
     "compilerOptions": {
