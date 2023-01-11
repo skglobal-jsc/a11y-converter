@@ -1,6 +1,11 @@
 import $ from 'jquery';
-import { BLOCK_TYPE } from '../../constant/index'
-import { _applyCssRules, _applyGoogleAnalytics, _applyMeta, _applySocialMeta } from './css'
+import { BLOCK_TYPE } from '../../constant/index';
+import {
+  _applyCssRules,
+  _applyGoogleAnalytics,
+  _applyMeta,
+  _applySocialMeta,
+} from './css';
 
 const ragtPlayerInfo = {
   name: 'wc-ragt-player',
@@ -73,13 +78,17 @@ export const ragtJson2a11y = (
     //TODO: Paragraph
     if (block.type === BLOCK_TYPE.PARAGRAPH) {
       $('body', htmlDOM).append(
-        `<p id="${block.id}" tabindex="0">${block.data.text}</p>`
+        `<p id="${block.id}" tabindex="0">
+          ${(block?.meta || [])?.map((item) => item.ui)?.join(' ')}
+        </p>`
       );
     }
     //TODO: Header
     if (block.type === BLOCK_TYPE.HEADER) {
       $('body', htmlDOM).append(
-        `<h${block.data.level} id="${block.id}" tabindex="0">${block.data.text}</h${block.data.level}>`
+        `<h${block.data.level} id="${block.id}" tabindex="0">
+          ${(block?.meta || [])?.map((item) => item.ui)?.join(' ')}
+        </h${block.data.level}>`
       );
     }
 
@@ -126,9 +135,9 @@ export const ragtJson2a11y = (
     }
     //TODO: Image
     if (block.type === BLOCK_TYPE.IMAGE) {
-      $('body', htmlDOM).append(
-        `<p tabindex="0" class="annotation">${block.data.caption}</p>`
-      );
+      // $('body', htmlDOM).append(
+      //   `<p tabindex="0" class="annotation">${block.data.caption}</p>`
+      // );
       $('body', htmlDOM).append(
         `<img id="${block.id}" src="${block.data?.file?.url || ''}" alt="${
           block.data.caption
@@ -141,16 +150,13 @@ export const ragtJson2a11y = (
       $('body', htmlDOM).append(
         `<p id="${block.meta[0].id}" tabindex="0">${block.meta[0].polly}</p>`
       );
-      const bodyTable = block.meta.reduce(
-        (res: string, cur, idx: number) => {
-          if (idx !== 0 && idx !== block.meta.length - 1) {
-            return res.concat(cur.ui);
-          } else {
-            return res;
-          }
-        },
-        ''
-      );
+      const bodyTable = block.meta.reduce((res: string, cur, idx: number) => {
+        if (idx !== 0 && idx !== block.meta.length - 1) {
+          return res.concat(cur.ui);
+        } else {
+          return res;
+        }
+      }, '');
       const table = `<table id="${block.id}">${bodyTable}</table>`;
       $('body', htmlDOM).append(table);
       $('body', htmlDOM).append(
