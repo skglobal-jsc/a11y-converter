@@ -20,7 +20,7 @@ import {
   buildListComponent,
   buildTableComponent,
   buildTextComponent,
-} from './uv-components';
+} from '../uv-components';
 
 export const _applyCssRules = ($: cheerio.CheerioAPI, cssRules?: string[]) => {
   // first, remove head style tag
