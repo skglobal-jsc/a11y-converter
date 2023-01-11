@@ -1,4 +1,4 @@
-declare interface MetaOptions {
+declare type MetaOptions = {
   title?: string;
   cssLinks?: string[];
   meta?: {};
@@ -6,9 +6,9 @@ declare interface MetaOptions {
   lang?: string;
   favicon?: string;
   googleAnalyticsId?: string;
-}
+};
 
-declare interface ProcessOptions {
+declare type ProcessOptions = {
   removeComments?: boolean;
   removeEmptyElements?: boolean;
   removeScriptTypeAttributes?: boolean;
@@ -23,7 +23,7 @@ declare interface ProcessOptions {
     before?: string;
     after?: string;
   };
-}
+};
 
 declare type MetaItem = {
   id?: string;
