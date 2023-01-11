@@ -34,18 +34,19 @@ const saveHtmlToFile = async (path: string, html: string): Promise<void> => {
     console.log('afterrr hook');
   }`;
   const url =
-    // 'https://www.city.fukuoka.lg.jp/hofuku/coronavaccine/wakutin.html';
-    // 'https://newsdig.tbs.co.jp/articles/-/257448?display=1';
-    'https://www.freecodecamp.org/news/html-tables-table-tutorial-with-css-example-code/';
+    'https://www.city.fukuoka.lg.jp/hofuku/coronavaccine/wakutin.html';
+  // 'http://127.0.0.1:5500/index.html';
+  // 'https://www.city.yatsushiro.lg.jp/kiji00318310/index.html';
+  // 'https://www.city.yatsushiro.lg.jp/kiji00312980/index.html';
   const { html, body } = await fromUrl({
     url,
-    opt: {
-      contentSelectors: ['.post-content'],
-      hooks: {
-        before: beforeFn,
-        after: afterFn,
-      },
-    },
+    // opt: {
+    //   contentSelectors: ['.container'],
+    //   hooks: {
+    //     before: beforeFn,
+    //     after: afterFn,
+    //   },
+    // },
   });
   await saveHtmlToFile('./data/test1-out.html', html || '');
 
