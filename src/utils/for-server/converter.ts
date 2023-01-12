@@ -124,7 +124,7 @@ const splitSentences = (rawText, lang = 'en') => {
   return sentences;
 };
 
-const editorJson2ragtJson = (editorJson, lang = 'en') => {
+const editorJson2RagtJson = (editorJson, lang = 'en') => {
   const getListAnnotation = (data) => {
     let itemsArr = [];
     dfsTree(data, itemsArr);
@@ -534,7 +534,7 @@ const ragtJson2text = (ragtJson) => {
  */
 const editorJson2A11yHtml = (data, metaHtml: MetaOptions = {}) => {
   // Convert editorjs JSON to ragt JSON
-  const ragJson = editorJson2ragtJson(data, metaHtml.lang);
+  const ragJson = editorJson2RagtJson(data, metaHtml.lang);
   // Convert ragt JSON to A11y HTML
   const a11yHtml = ragtJson2a11y(ragJson, metaHtml);
 
@@ -734,6 +734,6 @@ export {
   html2editorJson,
   editorJson2A11yHtml,
   ragtJson2text,
-  editorJson2ragtJson,
+  editorJson2RagtJson,
   ragtJson2a11y,
 };
