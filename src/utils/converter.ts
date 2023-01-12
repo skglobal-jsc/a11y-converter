@@ -436,13 +436,17 @@ const ragtJson2a11y = (ragtJson, metaOpt: MetaOptions = {}) => {
     //TODO: Paragraph
     if (block.type === BLOCK_TYPE.PARAGRAPH) {
       $('body').append(
-        `<p id="${block.id}" tabindex="0">${block.data.text}</p>`
+        `<p id="${block.id}" tabindex="0">
+          ${(block?.meta || [])?.map((item) => item.ui)?.join(' ')}
+        </p>`
       );
     }
     //TODO: Header
     if (block.type === BLOCK_TYPE.HEADER) {
       $('body').append(
-        `<h${block.data.level} id="${block.id}" tabindex="0">${block.data.text}</h${block.data.level}>`
+        `<h${block.data.level} id="${block.id}" tabindex="0">
+          ${(block?.meta || [])?.map((item) => item.ui)?.join(' ')}
+        </h${block.data.level}>`
       );
     }
 
@@ -475,9 +479,9 @@ const ragtJson2a11y = (ragtJson, metaOpt: MetaOptions = {}) => {
     }
     //TODO: Image
     if (block.type === BLOCK_TYPE.IMAGE) {
-      $('body').append(
-        `<p tabindex="0" class="annotation">${block.meta[0].polly}</p>`
-      );
+      // $('body').append(
+      //   `<p tabindex="0" class="annotation">${block.meta[0].polly}</p>`
+      // );
       $('body').append(
         `<img id="${block.id}" src="${block.data?.file?.url || ''}" alt="${
           block.data.caption
