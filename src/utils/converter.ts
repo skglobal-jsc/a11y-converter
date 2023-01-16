@@ -113,7 +113,7 @@ const splitSentences = (rawText, lang = 'en') => {
       : /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?|\:|\!|\n)\s/g;
   const noHtmlSentences = noHtml
     .split(regexSplitSentences)
-    .filter((sentences) => !!sentences);
+    .filter((sentences) => sentences?.trim());
   const sentences = noHtmlSentences.map((sentence) => {
     htmlElements.forEach(
       (element, idx) =>
@@ -151,13 +151,21 @@ const editorJson2ragtJson = (editorJson, lang = 'en') => {
     } sub items`;
   };
   const getImageAnnotation = (alt) => {
-    if (lang === 'ja') {
-      return `ここに「${alt}」の画像があります。`;
+    if (alt) {
+      const annotation = {
+        ja: `ここに「${alt}」の画像があります。`,
+        vi: `Đây là hình ảnh về ${alt}`,
+        en: `This image is about ${alt}.`,
+      };
+      return annotation[lang] || annotation.en;
+    } else {
+      const annotation = {
+        ja: 'ここに画像があります。',
+        vi: 'Đây là một bức hình',
+        en: 'There is a image',
+      };
+      return annotation[lang] || annotation.en;
     }
-    if (lang === 'vi') {
-      return `Đây là hình ảnh về ${alt}`;
-    }
-    return `This image is about ${alt}.`;
   };
 
   const buildMetaTable = (data) => {
@@ -572,7 +580,7 @@ const parseListItems = ($, items) => {
 
 const cleanInline = (html) => {
   return sanitizeHtml(html, {
-    allowedTags: ['a', 'mark', 'br'],
+    allowedTags: ['a', 'mark'],
   });
 };
 
