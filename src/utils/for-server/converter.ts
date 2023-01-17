@@ -397,7 +397,7 @@ const editorJson2RagtJson = (editorJson, lang = 'en') => {
   };
 };
 
-const ragtJson2a11y = (ragtJson, metaOpt: MetaOptions = {}) => {
+const ragtJson2A11Y = (ragtJson, metaOpt: MetaOptions = {}) => {
   const htmlDefault = `<!DOCTYPE html><html><head></head><body></body></html>`;
 
   const $ = cheerio.load(htmlDefault);
@@ -536,7 +536,7 @@ const editorJson2A11yHtml = (data, metaHtml: MetaOptions = {}) => {
   // Convert editorjs JSON to ragt JSON
   const ragJson = editorJson2RagtJson(data, metaHtml.lang);
   // Convert ragt JSON to A11y HTML
-  const a11yHtml = ragtJson2a11y(ragJson, metaHtml);
+  const a11yHtml = ragtJson2A11Y(ragJson, metaHtml);
 
   return {
     html: a11yHtml,
@@ -735,5 +735,5 @@ export {
   editorJson2A11yHtml,
   ragtJson2text,
   editorJson2RagtJson,
-  ragtJson2a11y,
+  ragtJson2A11Y,
 };

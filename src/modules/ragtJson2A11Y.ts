@@ -1,15 +1,17 @@
-import { ragtJson2a11y as ragtJson2a11yClient } from '../utils/for-client/converter';
-import { ragtJson2a11y as ragtJson2a11yServer } from '../utils/for-server/converter';
-
 const ragtJson2A11Y = ({
   env = 'server',
   ragtJson,
   metaOpt = {},
   playerBarOption,
 }) => {
-  return env === 'server'
-    ? ragtJson2a11yServer(ragtJson, metaOpt)
-    : ragtJson2a11yClient(ragtJson, metaOpt, playerBarOption);
+  if (env === 'server') {
+    return import('../utils/for-server/converter.js').then(
+      ({ ragtJson2A11Y }) => ragtJson2A11Y(ragtJson, metaOpt)
+    );
+  }
+  return import('../utils/for-client/converter.js').then(({ ragtJson2A11Y }) =>
+    ragtJson2A11Y(ragtJson, metaOpt, playerBarOption)
+  );
 };
 
 export default ragtJson2A11Y;

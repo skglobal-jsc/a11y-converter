@@ -76,7 +76,7 @@ const getMetaByDfs = (root: any, parentId: any, arr: any) => {
   }
 };
 
-export const ragtJson2a11y = (
+export const ragtJson2A11Y = (
   ragtJson,
   metaOpt: MetaOptions = {},
   playerBarOption?: any
