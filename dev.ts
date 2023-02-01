@@ -573,11 +573,11 @@ import {
     `,
     contentSelectors: [],
     iArticle: {
-      title: 'Code title',
-      publishDate: '2021-01-01',
+      title: '',
+      publishDate: '',
       loadedUrl: 'https://baodang.com/test',
     },
   }).then((res) => {
-    console.log(res);
+    console.log(res.plainText);
   });
 })();

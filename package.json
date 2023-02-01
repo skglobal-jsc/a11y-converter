@@ -1,7 +1,7 @@
 {
   "name": "ragt-converter",
   "description": "A tiny HTML parser, written in TypeScript",
-  "version": "0.6.41",
+  "version": "0.6.42",
   "source": "src/index.ts",
   "main": "./dist/index.js",
   "module": "dist/index.module.js",

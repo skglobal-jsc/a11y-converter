@@ -241,9 +241,8 @@ const ragtJson2Text = ({
     }
   });
   res =
-    iArticle.title +
-    '\n' +
-    dayjs(iArticle.publishDate).format(useLocale('Date', 'ja')) +
+    (iArticle?.title ? `${iArticle.title}\n` : '' ) +
+    (iArticle?.publishDate ? `${dayjs(iArticle.publishDate).format(useLocale('Date', 'ja'))}\n` : '') +
     '\n\n' +
     useLocale('StartArticle', metaOpt?.lang) +
     '\n\n' +
