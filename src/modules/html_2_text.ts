@@ -35,7 +35,7 @@ const html2Text = async ({
   // Step3: Convert ragt json to plain text
   const plainText = ragtJson2Text({ ragtJson, iArticle });
 
-  return plainText;
+  return { plainText, tinyhtml: html };
 };
 
 export default html2Text;

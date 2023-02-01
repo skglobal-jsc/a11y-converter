@@ -56,7 +56,7 @@ export {
   editorJson2A11yHtml,
   editorJson2ragtJson,
   ragtJson2a11y,
-  html2Text,
   ragtJson2Text,
+  html2Text,
   tinyhtml,
 };
