@@ -71,7 +71,7 @@ const splitSentences = (rawText, lang = 'en') => {
   return sentences;
 };
 
-const editorJson2ragtJson = (editorJson, lang = 'en') => {
+const editorJson2RagtJson = (editorJson, lang = 'en') => {
   const getListAnnotation = (data) => {
     let itemsArr = [];
     dfsTree(data, itemsArr);
@@ -352,7 +352,7 @@ const editorJson2ragtJson = (editorJson, lang = 'en') => {
   };
 };
 
-const ragtJson2a11y = (ragtJson, metaOpt) => {
+const ragtJson2A11Y = (ragtJson, metaOpt) => {
   const htmlDefault = `<!DOCTYPE html><html><head></head><body></body></html>`;
 
   const $ = cheerio.load(htmlDefault);
@@ -470,21 +470,4 @@ const ragtJson2a11y = (ragtJson, metaOpt) => {
   return $.html();
 };
 
-/**
- * Convert editorjs JSON to A11y HTML
- * @param data EditorJS JSON
- * @returns A11y HTML
- */
-const editorJson2A11yHtml = (data, metaHtml) => {
-  // Convert editorjs JSON to ragt JSON
-  const ragJson = editorJson2ragtJson(data, metaHtml.lang);
-  // Convert ragt JSON to A11y HTML
-  const a11yHtml = ragtJson2a11y(ragJson, metaHtml);
-
-  return {
-    html: a11yHtml,
-    meta: ragJson,
-  };
-};
-
-export { editorJson2A11yHtml, editorJson2ragtJson, ragtJson2a11y };
+export { editorJson2RagtJson, ragtJson2A11Y };

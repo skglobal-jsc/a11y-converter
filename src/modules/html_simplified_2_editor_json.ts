@@ -37,9 +37,7 @@ const parseListItems = ($, items) => {
 };
 
 const htmlSimplified2EditorJson = (html) => {
-  let res: { blocks: any[] } = {
-    blocks: [],
-  };
+  let blocks: any[] = [];
   // Build meta option content
   const $ = cheerio.load(html);
   const meta = {
@@ -67,7 +65,7 @@ const htmlSimplified2EditorJson = (html) => {
         if (BLOCK_TAGS.includes(el.name)) {
           if (groupUnSupportTag.length) {
             const unsupportedId = Math.random().toString(36).substring(7);
-            res.blocks.push({
+            blocks.push({
               id: unsupportedId,
               type: BLOCK_TYPE.PARAGRAPH,
               data: {
@@ -78,7 +76,7 @@ const htmlSimplified2EditorJson = (html) => {
           }
           //TODO: Paragraph
           if (el.name === 'p') {
-            res.blocks.push({
+            blocks.push({
               id,
               type: BLOCK_TYPE.PARAGRAPH,
               data: {
@@ -88,7 +86,7 @@ const htmlSimplified2EditorJson = (html) => {
           }
           //TODO: Header
           if (['h1', 'h2', 'h3'].includes(el.name)) {
-            res.blocks.push({
+            blocks.push({
               id,
               type: BLOCK_TYPE.HEADER,
               data: {
@@ -100,7 +98,7 @@ const htmlSimplified2EditorJson = (html) => {
           //TODO: List
           if (['ul', 'ol'].includes(el.name)) {
             const items = parseListItems($, el.children);
-            res.blocks.push({
+            blocks.push({
               id,
               type: BLOCK_TYPE.LIST,
               data: {
@@ -111,7 +109,7 @@ const htmlSimplified2EditorJson = (html) => {
           }
           //TODO: Image
           if (el.name === 'img') {
-            res.blocks.push({
+            blocks.push({
               id,
               type: BLOCK_TYPE.IMAGE,
               data: {
@@ -163,7 +161,7 @@ const htmlSimplified2EditorJson = (html) => {
               }),
               headers,
             };
-            res.blocks.push({
+            blocks.push({
               id,
               type: BLOCK_TYPE.TABLE,
               data,
@@ -179,7 +177,7 @@ const htmlSimplified2EditorJson = (html) => {
         const id = Math.random().toString(36).substring(7);
         const text = $(el).text().trim();
         if (!!text) {
-          res.blocks.push({
+          blocks.push({
             id,
             type: BLOCK_TYPE.PARAGRAPH,
             data: {
@@ -190,8 +188,8 @@ const htmlSimplified2EditorJson = (html) => {
       }
     });
   return {
-    json: res,
-    meta: metaOpts,
+    blocks,
+    metaOpt: metaOpts,
   };
 };
 

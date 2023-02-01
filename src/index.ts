@@ -1,10 +1,6 @@
 import { Client, RequestsOptions } from './utils/client';
 
-import {
-  editorJson2A11yHtml,
-  editorJson2ragtJson,
-  ragtJson2a11y,
-} from './utils/converter';
+import { ragtJson2A11Y, editorJson2RagtJson } from './utils/converter';
 
 import {
   html2Text,
@@ -53,9 +49,8 @@ const fromUrl = async ({
 export {
   fromUrl,
   htmlSimplified2EditorJson,
-  editorJson2A11yHtml,
-  editorJson2ragtJson,
-  ragtJson2a11y,
+  editorJson2RagtJson,
+  ragtJson2A11Y,
   ragtJson2Text,
   html2Text,
   tinyhtml,

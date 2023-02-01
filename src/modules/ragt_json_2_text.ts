@@ -218,10 +218,10 @@ const ragtJson2Text = ({
   ragtJson: any;
   iArticle: IArticle;
 }) => {
-  const { json, meta } = ragtJson;
+  const { blocks, metaOpt } = ragtJson;
   let res = '';
 
-  (json.blocks || []).forEach((block) => {
+  (blocks || []).forEach((block) => {
     if (block.type === BLOCK_TYPE.LIST && block.data?.style === LIST_STYLE.ul) {
       res += parseUoL2Text(block, iArticle) + '\n';
     } else if (
@@ -230,9 +230,9 @@ const ragtJson2Text = ({
     ) {
       res += parseOL2Text(block, iArticle) + '\n\n';
     } else if (block.type === BLOCK_TYPE.IMAGE) {
-      res += parseImage2Text(block, meta?.lang, iArticle) + '\n\n';
+      res += parseImage2Text(block, metaOpt?.lang, iArticle) + '\n\n';
     } else if (block.type === BLOCK_TYPE.TABLE) {
-      res += parseTable2Text(block, meta?.lang, iArticle) + '\n\n';
+      res += parseTable2Text(block, metaOpt?.lang, iArticle) + '\n\n';
     } else if (block.type === BLOCK_TYPE.HEADER) {
       res += parseHeading2Text(block, iArticle) + '\n\n';
     } else {
@@ -245,11 +245,11 @@ const ragtJson2Text = ({
     '\n' +
     dayjs(iArticle.publishDate).format(useLocale('Date', 'ja')) +
     '\n\n' +
-    useLocale('StartArticle', meta?.lang) +
+    useLocale('StartArticle', metaOpt?.lang) +
     '\n\n' +
     res +
     '\n\n' +
-    useLocale('EndArticle', meta?.lang);
+    useLocale('EndArticle', metaOpt?.lang);
   return res;
 };
 
