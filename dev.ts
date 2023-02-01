@@ -571,7 +571,7 @@ import {
 
     </html>
     `,
-    contentSelectors: ['#main-wrap > div.contents > div > article'],
+    contentSelectors: [],
     iArticle: {
       title: 'Code title',
       publishDate: '2021-01-01',

@@ -37,11 +37,10 @@ const parseParagraph2Text = ($p, iArticle?: IArticle): any => {
   if (!$p?.children || $p.children.length === 0) {
     return cleanText($p.data);
   }
-
-  $p.children.forEach((element) => {
+  $p?.children.forEach((element) => {
     // link tag
     if (element.name === TAG_NAME.Link) {
-      let href = element?.attribs?.href;
+      let href = element?.attribs?.href || '';
       if (!href.includes('http') && iArticle?.loadedUrl) {
         const path = new URL(href, iArticle.loadedUrl);
         href = path.href;
