@@ -1,7 +1,7 @@
 {
   "name": "ragt-converter",
   "description": "A tiny HTML parser, written in TypeScript",
-  "version": "0.6.36",
+  "version": "0.6.37",
   "source": "src/index.ts",
   "main": "./dist/index.js",
   "module": "dist/index.module.js",
@@ -59,6 +59,7 @@
   "dependencies": {
     "cheerio": "^1.0.0-rc.12",
     "content-type": "^1.0.4",
+    "dayjs": "^1.11.7",
     "got-scraping": "^3.2.11",
     "iconv-lite": "^0.6.3",
     "jquery": "^3.6.3",

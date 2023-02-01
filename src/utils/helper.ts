@@ -1,6 +1,5 @@
 import * as cheerio from 'cheerio';
 import * as url from 'url';
-import { MetaOptions } from './converter';
 
 export const convertRelativeUrlsToAbsolute = (
   baseUrl: string,
@@ -55,8 +54,8 @@ export const buildMetaOptions = (opt: {
   favicon?: string;
   image?: string;
   type?: string;
-}): MetaOptions => {
-  const metaOptions: MetaOptions = {
+}) => {
+  const metaOptions = {
     ...(!!opt.lang && { lang: opt.lang }),
     ...(!!opt.title && { title: opt.title }),
     ...(!!opt.favicon && { favicon: opt.favicon }),
@@ -77,4 +76,26 @@ export const buildMetaOptions = (opt: {
     },
   };
   return metaOptions;
+};
+
+export const isIgnoreText = (text: string): boolean => {
+  if (
+    text.includes('Acrobat') ||
+    text.includes('Adobe') ||
+    text.toLowerCase().includes('adobe.com/jp') ||
+    text.toLowerCase().includes('function(') ||
+    text.toLowerCase().includes('connect.facebook.net') ||
+    text.toLowerCase().includes('facebook.com/share') ||
+    text.toLowerCase().includes('javascript') ||
+    text.toLowerCase().includes('line-website.com') ||
+    text.toLowerCase().includes('line.me') ||
+    text.toLowerCase().includes('document.write(') ||
+    text.toLowerCase().includes('twitter.com') ||
+    text.toLowerCase().includes('hatena') ||
+    text.includes('＜外部リンク＞')
+  ) {
+    return true;
+  }
+
+  return false;
 };
