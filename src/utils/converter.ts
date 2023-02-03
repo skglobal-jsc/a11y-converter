@@ -72,7 +72,8 @@ const splitSentences = (rawText, lang = 'en') => {
 };
 
 const editorJson2RagtJson = (editorJson) => {
-  const lang = editorJson?.metaOpt?.lang || 'en';
+  const metaOpt = editorJson?.metaOpt || {};
+  const lang = metaOpt?.lang || 'en';
   const getListAnnotation = (data) => {
     let itemsArr = [];
     dfsTree(data, itemsArr);
@@ -283,7 +284,7 @@ const editorJson2RagtJson = (editorJson) => {
   };
 
   //TODO: Generate meta data for each block
-  const blocks = editorJson.blocks.map((block) => {
+  const blocks = (editorJson?.blocks || []).map((block) => {
     let meta: any = [];
     //TODO: Paragraph, Header
     if ([BLOCK_TYPE.HEADER, BLOCK_TYPE.PARAGRAPH].includes(block.type)) {

@@ -1,6 +1,6 @@
 import tinyhtml from './tiny_html';
 import htmlSimplified2EditorJson from './html_simplified_2_editor_json';
-import editorJson2Text from './editor_json_2_text';
+import json2Text from './json_2_text';
 import { editorJson2RagtJson, ragtJson2A11Y } from '../utils/converter';
 
 export interface IArticle {
@@ -39,7 +39,7 @@ const html2Text = async ({
   const editorJson = htmlSimplified2EditorJson(htmlSimplified);
 
   // Step3: Convert editor json to plain text
-  const plainText = editorJson2Text({ editorJson: editorJson, iArticle });
+  const plainText = json2Text({ json: editorJson, iArticle });
 
   // Step4: Convert editor json 2 ragt json
   const ragtJson = editorJson2RagtJson(editorJson);

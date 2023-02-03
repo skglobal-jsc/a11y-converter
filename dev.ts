@@ -2,7 +2,7 @@ import {
   // fromUrl,
   // editorJson2A11yHtml,
   // html2editorJson,
-  editorJson2Text,
+  json2Text,
   html2Text,
 } from './src/index';
 
@@ -261,7 +261,7 @@ import {
       },
     ],
   };
-  // console.log(editorJson2Text(ragtJson));
+  // console.log(json2Text(ragtJson));
 
   html2Text({
     html: `

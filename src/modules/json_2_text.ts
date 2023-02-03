@@ -210,14 +210,9 @@ const parseTable2Text = (block, lang = 'ja', iArticle?: IArticle): any => {
  * @param lang
  * @return { string }
  */
-const editorJson2Text = ({
-  editorJson,
-  iArticle,
-}: {
-  editorJson: any;
-  iArticle: IArticle;
-}) => {
-  const { blocks, metaOpt } = editorJson;
+const json2Text = ({ json, iArticle }: { json: any; iArticle: IArticle }) => {
+  const blocks = json?.blocks || [],
+    metaOpt = json?.metaOpt || {};
   let res = '';
 
   (blocks || []).forEach((block) => {
@@ -248,4 +243,4 @@ const editorJson2Text = ({
   return res;
 };
 
-export default editorJson2Text;
+export default json2Text;

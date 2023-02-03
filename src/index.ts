@@ -5,8 +5,9 @@ import { ragtJson2A11Y, editorJson2RagtJson } from './utils/converter';
 import {
   html2Text,
   tinyhtml,
-  editorJson2Text,
+  json2Text,
   htmlSimplified2EditorJson,
+  htmlSimplified2RagtJson,
 } from './modules/index';
 
 export interface ProcessOptions {
@@ -50,9 +51,10 @@ const fromUrl = async ({
 export {
   fromUrl,
   htmlSimplified2EditorJson,
+  htmlSimplified2RagtJson,
   editorJson2RagtJson,
   ragtJson2A11Y,
-  editorJson2Text,
+  json2Text,
   html2Text,
   tinyhtml,
 };
