@@ -19,7 +19,8 @@ export interface ProcessOptions {
     minHeight: number;
   };
   url?: string; // url of the page
-  contentSelectors?: string[]; // selector of the content
+  contentSelectors?: string[];
+  titleSelector?: string; // selector of the content
   hooks?: {
     before?: string;
     after?: string;

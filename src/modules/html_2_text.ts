@@ -20,14 +20,19 @@ export interface IArticle {
 const html2Text = async ({
   html,
   contentSelectors,
+  titleSelector,
   iArticle,
 }: {
   html: string;
   contentSelectors?: string[];
+  titleSelector?: string;
   iArticle: IArticle;
 }) => {
   // Step1: Simplify html
-  const { html: htmlSimplified } = await tinyhtml(html, { contentSelectors });
+  const { html: htmlSimplified } = await tinyhtml(html, {
+    contentSelectors,
+    titleSelector,
+  });
 
   // Step2: Convert html simplified to ragt json
   const ragtJson = htmlSimplified2EditorJson(htmlSimplified);

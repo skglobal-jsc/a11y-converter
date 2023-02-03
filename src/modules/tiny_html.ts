@@ -220,6 +220,27 @@ const tinyhtml = async (html: string, opt?: ProcessOptions) => {
     await executeHookFn(options.hooks.before, $);
   }
 
+  if (options.titleSelector && options.contentSelectors) {
+    const $content = $(options.contentSelectors.join(','));
+    const $titleEl = $(options.titleSelector);
+
+    $content.find('*').each((i, child) => {
+      const $child = $(child);
+      if (child.type === 'tag') {
+        // loop until meet the title element
+        if ($titleEl.is($child)) {
+          // remove itself
+          $child.remove();
+          return false;
+        } else {
+          // if not titleEle, remove it
+          $child.remove();
+        }
+      }
+      return true;
+    });
+  }
+
   // select the content of the page using contentSelectors. If doesn't exist then select the whole body
   if (options.contentSelectors && options.contentSelectors.length > 0) {
     const $content = $(options.contentSelectors!.join(','));

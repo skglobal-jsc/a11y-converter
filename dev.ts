@@ -265,313 +265,263 @@ import {
 
   html2Text({
     html: `
-    <!doctype html>
-    <html lang="ja">
-
-    <head>
-    <meta charset="UTF-8" />
-    <title>新型コロナワクチン接種の進捗状況 - 保健福祉部感染症対策局感染症対策課</title>
-    <link rel="stylesheet" media="all" href="/assets/cms/public.css" />
-    <script src="/assets/cms/public.js"></script>
-    <script>
-    //<![CDATA[
-
-      SS.config = {"site_url":"/","kana_url":"/kana/","translate_url":"/translate/","theme":{"white":{"css_path":null,"name":"白","font_color":null,"background_color":null},"blue":{"css_path":null,"name":"青","font_color":"#FFFFFF","background_color":"#0066CC"},"black":{"css_path":"/css/black.css","name":"黒","font_color":null,"background_color":null}},"recommend":{}};
-
-    //]]>
-    </script><meta name="keywords" content="covid, 感染症" />
-    <meta name="description" content="新型コロナウイルスワクチン接種の進捗状況 本道における新型コロナウイルスワクチンの接種の進捗状況をお知らせします。..." />
-
-      <meta name="viewport" content="width=device-width">
-        <link href="/css/style.css" media="all" rel="stylesheet" />
-        <link href="/css/style-o.css" media="all" rel="stylesheet" />
-        <script src="/js/common.js"></script>
-        <!--
-    <script>
-    (function(d) {
-      var config = {
-        kitId: 'ziw5cbt',
-        scriptTimeout: 3000,
-        async: true
-      },
-      h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
-    })(document);
-    </script>
-
-    <script>
-    (function(d) {
-      var config = {
-        kitId: 'pax6zqs',
-        scriptTimeout: 3000,
-        async: true
-      },
-      h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
-    })(document);
-    </script>
-
-    <script>
-     (function(d) {
-       var config = {
-         kitId: 'urw1nqv',
-         scriptTimeout: 3000,
-         async: true
-       },
-    h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
-     })(document);
-    </script>
-
-    <script>
-    (function(d) {
-      var config = {
-        kitId: 'jsw0pcp',
-        scriptTimeout: 3000,
-        async: true
-      },
-      h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
-    })(document);
-    </script>
-    -->
-        <script src="//cdn1.readspeaker.com/script/8605/webReader/webReader.js?pids=wr&amp;forceAdapter=ioshtml5&amp;disable=translation,lookup" type="text/javascript" id="rs_req_Init"></script>
-    <script type="text/javascript">window.rsConf = { general: { usePost: true } };</script>
-        <style>
-         #wrap #main-wrap {
-           width: calc(100%)!important;
-         }
-      </style>
-
-
-
-
-    </head>
-
-    <body id="body--hf-kst-covid-wakuchin_shintyoku" class="body--hf body--hf-kst body--hf-kst-covid">
-
-        <div id="page" class="lower-page">
-          <div id="tool">
-      <div class="inner">
-      <div class="voice-tool">
-        <div id="readspeaker_button1" class="rs_skip rsbtn rs_preserve">
-          <a href="//app-eas.readspeaker.com/cgi-bin/rsent?customerid=8605&amp;lang=ja_jp&amp;readid=main&amp;url=" title="音声で読み上げる" rel="nofollow" class="rsbtn_play" accesskey="L">
-            <span class="rsbtn_left rsimg rspart"><span class="rsbtn_text"><span>読み上げる</span></span></span>
-            <span class="rsbtn_right rsimg rsplay rspart"></span>
-          </a>
-        </div>
-      </div>
-      <div class="lang-tool"><a class="linkBtn" href="/foreign/translate.html"><span>Foreign Language</span></a></div>
-      </div>
-    </div>
-
-          <header id="head">
-            <div class="inner">
-              <div class="site-head-l">
-                <div class="site-id">
-                  <div id="MainSkip"><a href="#main">メインコンテンツへ移動</a></div>
-    <div class="logo"><a href="/"><img src="/img/logo.png" alt="" width="188" height="78"/><span class="top"><img src="/img/ic-hokkaido-top.png" alt="" width="17" height="15" /><span>北海道トップ</span></span></a></div>
-                </div>
-                <div class="site-menu">
-                  <nav id="navi">
-      <ul class="nav-item">
-        <li class="navi-cat"><a href="/category/index.html"><span class="navi-btn"><img src="/img/ic-category.png" alt="" width="58" height="57" /><span class="text">カテゴリから探す</span></span></a>
-          <span class="nav-sub">
-            <ul class="nav-list">
-              <li><a href="/category/d001/">公募・意見募集</a></li>
-              <li><a href="/category/d002/">申請・手続き</a></li>
-              <li><a href="/category/d003/">入札・調達・売却</a></li>
-              <li><a href="/category/d004/">採用・試験・資格</a></li>
-              <li><a href="/category/d005/">イベント・講習会・お知らせ</a></li>
-              <li><a href="/category/d006/">総合案内・道政情報・税</a></li>
-              <li><a href="/category/d007/">防災・くらし・人権・環境</a></li>
-              <li><a href="/category/d008/">観光・道立施設・文化・スポーツ・国際</a></li>
-              <li><a href="/category/d009/">健康・医療・福祉</a></li>
-              <li><a href="/category/d010/">子育て・教育</a></li>
-              <li><a href="/category/d011/">経済・雇用・産業</a></li>
-              <li><a href="/category/d012/">まちづくり・地域振興</a></li>
-            </ul>
-          </span>
-        </li>
-        <li class="navi-org"><a href="/soshiki.html"><span class="navi-btn"><img src="/img/ic-organization.png" alt="" width="59" height="55" /><span class="text">組織から探す</span></span></a>
-          <span class="nav-sub">
-            <ul class="nav-list">
-              <li><a href="/soshiki/index.html">本庁各部・局・行政委員会</a></li>
-              <li><a href="/gyosei/shicho/index.html">14総合振興局・振興局</a></li>
-              <li><a href="https://www.gikai.pref.hokkaido.lg.jp/" class="internal">北海道議会</a></li>
-              <li><a href="https://www.dokyoi.pref.hokkaido.lg.jp/" class="internal">北海道教育委員会</a></li>
-              <li><a href="/link/do_kikan/index.html">出先機関、関係機関など</a></li>
-              <li><a href="/soshiki.html">関連組織</a></li>
-              <li><a href="/soshiki.html">関連リンク</a></li>
-            </ul>
-          </span>
-        </li>
-        <li class="navi-bosai"><a href="/sm/ktk/saigai-bousai.html"><span class="navi-btn"><img src="/img/ic-saigaiBosai.png" alt="" width="56" height="53" /><span class="text">防災<br />情報</span></span></a></li>
-      </ul>
-    </nav>
-                </div>
-              </div>
-              <div class="site-head-r">
-                <div id="bosai"><ul></ul></div><!--only mb-->
-                <div id="search-btn"><button type="button"><img class="s-open" src="/img/ic-search-mb.png" alt="" width="34" height="34" /><img class="s-close" src="/img/ic-search-close.png" alt="" width="28" height="28" /><span>検索</span></button></div><!--only mb-->
-                <form id="cse-search-box" action="/search.html">
-      <input name="cx" type="hidden" value="015791192620576126433:bnwztabap_w">
-      <input name="ie" type="hidden" value="UTF-8">
-      <input name="q" class="search-box">
-      <input name="sa" class="search-button" type="submit" value="検索">
-    </form>
-    <script type="text/javascript" src="https://www.google.com/cse/brand?form=cse-search-box&lang=ja"></script>
-                <div id="menu-btn"><a href="javascript:void(0);"><span></span><span></span><span></span><em class="open">メニュー</em><em class="close">閉じる</em></a></div><!--only mb-->
-                <div id="gnavi"></div><!--only mb-->
-              </div>
-            </div><!--.inner-->
-          </header>
-
-          <div id="breadcrumb" class="inner">
-            <div class="crumbs">
-        <div class="crumb" itemscope itemtype="http://schema.org/BreadcrumbList">
-          <span class="page" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><span itemprop="name"><a itemprop="item" href="/">HOME</a></span><meta itemprop="position" content="1"></span><span class="separator">&rsaquo;</span><span class="page" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><span itemprop="name"><a itemprop="item" href="/hf/">保健福祉部</a></span><meta itemprop="position" content="2"></span><span class="separator">&rsaquo;</span><span class="page" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><span itemprop="name"><a itemprop="item" href="/hf/kst/">感染症対策局感染症対策課</a></span><meta itemprop="position" content="3"></span><span class="separator">&rsaquo;</span><span class="page" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><span itemprop="name"><a itemprop="item" href="/hf/kst/covid/">covid</a></span><meta itemprop="position" content="4"></span><span class="separator">&rsaquo;</span><span class="page" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><span itemprop="name">新型コロナワクチン接種の進捗状況</span><meta itemprop="position" content="5"></span>
-        </div>
-    </div>
-
-          </div><!--.inner-->
-          <div class="voice-wrap inner"></div> <!--.inner only mb-->
-
-          <main id="main" class="doc">
-            <div id="wrap" class="inner">
-
-              <div id="main-wrap">
-                <header><h1 id="page-header" class="middle"><span>新型コロナワクチン接種の進捗状況</span></h1></header>
-                <div class="contents">
-                  <div class="yield">
-                    <!-- layout_yield -->
-
-
-
-
-
-
-
-
-
-
-
-
-        <article class="body">
-
-      <div class="ss-alignment ss-alignment-flow"><p><img alt="図1 (PNG 33.8KB)" src="/fs/6/4/4/1/0/7/1/_/%E5%9B%B31.png" /></p></div><div class="ss-alignment ss-alignment-flow"><ul><li>本道における新型コロナワクチンの接種の進捗状況をお知らせします。</li></ul></div><div class="ss-alignment ss-alignment-flow"><h3>令和5年（2023年）1月30日時点</h3></div><div class="ss-alignment ss-alignment-flow"><table><caption>【初回接種（１、２回目接種）】接種回数・接種率</caption><thead><tr><th scope="col">　　　　区　　分</th><th scope="col">1回目接種回数</th><th scope="col">1回目接種率</th><th scope="col">2回目接種回数</th><th scope="col">2回目接種率</th></tr></thead><tbody><tr><td>全　体　　　</td><td>　　4,354,459</td><td>　　　84.0%</td><td>　　4,292,497</td><td>　　　82.8％</td></tr><tr><td>全　体（医療従事者等を除く）　　　　　<br /></td><td>　　4,025,338</td><td>　　　77.7%</td><td>　　3,999,608</td><td>　　　77.2％</td></tr></tbody></table></div><div class="ss-alignment ss-alignment-flow"><table><caption>【３回目接種】接種回数・接種率</caption><thead><tr><th scope="col">　　　　区　　分 　　　　　　　　　</th><th scope="col">接種回数</th><th scope="col">接種率</th></tr></thead><tbody><tr><td>全　体　　　</td><td>　　3,663,766</td><td>　　　  70.7％</td></tr></tbody></table></div><div class="ss-alignment ss-alignment-flow"><table><caption>【４回目接種】接種回数・接種率</caption><thead><tr><th scope="col">　　　　区　　分 </th><th scope="col">接種回数</th><th scope="col">接種率</th></tr></thead><tbody><tr><td>全　体　　　</td><td>　　2,617,492</td><td>　　　  50.5％</td></tr><tr><td>うち高齢者（60歳以上）</td><td>　　1,637,331<br /></td><td>　　　  81.5％</td></tr></tbody></table></div><div class="ss-alignment ss-alignment-flow"><table><caption>【５回目接種】接種回数・接種率</caption><thead><tr><th scope="col">　　　　区　　分 </th><th scope="col">接種回数</th><th scope="col">接種率</th></tr></thead><tbody><tr><td>全　体　　　</td><td>   　1,297,902</td><td>　　　  25.0％</td></tr></tbody></table></div><div class="ss-alignment ss-alignment-flow"><table><caption>【オミクロン株対応ワクチン接種】接種回数・接種率</caption><thead><tr><th scope="col">　　　　区　　分 </th><th scope="col">接種回数</th><th scope="col">接種率</th></tr></thead><tbody><tr><td>全　体　　</td><td>   　2,342,416</td><td>   　　  45.2％</td></tr><tr><td>うち高齢者（65歳以上）</td><td>   　1,169,292</td><td>   　　  69.8％</td></tr></tbody></table></div><div class="ss-alignment ss-alignment-flow"><p><a class="icon-pdf" href="/fs/7/8/6/9/9/8/3/_/230131%20%E5%B9%B4%E9%BD%A2%E9%9A%8E%E7%B4%9A%E5%88%A5%E6%8E%A5%E7%A8%AE%E7%8E%87(R4.1.1%E4%BA%BA%E5%8F%A3)(%E3%82%AA%E3%83%9F%E3%82%AF%E3%83%AD%E3%83%B3).pdf">年齢階級別接種率 (PDF 371KB)</a></p></div><div class="ss-alignment ss-alignment-flow"><p><a href="https://www.kantei.go.jp/jp/headline/kansensho/vaccine.html">首相官邸新型コロナワクチンのページはこちら</a></p></div><div class="ss-alignment ss-alignment-flow">
-      <p>・接種率は、令和4年1月1日現在の人口に対する割合。
-    <br />
-    ・3・4・5回目接種の全体接種回数及び高齢者接種回数は、オミクロン株対応ワクチン接種の回数を含む
-    <br />
-    ・接種回数はVRS（ワクチン接種記録システム）による。
-    <br />
-    　※初回接種（１、２回目接種）の医療従事者等の接種回数は、首相官邸HPによる
-    <br />
-    　　追加接種（３、４回目接種）は、医療従事者等を含む
-    <br />
-    　※初回接種（１、２回目接種）の接種回数は、小児接種を含む
-    <br />
-    ・更新は平日のみとなります。</p>
-    </div>
-
-    </article>
-        <section class="categories">
-      <header><h2>カテゴリー</h2></header>
-      <div class="nodes">
-        <ul>
-          <li><a href="/news/oshirase/">お知らせ</a></li>
-          <li><a href="/category/d009/c057/s258/">新型コロナウィルス感染症</a></li>
-        </ul>
-      </div>
-    </section>
-
-
-
-    <section class="section_categories">
-      <header><h2>感染症対策局感染症対策課のカテゴリ</h2></header>
-      <div class="nodes">
-        <ul>
-            <li><a href="/hf/kst/a0000/">注目情報</a></li>
-            <li><a href="/hf/kst/vaccine/vaccine1/">ワクチン接種の進捗状況</a></li>
-        </ul>
-      </div>
-    </section>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      <footer class="contact">
-        <h2>お問い合わせ</h2>
-          <p class="group">北海道新型コロナウイルス感染症対策本部指揮室</p>
-          <p class="address-group"><span class="postal-code">〒060-8588</span><span class="address">札幌市中央区北3条西6丁目</span></p>
-          <dl class="tel"><dt>電話:</dt><dd><a href="tel:0112314111">011-231-4111</a></dd></dl>
-      </footer>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <!-- /layout_yield -->
-                    <div class="uppate-date"><time datetime="2023-01-31">2023年1月31日</time></div>
-                  </div><!--.yield-->
-                  <nav class="ss-adobe-reader" style="display: none">Adobe Reader</nav>
-                </div><!--.contents-->
-                <div class="cc-license">
-      <a href="/site-info/sitepolicy.html#chapter-4"><img src="/img/cc-by.png" alt="" width="88" height="31" /></a>
-    </div>
-              </div><!--#main-wrap-->
-            </div><!--.wrap .inner-->
-          </main><!-- /#main -->
-
-          <p id="scrollTop"><a href="#page"><img src="/img/ic-pagetop.png" alt="" width="30" height="34" /><span lang="en">page top</span></a></p>
-          <footer id="foot">
-            <nav id="footer-navi">
-      <div class="inner">
-        <div class="fnav-btn">
-          <p class="fnav-contact"><a href="/site-info/contact.html">お問合せ・相談窓口</a></p>
-          <p class="fnav-guide"><a href="/chosha/index.html">庁舎のご案内</a></p>
-        </div>
-        <ul>
-          <li><a href="/site-info/sitepolicy.html">サイトポリシー</a></li>
-          <li><a href="/site-info/kojinjoho.html">個人情報の取扱いについて </a></li>
-          <li><a href="/sitemap/index.html">サイトマップ</a></li>
-          <li><a href="/ss/dtf/opendata/opendata.html">北海道のオープンデータの取組</a></li>
-        </ul>
-      </div><!--.inner-->
-    </nav>
-    <address>
-      <div class="inner">
-        <span class="addr">〒060-8588&nbsp;<br />札幌市中央区北3条西6丁目&nbsp;&nbsp;<br />電話番号 <span><a href="tel:0112314111">011-231-4111</a></span>（総合案内）</span>
-        <span class="work-time">一般的な業務時間：8時45分から17時30分<br />（土日祝日および12月29日～1月3日はお休み）</span>
-        <span class="corp-num">法人番号：7000020010006</span>
-      </div>
-    </address>
-            <div id="copyright"><small>&copy; 2021 HOKKAIDO GOVERNMENT</small></div>
-          </footer>
-
-        </div><!-- /#page -->
-      <script type="text/javascript" src="/_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3&ns=1&cb=488936762" async></script></body>
-
-    </html>
-    `,
-    contentSelectors: [],
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="ja" xml:lang="ja" xmlns="http://www.w3.org/1999/xhtml">
+<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
+<meta property="og:type"   content="article" />
+<meta property="og:url"    content="https://www.town.agui.lg.jp/contents_detail.php?frmId=71" />
+<meta property="og:title"  content="産業観光課農政係の仕事 | 阿久比町" />
+<meta property="og:image"  content="https://www.town.agui.lg.jp/images/logo_images.jpg" />
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Language" content="ja" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<title>産業観光課農政係の仕事 | 阿久比町</title>
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-71444537-1', 'auto');
+  ga('send', 'pageview');
+
+</script><script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+<!-- on  -->
+<script type="text/javascript" src="js/toolbox-ssl.js"></script>
+<script type="text/javascript" src="js/google_bg.js"></script>
+<script type="text/javascript" src="css/img/twitter.js"></script>
+<script type="text/javascript" src="css/img/facebook.js"></script>
+<link rel="stylesheet" type="text/css" href="css/style.css?123" media="screen,print" />
+<link rel="stylesheet" type="text/css" href="css/molecule_view.css?123" media="screen,print" />
+<link rel="stylesheet" type="text/css" href="css/faq.css" media="screen,print" />
+<!--[if IE 7]>
+<link rel="stylesheet" type="text/css" href="css/ie70.css?123" media="screen,print" />
+<![endif]-->
+<!--[if IE 8]>
+<link rel="stylesheet" type="text/css" href="css/ie80.css?123" media="screen,print" />
+<![endif]-->
+<!--[if IE 9]>
+<link rel="stylesheet" type="text/css" href="css/ie90.css?123" media="screen,print" />
+<![endif]-->
+<link rel="stylesheet" type="text/css" href="css/print.css?123" media="print" />
+<link href="css/img/favicon.ico" rel="shortcut icon" />
+<script type="text/javascript">
+$(function(){
+    $("dl.mol_attachfileblock_adobe").each(function(){
+        if($(this).find("a").attr('href') == 'http://www.microsoft.com/downloads/details.aspx?displaylang=ja&FamilyID=3657ce88-7cfa-457a-9aec-f4f827f20cac'){
+            $(this).hide();
+        }
+        if($(this).find("a").attr('href') == 'http://www.microsoft.com/downloads/details.aspx?displaylang=ja&FamilyID=1cd6acf9-ce06-4e1c-8dcf-f33f669dbc3a'){
+            $(this).hide();
+        }
+
+    });
+});
+</script>
+
+
+</head>
+<body id="body" class="inbody inkiji" onload="getCookie();">
+<a name="pagetop" id="pagetop" class="anchor" tabindex="-1"><img src="images/clearspacer.gif" alt="ページの先頭です" width="1" height="1" /></a>
+<div class="all">
+<div class="design">
+
+<!-- ▼▼▼▼▼ヘッダ▼▼▼▼▼ -->
+<div id="head_bg">
+<div id="head" class="clear">
+<!--head_sub-->
+<div id="head_sub" class="clear">
+<!--head_sub_lower01-->
+<div id="head_sub_lower01">
+<ul id="head_links">
+<li><a href="#HONBUN"><img src="/css/img/head_to.png" alt="本文へ" /></a></li><li><a href="http://www.town.agui.lg.jp/m/"><img src="/cmsfiles/menu_img/menu-34.png" alt="携帯サイト" /></a></li><li><a href="https://www.town.agui.lg.jp/form/opinion.cgi"><img src="/cmsfiles/menu_img/menu-35.png" alt="町政へのご意見" /></a></li></ul><div class="link_box">
+<ul class="clear">
+<li><a href="/soshiki_list.php"><img src="/css/img/in_head_org.gif" alt="組織で探す" /></a></li><li><a href="/sitemap.php"><img src="/css/img/in_head_map.gif" alt="サイトマップ" /></a></li>
+</ul>
+</div><div class="search_box">
+<form action="https://www.google.com/cse" id="search_form" name="search_form"><input type="hidden" name="cx" value="004813469845189942980:xlvcg0ykuje" /><input type="hidden" name="ie" value="UTF-8" /><input type="text" id="q" name="q" title="検索キーワード" /><input type="image" src="/css/img/search.gif" id="search_button" name="search_button" alt="サイト内検索" /></form>
+</div>
+</div>
+<!--/head_sub_lower01-->
+<!--head_sub_lower02-->
+<div id="head_sub_lower02" class="clear">
+<div id="head_lang">
+<p lang="en" xml:lang="en"><img src="/css/img/lang.gif" alt="翻訳" /></p><ul class="clear">
+<!--IF_TRANS_HIDE:ja <li><a href="https://www.town.agui.lg.jp/"><img src="/css/img/head_ja.gif" alt="日本語" width="50" height="21"  /></a></li> /IF_TRANS_HIDE:ja-->
+<!--IF_TRANS_HIDE:en--><li><a onclick="window.translate('en');" href="javascript:void(0)" lang="en" xml:lang="en"><img alt="English" src="/css/img/in_head_en.gif" /></a></li><!--/IF_TRANS_HIDE:en-->
+<!--IF_TRANS_HIDE:ko--><li><a onclick="window.translate('ko');" href="javascript:void(0)" lang="ko" xml:lang="ko"><img src="/css/img/in_head_ko.gif" alt="한국" /></a></li><!--/IF_TRANS_HIDE:ko-->
+<!--IF_TRANS_HIDE:zhb--><li><a onclick="window.translate('zhb');" href="javascript:void(0)" lang="zh-tw" xml:lang="zh-tw"><img src="/css/img/in_head_cn.gif" alt="中文繁體" /></a></li><!--/IF_TRANS_HIDE:zhb-->
+<!--IF_TRANS_HIDE:zh--><li><a onclick="window.translate('zh');" href="javascript:void(0)" lang="zh" xml:lang="zh"><img alt="中文簡体" src="/css/img/in_head_zh.gif" /></a></li><!--/IF_TRANS_HIDE:zh-->
+<!--IF_TRANS_HIDE:pt--><li><a onclick="window.translate('pt');" href="javascript:void(0)" lang="pt" xml:lang="pt"><img src="/css/img/in_head_pt.gif" alt="Portugues" /></a></li><!--/IF_TRANS_HIDE:pt-->
+</ul>
+</div>
+<div class="font">
+<p class="font_size"><img src="/css/img/font.gif" alt="文字" /></p><ul class="font_size"><li><a href="javascript:textSizeReset();"><img src="/css/img/font_def.gif" alt="標準" /></a></li><li><a href="javascript:textSizeUp();"><img src="/css/img/font_big.gif" alt="拡大" /></a></li></ul>
+</div>
+</div>
+<!--/head_sub_lower02-->
+</div>
+<!--/head_sub-->
+
+<div id="head_main" class="clear">
+<div class="h1"><a href="/"><img src="/design_img/head_id.png?123" alt="阿久比町" /></a></div>
+</div>
+
+<div id="navi">
+<ul class="clear">
+<li class="menu_hom"><a href="https://www.town.agui.lg.jp/" onmouseover="change_image('menu809',810)" onfocus="change_image('menu809',810)" onmouseout="change_image('menu809',809)" onblur="change_image('menu809',809)"><img src="/css/img/in_navi_hom2.png" alt="ホーム"  name="menu809" id="menu809" /></a></li>
+<li class="menu_lif"><a href="https://www.town.agui.lg.jp/category_list.php?frmCd=8-0-0-0-0" onmouseover="change_image('menu811',812)" onfocus="change_image('menu811',812)" onmouseout="change_image('menu811',811)" onblur="change_image('menu811',811)"><img src="/css/img/in_navi_inf2.png" alt="町の紹介"  name="menu811" id="menu811" /></a></li><li class="menu_lif"><a href="https://www.town.agui.lg.jp/category_list.php?frmCd=1-0-0-0-0" onmouseover="change_image('menu801',802)" onfocus="change_image('menu801',802)" onmouseout="change_image('menu801',801)" onblur="change_image('menu801',801)"><img src="/css/img/in_navi_lif2.png" alt="暮らし"  name="menu801" id="menu801" /></a></li><li class="menu_hlt"><a href="https://www.town.agui.lg.jp/category_list.php?frmCd=9-0-0-0-0" onmouseover="change_image('menu803',804)" onfocus="change_image('menu803',804)" onmouseout="change_image('menu803',803)" onblur="change_image('menu803',803)"><img src="/css/img/in_navi_hlt2.png" alt="健康づくり"  name="menu803" id="menu803" /></a></li><li class="menu_car"><a href="https://www.town.agui.lg.jp/category_list.php?frmCd=10-0-0-0-0" onmouseover="change_image('menu805',806)" onfocus="change_image('menu805',806)" onmouseout="change_image('menu805',805)" onblur="change_image('menu805',805)"><img src="/css/img/in_navi_car2.png" alt="福祉・医療" name="menu805" id="menu805" /></a></li><li class="menu_gmt"><a href="https://www.town.agui.lg.jp/category_list.php?frmCd=4-0-0-0-0" onmouseover="change_image('menu807',808)" onfocus="change_image('menu807',808)" onmouseout="change_image('menu807',807)" onblur="change_image('menu807',807)"><img src="/css/img/in_navi_gmt2.png" alt="町政情報"  name="menu807" id="menu807" /></a></li></ul>
+</div>
+
+<noscript><p class="noscript"><strong>文字サイズ変更機能を利用するにはJavaScript（アクティブスクリプト）を有効にしてください。JavaScript（アクティブスクリプト） を無効のまま文字サイズを変更する場合には、ご利用
+のブラウザの表示メニューから文字サイズを変更してください。</strong></p></noscript>
+
+
+</div>
+</div>
+<a id="HONBUN" class="anchor" tabindex="-1"><img src="/images/clearspacer.gif" alt="" width="1" height="1" /></a>
+<!-- <olang> --><input type="hidden" id="ssps" value="http://www.town.agui.lg.jp/contents_detail.php?co=kak&frmId=71"/><!-- </olang> -->
+<!-- ▲▲▲▲▲ヘッダ▲▲▲▲▲ -->
+<!-- ▼▼▼▼▼メイン▼▼▼▼▼ -->
+<ul id="pankuzu" class="clear">
+<li><a href="/">ホーム</a></li>
+<li><a href="soshiki_list.php">各課の窓口</a></li>
+<li><a href="soshiki_view.php?so_cd1=3&amp;so_cd2=1&amp;so_cd3=1&amp;so_cd4=0&amp;so_cd5=0">農政係</a></li>
+<li><a href="soshiki_view.php?so_cd1=3&amp;so_cd2=1&amp;so_cd3=1&amp;so_cd4=0&amp;so_cd5=0&amp;bn_cd=1">お知らせ</a></li>
+</ul>
+<div class="main_naka">
+<h1>産業観光課農政係の仕事</h1>
+<div class="clear">
+<p class="syosai_hiduke">[2012年4月1日]</p>
+<div id="sns_box">
+<p class="sns_btn"><span class="small">ソーシャルサイトへのリンクは別ウィンドウで開きます</span></p>
+<ul>
+<li class="sns_btn"><script type="text/javascript">facebutton();</script></li>
+<li class="sns_btn"><script type="text/javascript">twitterbutton();</script></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+
+<div class="waku">
+<div class="clear">
+<div class="main_naka_kiji_box">
+<div class="main_naka_kiji">
+<div id="mol_contents" class="mol_contents"><div class="mol_textblock"><ul><li>農業委員会に関すること。</li><li>農地に関すること。</li><li>農業者年金に関すること。</li><li>農林業振興に関すること。</li><li>農業振興地域整備計画に関すること。</li><li>食育推進計画に関すること。</li><li>農業経営基盤強化促進事業に関すること。</li><li>米生産調整に関すること。</li><li>農林水産統計に関すること。</li><li>病害虫防除に関すること。</li><li>家畜伝染病に関すること。</li><li>林地保全に関すること。</li><li>治山、治水に関すること。</li><li>緑化推進に関すること。</li><li>鳥獣保護および狩猟に関すること。</li><li>知多地区農業共済事務組合に関すること。</li><li>知多南部総合卸売市場に関すること。</li></ul></div></div>
+</div>
+</div>
+<div id="kiji_sub">
+<div class="syosai_sonota">
+<h2>お問い合わせ</h2>
+<p>阿久比町役場建設経済部<br />産業観光課農政係</p>
+<p>電話: 0569-48-1111<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;内線1222・1223</p><p>ファックス: 0569-48-0229</p><p class="for_img"><strong><img src="css/img/sonota_atc.gif" alt="電話番号のかけ間違>いにご注意ください！" width="160" height="42" /></strong></p>
+<p><a href="https://www.town.agui.lg.jp/form/inquiry.cgi?so=277da6cc975c9c0fc7b6af8e75afb98095dba73c&amp;ref=%2Fcontents_detail.php%3Fco%3Dkak%26frmId%3D71">
+<img src="css/img/sonota_btn.gif" alt="お問い合わせフォーム" width="160" height="30" />
+</a></p></div><div class="kakuka">
+<h2>組織内ジャンル</h2>
+<h3>建設経済部産業観光課農政係</h3>
+<ul style="margin:0 0 8px 0;">
+<li><a href="soshiki_view.php?so_cd1=3&amp;so_cd2=1&amp;so_cd3=1&amp;so_cd4=0&amp;so_cd5=0&amp;bn_cd=1">お知らせ</a>
+</li>
+<li><a href="soshiki_view.php?so_cd1=3&amp;so_cd2=1&amp;so_cd3=1&amp;so_cd4=0&amp;so_cd5=0&amp;bn_cd=3">農業者支援</a>
+</li>
+<li><a href="soshiki_view.php?so_cd1=3&amp;so_cd2=1&amp;so_cd3=1&amp;so_cd4=0&amp;so_cd5=0&amp;bn_cd=4">元気な家族農園</a>
+</li>
+<li><a href="soshiki_view.php?so_cd1=3&amp;so_cd2=1&amp;so_cd3=1&amp;so_cd4=0&amp;so_cd5=0&amp;bn_cd=5">畜産</a>
+</li>
+<li><a href="soshiki_view.php?so_cd1=3&amp;so_cd2=1&amp;so_cd3=1&amp;so_cd4=0&amp;so_cd5=0&amp;bn_cd=6">鳥獣</a>
+</li>
+<li><a href="soshiki_view.php?so_cd1=3&amp;so_cd2=1&amp;so_cd3=1&amp;so_cd4=0&amp;so_cd5=0&amp;bn_cd=7">食育</a>
+</li>
+<li><a href="soshiki_view.php?so_cd1=3&amp;so_cd2=1&amp;so_cd3=1&amp;so_cd4=0&amp;so_cd5=0&amp;bn_cd=8">林務</a>
+</li>
+<li><a href="soshiki_view.php?so_cd1=3&amp;so_cd2=1&amp;so_cd3=1&amp;so_cd4=0&amp;so_cd5=0&amp;bn_cd=2">農業振興</a>
+</li>
+</ul>
+</div></div>
+</div>
+</div>
+<img src="images/clearspacer.gif" alt="" width="100%" height="1" />
+
+<div class="design">
+<div class="main_naka">
+<!-- ▼▼▼▼▼アンケート領域▼▼▼▼▼ -->
+<div class="syosai_qa">
+<div class="syosai_qa2">
+<form class="form" name="mdb" action="https://www.town.agui.lg.jp/evaluation/evaluation.cgi" method="post">
+<h2>ご意見をお聞かせください</h2>
+<div>
+<ul><li><fieldset><legend>このページは役に立ちましたか？</legend>
+<p><span><input type="radio" name="ans1" id="ans12" value="2" /><input type="hidden" name="ans1_2_text" value="役に立った" /><label for="ans12">役に立った</label></span>
+<span><input type="radio" name="ans1" id="ans11" value="1" /><input type="hidden" name="ans1_1_text" value="まあまあ役に立った" /><label for="ans11">まあまあ役に立った</label></span>
+<span><input type="radio" name="ans1" id="ans10" value="0" checked="checked" /><input type="hidden" name="ans1_0_text" value="どちらともいえない" /><label for="ans10">どちらともいえない</label></span>
+<span><input type="radio" name="ans1" id="ans1-1" value="-1" /><input type="hidden" name="ans1_-1_text" value="あまり役に立たなかった" /><label for="ans1-1">あまり役に立たなかった</label></span>
+<span><input type="radio" name="ans1" id="ans1-2" value="-2" /><input type="hidden" name="ans1_-2_text" value="役に立たなかった" /><label for="ans1-2">役に立たなかった</label></span>
+</p>
+</fieldset>
+</li>
+<li>
+<fieldset>
+<legend>このページは見つけやすかったですか？</legend>
+<p><span><input type="radio" name="ans2" id="ans22" value="2" /><input type="hidden" name="ans2_2_text" value="見つけやすかった" /><label for="ans22">見つけやすかった</label></span>
+<span><input type="radio" name="ans2" id="ans21" value="1" /><input type="hidden" name="ans2_1_text" value="まあまあ見つけやすかった" /><label for="ans21">まあまあ見つけやすかった</label></span>
+<span><input type="radio" name="ans2" id="ans20" value="0" checked="checked" /><input type="hidden" name="ans2_0_text" value="どちらともいえない" /><label for="ans20">どちらともいえない</label></span>
+<span><input type="radio" name="ans2" id="ans2-1" value="-1" /><input type="hidden" name="ans2_-1_text" value="やや見つけにくかった" /><label for="ans2-1">やや見つけにくかった</label></span>
+<span><input type="radio" name="ans2" id="ans2-2" value="-2" /><input type="hidden" name="ans2_-2_text" value="見つけにくかった " /><label for="ans2-2">見つけにくかった </label></span>
+</p>
+</fieldset>
+</li>
+</ul>
+</div>
+<p><label for="opinion">このページに関してのご意見がありましたらご記入ください。</label></p>
+<p>（注意）お答えが必要なお問合せは、直接担当部署へお願いいたします（こちらではお受けできません）。</p>
+<textarea name="ans3" id="opinion" rows="3" cols="100"></textarea>
+<div class="qa_button">
+<input type="hidden" name="mode" value="check" />
+<input type="hidden" name="con" value="71" />
+<input type="submit" value="送信" />
+</div>
+</form>
+</div>
+</div>
+<!-- ▲▲▲▲▲アンケート領域▲▲▲▲▲ -->
+
+
+<hr />
+</div>
+<!-- ▲▲▲▲▲メイン▲▲▲▲▲ -->
+
+<!-- ▼▼▼▼▼フッタ▼▼▼▼▼ -->
+<input type="hidden" id="mainURLpath" value="/"/>
+<div id="foot_bg">
+<p id="foot_modori"><a href="#pagetop"><img src="/css/img/page_top.gif" alt="ページの先頭へ戻る" /></a></p>
+<div id="foot" class="clear">
+<div class="foot_main">
+<ul id="foot_link"><li><a href="http://www.town.agui.lg.jp/contents_detail.php?frmId=548">阿久比町までの交通案内</a></li><li><a href="https://www.town.agui.lg.jp/site_policy.php?no=2">このサイトについて</a></li></ul><div id="foot_id" class="clear">
+<img src="/css/img/foot_id.gif" alt="阿久比町役場" />
+<address><span class="small">〒470-2292 愛知県知多郡阿久比町大字卯坂字殿越50番地</span></address>
+<address class="small">電話: 0569-48-1111（代表）ファックス: 0569-48-0229（代表）</address><p class="small">役場開庁時間：午前8時30分～午後5時15分</p>
+<p class="small">閉庁日：土曜日、日曜日、祝日、年末年始（12月29日～1月3日）</p>
+<p class="small">利用者が情報を送信するページについてはSSL化（通信の暗号化）をしています。</p>
+</div>
+</div>
+</div>
+<address id="foot_copy" lang="en" xml:lang="en"><strong>Copyright ⓒ AGUI TOWN 2010. All right reserved.</strong></address>
+</div>
+
+<!-- ▲▲▲▲▲フッタ▲▲▲▲▲ -->
+<script type="text/javascript" src="/js/onload_common.js"></script>
+<div id="view_sp" style="display:none;"><a href="javascript:void(0);" onclick="subDelPc(); location.href=location.href.replace(/#.*$/,''); return false;">スマートフォン版ページへ</a></div>
+</div>
+</div>
+<script type="text/javascript" src="/_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3&ns=67&cb=1727166697" async></script></body>
+</html>`,
+    contentSelectors: ['#body > div'],
+    titleSelector: '#body > div > div:nth-child(1) > div.main_naka > h1',
     iArticle: {
       title: '',
       publishDate: '',
