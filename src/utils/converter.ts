@@ -71,7 +71,8 @@ const splitSentences = (rawText, lang = 'en') => {
   return sentences;
 };
 
-const editorJson2RagtJson = (editorJson, lang = 'en') => {
+const editorJson2RagtJson = (editorJson) => {
+  const lang = editorJson?.metaOpt?.lang || 'en';
   const getListAnnotation = (data) => {
     let itemsArr = [];
     dfsTree(data, itemsArr);
@@ -352,13 +353,15 @@ const editorJson2RagtJson = (editorJson, lang = 'en') => {
   };
 };
 
-const ragtJson2A11Y = (ragtJson, metaOpt) => {
+const ragtJson2A11Y = (ragtJson) => {
+  let metaOpt = ragtJson?.metaOpt || {},
+    blocks = ragtJson?.blocks || [];
   const htmlDefault = `<!DOCTYPE html><html><head></head><body></body></html>`;
 
   const $ = cheerio.load(htmlDefault);
 
   // add lang attribute to html tag
-  $('html').attr('lang', $('html').attr('lang') || metaOpt.lang || 'en');
+  $('html').attr('lang', $('html').attr('lang') || metaOpt?.lang || 'en');
 
   // namespace html tag
   $('html').attr('xmlns', 'http://www.w3.org/1999/xhtml');
@@ -387,7 +390,7 @@ const ragtJson2A11Y = (ragtJson, metaOpt) => {
   // apply css
   _applyCssRules($, metaOpt.cssLinks);
 
-  ragtJson.blocks.forEach((block) => {
+  blocks.forEach((block) => {
     //TODO: Paragraph
     if (block.type === BLOCK_TYPE.PARAGRAPH) {
       $('body').append(

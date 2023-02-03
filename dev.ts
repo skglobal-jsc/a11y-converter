@@ -2,7 +2,7 @@ import {
   // fromUrl,
   // editorJson2A11yHtml,
   // html2editorJson,
-  ragtJson2Text,
+  editorJson2Text,
   html2Text,
 } from './src/index';
 
@@ -261,7 +261,7 @@ import {
       },
     ],
   };
-  // console.log(ragtJson2Text(ragtJson));
+  // console.log(editorJson2Text(ragtJson));
 
   html2Text({
     html: `
@@ -528,6 +528,6 @@ $(function(){
       loadedUrl: 'https://baodang.com/test',
     },
   }).then((res) => {
-    console.log(res.plainText);
+    console.log(res.a11yHTML);
   });
 })();

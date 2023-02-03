@@ -210,14 +210,14 @@ const parseTable2Text = (block, lang = 'ja', iArticle?: IArticle): any => {
  * @param lang
  * @return { string }
  */
-const ragtJson2Text = ({
-  ragtJson,
+const editorJson2Text = ({
+  editorJson,
   iArticle,
 }: {
-  ragtJson: any;
+  editorJson: any;
   iArticle: IArticle;
 }) => {
-  const { blocks, metaOpt } = ragtJson;
+  const { blocks, metaOpt } = editorJson;
   let res = '';
 
   (blocks || []).forEach((block) => {
@@ -248,4 +248,4 @@ const ragtJson2Text = ({
   return res;
 };
 
-export default ragtJson2Text;
+export default editorJson2Text;

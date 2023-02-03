@@ -5,7 +5,7 @@ import { ragtJson2A11Y, editorJson2RagtJson } from './utils/converter';
 import {
   html2Text,
   tinyhtml,
-  ragtJson2Text,
+  editorJson2Text,
   htmlSimplified2EditorJson,
 } from './modules/index';
 
@@ -52,7 +52,7 @@ export {
   htmlSimplified2EditorJson,
   editorJson2RagtJson,
   ragtJson2A11Y,
-  ragtJson2Text,
+  editorJson2Text,
   html2Text,
   tinyhtml,
 };
