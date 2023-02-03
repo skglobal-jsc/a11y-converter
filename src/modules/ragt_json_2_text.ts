@@ -1,5 +1,4 @@
 import * as cheerio from 'cheerio';
-const dayjs = require('dayjs');
 import { BLOCK_TYPE, LIST_STYLE } from '../constant/index';
 import { useLocale } from '../locale/index';
 import { IArticle } from './html_2_text';
@@ -241,9 +240,6 @@ const ragtJson2Text = ({
     }
   });
   res =
-    (iArticle?.title ? `${iArticle.title}\n` : '' ) +
-    (iArticle?.publishDate ? `${dayjs(iArticle.publishDate).format(useLocale('Date', 'ja'))}\n` : '') +
-    '\n\n' +
     useLocale('StartArticle', metaOpt?.lang) +
     '\n\n' +
     res +

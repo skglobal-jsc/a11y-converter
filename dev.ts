@@ -523,8 +523,8 @@ $(function(){
     contentSelectors: ['#body > div'],
     titleSelector: '#body > div > div:nth-child(1) > div.main_naka > h1',
     iArticle: {
-      title: '',
-      publishDate: '',
+      title: '1234',
+      publishDate: '1234',
       loadedUrl: 'https://baodang.com/test',
     },
   }).then((res) => {
