@@ -220,8 +220,8 @@ const tinyhtml = async (html: string, opt?: ProcessOptions) => {
     await executeHookFn(options.hooks.before, $);
   }
 
-  if (options.titleSelector && options.contentSelectors && options.contentSelectors.length > 0) {
-    const $content = $(options.contentSelectors.join(','));
+  if (options.titleSelector) {
+    const $content = $(options.contentSelectors?.join(',') || 'body');
     const $titleEl = $(options.titleSelector);
 
     $content.find('*').each((i, child) => {
