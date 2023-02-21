@@ -136,9 +136,10 @@ const parseUoL2Text = (block, iArticle?: IArticle): any => {
 const parseImage2Text = (block, lang = 'ja', iArticle?: IArticle): any => {
   if (!block?.data?.file?.url) return '';
 
-  let text = `${
-    useLocale('Image', lang, block?.data?.caption) || useLocale('ImageNoAlt')
-  }\n`;
+  let text = block?.data?.caption
+    ? `${useLocale('Image', lang, block.data.caption)}\n`
+    : `${useLocale('ImageNoAlt')}\n`;
+
   if (block.data.file.url.includes('http')) {
     text += block.data.file.url;
   } else if (!block.data.file.url.startsWith('data:image')) {
@@ -167,14 +168,14 @@ const parseTable2Text = (block, lang = 'ja', iArticle?: IArticle): any => {
   }
   const totalRows = block?.data?.content?.length;
   const totalColumns = block?.data?.content[0]?.length;
-  let text = `${useLocale(
-    'TableNumberRow',
-    lang,
-    (totalRows - 1).toString()
-  )}、${useLocale('TableNumberColumn', lang, totalColumns.toString())}\n`;
+  let text = `${
+    useLocale('TableNumberRow', lang, (totalRows - 1).toString())
+  }、${
+    useLocale('TableNumberColumn', lang, totalColumns.toString())
+  }\n`;
 
   if (block.data?.caption) {
-    text += `${useLocale('TableCaption', lang, block.data?.caption)}\n`;
+    text += `${useLocale('TableCaption', lang, block.data?.caption)}`;
   }
 
   const rows = block.data.content;
@@ -198,7 +199,11 @@ const parseTable2Text = (block, lang = 'ja', iArticle?: IArticle): any => {
         const $p = cheerio.load(item || '')('body')[0];
         return parseParagraph2Text($p, iArticle);
       })
+      .filter(item => item)
       .join(lang === 'ja' ? '、' : ', ');
+    if (i + 1 !== rows.length) {
+      text += '\n'
+    }
   }
 
   return text + `${lang === 'ja' ? '、' : ', '}${useLocale('TableEnd', lang)}`;

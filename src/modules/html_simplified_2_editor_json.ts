@@ -187,6 +187,7 @@ const htmlSimplified2EditorJson = (html) => {
         }
       }
     });
+
   return {
     blocks,
     metaOpt: metaOpts,

@@ -23,11 +23,20 @@ const html2Text = async ({
   contentSelectors,
   titleSelector,
   iArticle,
+  a11ySetting,
 }: {
   html: string;
   contentSelectors?: string[];
   titleSelector?: string;
   iArticle: IArticle;
+  a11ySetting?: {
+    lang?: string;
+    cssLinks?: string[];
+    meta?: {};
+    socialMeta?: {};
+    favicon?: string;
+    googleAnalyticsId?: string;
+  };
 }) => {
   // Step1: Simplify html
   const { html: htmlSimplified } = await tinyhtml(html, {
@@ -37,6 +46,7 @@ const html2Text = async ({
 
   // Step2: Convert html simplified to ragt json
   const editorJson = htmlSimplified2EditorJson(htmlSimplified);
+  console.log(htmlSimplified)
 
   // Step3: Convert editor json to plain text
   const plainText = json2Text({ json: editorJson, iArticle });
@@ -45,7 +55,7 @@ const html2Text = async ({
   const ragtJson = editorJson2RagtJson(editorJson);
 
   // Step4: Convert ragt json to a11y
-  const a11yHTML = ragtJson2A11Y(ragtJson);
+  const a11yHTML = ragtJson2A11Y(ragtJson, a11ySetting);
 
   return { plainText, a11yHTML };
 };

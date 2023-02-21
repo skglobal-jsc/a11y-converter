@@ -354,8 +354,8 @@ const editorJson2RagtJson = (editorJson) => {
   };
 };
 
-const ragtJson2A11Y = (ragtJson) => {
-  let metaOpt = ragtJson?.metaOpt || {},
+const ragtJson2A11Y = (ragtJson, a11ySetting = {}) => {
+  let metaOpt = { ...ragtJson?.metaOpt, ...a11ySetting } || {},
     blocks = ragtJson?.blocks || [];
   const htmlDefault = `<!DOCTYPE html><html><head></head><body></body></html>`;
 
