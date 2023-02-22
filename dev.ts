@@ -1,10 +1,10 @@
 import {
-  // fromUrl,
   // editorJson2A11yHtml,
   // html2editorJson,
   json2Text,
   html2Text,
   htmlSimplified2RagtJson,
+  fromUrl
 } from './src/index';
 
 // import { readFile, writeFile } from 'fs';
@@ -71,502 +71,109 @@ import {
 
 // })();
 
-(() => {
+(async () => {
   const htmlString = `
-  <!DOCTYPE HTML>
-  <html lang="ja">
+  <!DOCTYPE html>
+<html lang="ja" xmlns="http://www.w3.org/1999/xhtml">
   <head>
-  <meta charset="utf-8">
-  <meta content="平生町,平生" name="keywords">
-  <meta content="平生町のホームページです。" name="description">
-  <title>投票時間の短縮について／平生町ホームページ</title>
-  <link rel="icon" href="/favicon.ico">
-
-  <link href="http://www.town.hirao.lg.jp/i/soshiki/senkyo/keihatsu/1673928910367.html" rel="alternate" media="handheld">
-
-
-  <link href="/material/template/renewal/css/import_pc_sub.css" rel="stylesheet" type="text/css">
-  <link href="/material/template/renewal/css/hide_map.css" rel="stylesheet" type="text/css">
-
-  <script type="text/javascript" src="/material/template/renewal/js/jquery.js"></script>
-  <script type="text/javascript" src="/material/template/renewal/js/jquery_cookie.js"></script>
-  <script type="text/javascript" src="/material/template/renewal/js/jquery_lib.js"></script>
-  <script type="text/javascript" src="/material/template/renewal/js/common.js"></script>
-  <script type="text/javascript" src="/material/template/renewal/js/pc_common.js"></script>
-  <script type="text/javascript" src="/material/template/renewal/js/sub.js"></script>
-  <script type="text/javascript" src="/material/template/renewal/js/pc_sub.js"></script>
-  <!--[if lt IE 9]>
-  <script type="text/javascript" src="/material/template/js/html5shiv-printshiv.min.js"></script>
-  <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link rel="stylesheet" href="https://unpkg.com/a11y-css-reset/combo.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;300;400;500;700;900&amp;display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://ragt-dev.s3.ap-southeast-1.amazonaws.com/public/ragt-convertor/ja.css?v=0.03504279427042811"
+    />
   </head>
-  <body>
-
-
-
-
-
-
-
-
-
-
-    <script type="text/javascript" src="/material/template/renewal/js/pc_to_sp.js"></script>
-
-  <noscript>
-  <p class="noscriptCom"> このサイトではJavascriptを使用しています。現在、JavaScriptが無効のため一部機能をご使用いただけません。 </p>
-  </noscript>
-  <div id="wrapper">
-    <div id="headerPrint">
-      <header id="header" role="banner">
-        <div class="toolArea">
-          <div class="inner clearFix">
-            <h1 id="headerLogo"><a href="http://www.town.hirao.lg.jp/">
-              <img src="/material/template/renewal/img_pc_common/common_img_header_logo.png" alt="平生町 Hirao Town" width="376" height="64">
-            </a></h1>
-            <!-- <div class="toolBlock"> -->
-            <div class="toolBlock sizeBlock toolBlockTop">
-                <dl id="headerSize">
-                  <dt class="title"><img src="/material/template/renewal/img_pc_common/common_tit_header_tools_size.png" alt="" width="75" height="26"></dt>
-                  <dd class="item"><a class="scSize normal"><img src="/material/template/renewal/img_pc_common/common_btn_header_tools_size_std_off.png" alt="文字サイズを標準にする" width="51" height="26"></a></dd>
-                  <dd class="item2"><a class="scSize up"><img src="/material/template/renewal/img_pc_common/common_btn_header_tools_size_zoom_off.png" alt="文字サイズを拡大する" width="51" height="26"></a></dd>
-                </dl>
-            </div>
-            <img src="/material/template/renewal/img_pc_common/common_tit_header_tools_color.png" alt="" width="75" height="26">
-            <div class="toolBlock colorBlock toolBlockTop">
-              <dl id="headerColor">
-                <dt class="title"><img src="/material/template/renewal/img_pc_common/common_tit_header_tools_color.png" alt="背景色変更" width="75" height="26"></dt>
-                <dd class="item"><a href="#" class="scColor" id="color_black"><img src="/material/template/renewal/img_pc_common/common_btn_header_tools_black.png" alt="背景色を黒色にする" width="31" height="26"></a></dd>
-                <dd class="item2"><a href="#" class="scColor" id="color_blue"><img src="/material/template/renewal/img_pc_common/common_btn_header_tools_blue.png" alt="背景色を青色にする" width="31" height="26"></a></dd>
-                <dd class="item3"><a href="#" class="scColor" id="color_normal"><img src="/material/template/renewal/img_pc_common/common_btn_header_tools_white.png" alt="背景色を白色にする" width="51" height="26"></a></dd>
-              </dl>
-            </div>
-            <div class="toolBlock linkBlock">
-              <p>
-                <a href="http://www.town.hirao.lg.jp/about/foreign_langage.html"><img src="/material/template/renewal/img_pc_common/common_tit_header_tools_lang.png" alt="Select Language" width="123" height="24"></a>
-                <img src="/material/template/renewal/img_pc_common/common_btn_header_bar_green.png" alt="|" width="3" height="24">
-                <a href="http://www.town.hirao.lg.jp/kurashi/shisetsu/chosha/index.html"><img src="/material/template/renewal/img_pc_common/common_btn_header_tools_access.png" alt="町役場へのアクセス" width="130" height="26"></a>
-                <img src="/material/template/renewal/img_pc_common/common_btn_header_bar_red.png" alt="|" width="3" height="24">
-                <a href="http://www.town.hirao.lg.jp/inquiry/index.html"><img src="/material/template/renewal/img_pc_common/common_btn_header_tools_contact.png" alt="お問い合わせ" width="82" height="26"></a>
-              </p>
-            </div>
-
-          </div>
-          <!-- /.toolBlock -->
-        </div>
-        <!-- /.toolArea -->
-
-        <div class="navArea">
-            <nav id="headerNav" role="navigation">
-              <ul class="list clearFix ov">
-                <li class="nav1"><a href="http://www.town.hirao.lg.jp/kurashi/index.html"><img src="/material/template/renewal/img_pc_common/common_gnav01_off.png" alt="くらし・手続き" width="198" height="70"></a></li>
-                <li class="nav2"><a href="http://www.town.hirao.lg.jp/kosodate/index.html"><img src="/material/template/renewal/img_pc_common/common_gnav02_off.png" alt="子育て・教育" width="210" height="70"></a></li>
-                <li class="nav3"><a href="http://www.town.hirao.lg.jp/fukushi/index.html"><img src="/material/template/renewal/img_pc_common/common_gnav03_off.png" alt="福祉・健康" width="188" height="70"></a></li>
-                <li class="nav4"><a href="http://www.town.hirao.lg.jp/kanko/index.html"><img src="/material/template/renewal/img_pc_common/common_gnav04_off.png" alt="観光・文化財" width="201" height="70"></a></li>
-                <li class="nav5"><a href="http://www.town.hirao.lg.jp/gyosei/index.html"><img src="/material/template/renewal/img_pc_common/common_gnav05_off.png" alt="行政情報" width="201" height="70"></a></li>
-              </ul>
-              <!-- /.navList -->
-            </nav>
-            <!-- /#headerNav -->
-        </div>
-        <!-- /.navArea -->
-
-       <!-- メインビジュアルエリア -->
-        <div class="kvArea">
-          <!--
-          <span m:id="public">
-            <p class="kv"><img src="/material/template/renewal/img_pc_top/top_bg_about.png" width="1600" height="500"></p>
-          </span>
-          -->
-        </div>
-        <!-- /.kvArea -->
-
-        <div class="inner">
-          <div class="mainArea">
-            <div class="mainRow">
-            </div>
-            <!-- /.mainRow -->
-          </div>
-          <!-- /.mainArea -->
-        </div>
-        <!-- /.inner -->
-      </header>
-      <!-- / #header -->
-    </div>
-    <!-- / #headerPrint -->
-
-    <dl id="pankuzu" class="inner clearFix">
-      <dt class="title"><img height="25" width="85" src="/material/template/renewal/img_pc_sub/pankuzu_title.png" alt="現在の位置"></dt>
-      <dd class="box">
-        <ul class="list">
-
-
-
-
-
-              <li><a href="http://www.town.hirao.lg.jp/index.html">ホーム</a></li>
-
-
-
-
-
-
-              <li class="icon"><a href="http://www.town.hirao.lg.jp/soshiki/index.html">組織から探す</a></li>
-
-
-
-
-
-              <li class="icon"><a href="http://www.town.hirao.lg.jp/soshiki/senkyo/index.html">選挙管理委員会</a></li>
-
-
-
-
-
-              <li class="icon"><a href="http://www.town.hirao.lg.jp/soshiki/senkyo/keihatsu/index.html">啓発</a></li>
-
-
-
-
-
-
-              <li class="icon"><span>投票時間の短縮について</span></li>
-
-
-
-
-
-
-
-
-
-        </ul>
-      </dd>
-    </dl>
-    <!-- / #pankuzu -->
-
-    <div id="container" class="clearFix">
-
-      <div class="inner clearFix">
-        <article id="contents" role="main">
-
-
-
-
-            <div id="social">
-
-              <div id="twitter"></div>
-
-              <div id="facebook_like"></div>
-
-              <div id="google_plusone"></div>
-
-            </div>
-
-
-
-
-
-
-
-
-
-
-
-
-    <h1 class="headCom"><span class="bg_">投票時間の短縮について</span></h1>
-
-    <div id="contentsIn">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-          <h2 id="a1" class="headCom"><span class="bg_"><span class="bg2_">
-
-            選挙投票日当日の投票時間が午後6時までに短縮されます
-          </span></span></h2>
-
-          <img src="/material/template/renewal/img_pc_common/common_tit_header_tools_color.png" alt="背景色変更" width="120" height="120" />
-          <img src="/material/template/renewal/img_pc_common/common_tit_header_tools_color.png" alt="" width="120" height="120" />
-
-
-        <div class="wysiwygCom">
-
-          <p>選挙管理委員会において、期日前投票制度の利用が全国的に定着し、本町においても全投票者の約4割近くが期日前投票制度を利用しており、当日投票者の占める割合が減少傾向となっている状況を踏まえ、令和5年4月9日執行の山口県議会議員一般選挙から選挙投票日当日の投票所閉鎖時刻を午後8時より午後6時に繰上げます。</p>
-
-  <p>町民の皆様のご理解とご協力をお願いします。</p>
-
-  <table border="5" cellpadding="0" cellspacing="0" style="width:700px;">
-    <thead>
-      <tr>
-        <th scope="col" style="width: 100px;">&nbsp;</th>
-        <th scope="col" style="width: 223px; height: 30px;">場所</th>
-        <th scope="col" style="width: 115px; height: 35px;">期日</th>
-        <th scope="col" style="height: 35px;"><strong>投票時間</strong></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td style="text-align: center; width: 120px; height: 35px;"><strong>選挙投票日当日</strong></td>
-        <td style="text-align: center; height: 35px;"><strong>全投票所</strong></td>
-        <td style="text-align: center;"><strong>4月9日</strong></td>
-        <td style="text-align: center;"><strong class="text_">午前7時～午後6時</strong></td>
-      </tr>
-    </tbody>
-  </table>
-
-  <p>※ 期日前投票については、下記のとおり時間の変更は行われません。</p>
-
-  <table border="5" cellpadding="0" cellspacing="0" style="width:700px;">
-    <thead>
-      <tr>
-        <th scope="col">&nbsp;</th>
-        <th colspan="2" scope="col" style="width: 120px; height: 35px;"><strong>場所</strong></th>
-        <th scope="col">期間</th>
-        <th scope="col"><strong>投票時間</strong></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td colspan="1" rowspan="3" style="text-align: center; width: 120px;"><strong>期日前投票</strong></td>
-        <td colspan="2" rowspan="1" style="vertical-align: baseline; height: 30px;">
-        <p style="text-align: center;"><b>平生町役場</b></p>
-        </td>
-        <td style="text-align: center;"><strong>4月1日～4月8日</strong></td>
-        <td style="text-align: center;"><strong>午前8時30分～午後8時</strong></td>
-      </tr>
-      <tr>
-        <td colspan="2" style="text-align: center; height: 35px;">
-        <p><strong>佐賀地域交流センター</strong></p>
-        </td>
-        <td style="text-align: center;"><strong>4月7日～4月8日</strong></td>
-        <td style="text-align: center;"><strong>午前8時30分～午後5時</strong></td>
-      </tr>
-      <tr>
-        <td colspan="2">
-        <p style="text-align: center;"><strong>佐賀地域交流センター佐合分館&nbsp;</strong></p>
-        </td>
-        <td style="text-align: center;"><strong>4月6日</strong></td>
-        <td style="text-align: center;"><strong>午前9時～午後1時</strong></td>
-      </tr>
-    </tbody>
-  </table>
-
-        </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        <div class="toiawaseMod">
-          <dl class="col">
-            <dt class="L"><img src="/material/template/img_sub/toiawase_mod_title.png" alt="お問い合わせ" width="698" height="45"></dt>
-            <dd class="R">
-
-              選挙管理委員会事務局<br>〒742-1195 山口県熊毛郡平生町大字平生町210-1<br>電話番号：0820-56-7111<br>ファックス：0820-56-3864<br><a href="/form/inquiryPC/Init.do?inquiryId=68">お問い合わせはこちらから</a>
-            </dd>
-          </dl>
-        </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    </div>
-
-
-        </article>
-        <!-- / #contents -->
-
-          <div id="sideNav" role="complementary">
-
-            <!-- サイドナビ内Google検索 -->
-            <div class="sideSearchMod">
-              <div class="in">
-                <div class="inputBox">
-                  <gcse:searchbox-only resultsUrl="/material/template/result.html"></gcse:searchbox-only>
-                </div>
-              </div>
-            </div>
-
-            <aside class="sideNavMod firstTopCom">
-              <dl class="box">
-                <dt class="title">
-
-
-
-            <a href="index.html">啓発</a>
-
-
-
-
-    </dt>
-                <dd class="box2">
-                <ul class="list">
-
-
-
-
-
-            <li><a href="http://www.town.hirao.lg.jp/soshiki/senkyo/keihatsu/1484542585526.html">投票</a></li>
-
-            <li><a href="http://www.town.hirao.lg.jp/soshiki/senkyo/keihatsu/1458626552827.html">引っ越したら住民票を移しましょう！</a></li>
-
-            <li><a href="http://www.town.hirao.lg.jp/soshiki/senkyo/keihatsu/1673928910367.html">投票時間の短縮について</a></li>
-
-
-
-
-                </ul>
-                </dd>
-              </dl>
-            </aside>
-            <!-- / .sideNavMod -->
-          </div>
-          <!-- / #sideNav -->
-
-        <!-- / usePageUtil -->
-
-      </div>
-      <!-- / .inner -->
-    </div>
-    <!-- / #container -->
-    <div id="footerPrint">
-      <footer id="footer" role="contentinfo">
-        <div class="mainArea">
-          <div class="inner">
-            <p id="pagetop"><a href="#header" class="smoothCom ov"><img src="/material/template/renewal/img_pc_common/common_img_pagetop.png" alt="ページトップへ" width="108" height="108"></a></p>
-            <div class="mainRow clearFix">
-              <div class="footerLeftCol">
-                <div class="logoCol">
-                  <p class="logo">平生町役場</p>
-                </div>
-
-                <!-- /.logoCol -->
-                <div class="infoCol">
-                  <p class="txt"> 〒742-1195　山口県熊毛郡平生町大字平生町210-1<br>
-                    電話番号：0820-56-7111 </p>
-                </div>
-                <div class="footerAccess">
-                  <a href="/kurashi/shisetsu/chosha/index.html">
-                  <img src="/material/template/renewal/img_pc_common/common_footer_access.png" width="140" height="34" alt="アクセス">
-                  <a>
-                </a></a></div>
-              </div>
-
-              <!-- /.infoCol -->
-              <div class="linkCol clearFix">
-                <ul class="linkList clearFix">
-                  <li><a href="http://www.town.hirao.lg.jp/about/index.html">このサイトについて</a>｜</li>
-                  <li><a href="http://www.town.hirao.lg.jp/about/menseki.html">免責事項について</a>｜</li>
-                  <li><a href="http://www.town.hirao.lg.jp/about/privacy.html">個人情報の取り扱い</a></li>
-                </ul>
-                <!-- /.linkList -->
-                <ul class="linkList clearFix">
-                  <li><a href="http://www.town.hirao.lg.jp/about/copyright.html">著作権について</a>｜</li>
-                  <li><a href="http://www.town.hirao.lg.jp/about/accessibility.html">ウェブアクセシビリティ</a>｜</li>
-                  <li><a href="http://www.town.hirao.lg.jp/inquiry/index.html">お問い合わせ</a></li>
-                </ul>
-                <!-- /.linkList -->
-              </div>
-              <!-- /.linkCol -->
-            </div>
-            <!-- /.mainRow clearFix -->
-          </div>
-          <!-- /.inner -->
-        </div>
-
-        <!-- /.mainArea -->
-        <div class="copyArea">
-          <div class="inner">
-            <p class="copyright">Copyright &copy; Hirao Town. all rights reserved</p>
-          </div>
-          <!-- /.inner -->
-        </div>
-        <!-- /.copyArea -->
-      </footer>
-    </div>
-    <!-- / #footerPrint -->
-
-  </div>
-  <!-- / #wrapper -->
-  <script src="//www.google.com/jsapi" type="text/javascript"></script>
-  <script type="text/javascript" src="/material/template/renewal/js/external.js"></script>
+  <body id="skg-style">
+    <p id="qbz88ndpog" tabindex="0">
+      Image:
+      https://images.pexels.com/photos/326055/pexels-photo-326055.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800
+    </p>
+    <p id="i9IbS5XRg8" tabindex="0">
+      Doc:
+      https://file-examples.com/wp-content/uploads/2017/02/file-sample_100kB.doc
+    </p>
+    <p id="54uc--t_iA" tabindex="0">
+      Excel:
+      https://file-examples.com/wp-content/uploads/2017/02/file_example_XLS_10.xls
+    </p>
+    <p id="4c6NEWK3m0" tabindex="0">
+      Powerpoint:
+      https://scholar.harvard.edu/files/torman_personal/files/samplepptx.pptx
+    </p>
+    <p id="4tTQivB4E8" tabindex="0">
+      Pdf: https://www.africau.edu/images/default/sample.pdf
+    </p>
+    <p id="Fi1DHZqgrD" tabindex="0">
+      Link: https://test-code.uni-voice.biz/projects/search
+    </p>
+    <p id="t1oXY6o9Xg" tabindex="0">
+      <a href="https://test-code.uni-voice.biz/projects/search"
+        >Link by editor</a
+      >
+    </p>
+    <p id="o0ioRdWDue" tabindex="0">Email: xuanhaphamse97@gmail.com</p>
+    <p id="lYYuVs_bh-" tabindex="0">
+      Address: 大津市京町四丁目1番1号 京都府 〒602-8570
+    </p>
+    <p id="J2yDGn3yx5" tabindex="0">
+      <a
+        href="https://www.google.co.jp/maps/place/大津市京町四丁目1番1号 京都府    〒602-8570"
+        >Address by editor</a
+      >
+    </p>
+    <p id="FahG1MPHKb" tabindex="0">Phone: ８６ー４２２ー５２５３４９</p>
+    <p id="XSRPL5oxQW" tabindex="0">
+      <a href="tel:８６ー４２２ー５２５３４９">Phone by editor</a>
+    </p>
+    <p id="w77ir7" tabindex="0">この下に、縦3行、横2列の表があります。</p>
+    <table id="olDIlgj1wf">
+      <tbody>
+        <tr
+          tabindex="0"
+          aria-label="データの1行目、８６ー４２２ー５２５３４９、大津市京町四丁目1番1号 京都府 〒602-8570、"
+        >
+          <td aria-hidden="true">８６ー４２２ー５２５３４９</td>
+          <td aria-hidden="true">大津市京町四丁目1番1号 京都府 〒602-8570</td>
+        </tr>
+        <tr
+          tabindex="0"
+          aria-label="2行目、xuanhaphamse97@gmail.com、https://test-code.uni-voice.biz/projects/searchです。"
+        >
+          <td aria-hidden="true">xuanhaphamse97@gmail.com</td>
+          <td aria-hidden="true">
+            https://test-code.uni-voice.biz/projects/search
+          </td>
+        </tr>
+        <tr
+          tabindex="0"
+          aria-label="3行目、https://file-examples.com/wp-content/uploads/2017/02/file_example_XLS_10.xls、https://images.pexels.com/photos/326055/pexels-photo-326055.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800、"
+        >
+          <td aria-hidden="true">
+            https://file-examples.com/wp-content/uploads/2017/02/file_example_XLS_10.xls
+          </td>
+          <td aria-hidden="true">
+            https://images.pexels.com/photos/326055/pexels-photo-326055.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p id="r510vg" tabindex="0">表の終わりです。</p>
   </body>
-  </html>
+</html>
+
   `;
   html2Text({
     html: htmlString,
-    contentSelectors: ['#contents'],
-    titleSelector: '#contents > h1 > span',
+    contentSelectors: ['#olDIlgj1wf'],
+    // titleSelector: '#contents > h1 > span',
     iArticle: {
       title: '1234',
       publishDate: '1234',
@@ -581,6 +188,8 @@ import {
       googleAnalyticsId: 'GT_baodang',
     },
   }).then((res) => {
-    console.log(res.plainText);
+    // console.log(res);
   });
+  // const html = await fromUrl({ url: 'https://www.orixlife.co.jp/', opt: { contentSelectors: ['.content:nth-child(2) .inner-01'] }})
+  // console.log(html)
 })();

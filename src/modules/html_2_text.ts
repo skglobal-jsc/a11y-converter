@@ -46,7 +46,6 @@ const html2Text = async ({
 
   // Step2: Convert html simplified to ragt json
   const editorJson = htmlSimplified2EditorJson(htmlSimplified);
-  console.log(htmlSimplified)
 
   // Step3: Convert editor json to plain text
   const plainText = json2Text({ json: editorJson, iArticle });

@@ -245,10 +245,17 @@ const tinyhtml = async (html: string, opt?: ProcessOptions) => {
   if (options.contentSelectors && options.contentSelectors.length > 0) {
     const $content = $(options.contentSelectors!.join(','));
     const $body = cheerio.load('<body></body>', { decodeEntities: true }, true);
-    // append the content to the new body
-    $body('body').append($content);
-    // replace the body with the new body
-    $('body').replaceWith($body('body'));
+
+    // Content selector is body
+    if ($content.length === 1 && ($content[0] as any)?.name === 'body') {
+      $('body').replaceWith($content);
+    } else {
+      // append the content to the new body
+      $body('body').append($content);
+      // replace the body with the new body
+      $('body').replaceWith($body('body'));
+    }
+
   }
   // clean and reduce html
   reduceHtml($, options);
