@@ -39,13 +39,13 @@ const html2Text = async ({
   };
 }) => {
   // Step1: Simplify html
-  const { html: htmlSimplified } = await tinyhtml(html, {
+  const { html: simplifiedHTML } = await tinyhtml(html, {
     contentSelectors,
     titleSelector,
   });
 
   // Step2: Convert html simplified to ragt json
-  const editorJson = htmlSimplified2EditorJson(htmlSimplified);
+  const editorJson = htmlSimplified2EditorJson(simplifiedHTML);
 
   // Step3: Convert editor json to plain text
   const plainText = json2Text({ json: editorJson, iArticle });
@@ -56,7 +56,7 @@ const html2Text = async ({
   // Step4: Convert ragt json to a11y
   const a11yHTML = ragtJson2A11Y(ragtJson, a11ySetting);
 
-  return { plainText, a11yHTML };
+  return { plainText, a11yHTML, simplifiedHTML };
 };
 
 export default html2Text;
