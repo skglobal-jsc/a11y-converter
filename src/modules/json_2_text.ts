@@ -44,7 +44,7 @@ const parseParagraph2Text = ($p, iArticle?: IArticle): any => {
         const path = new URL(href, iArticle.loadedUrl);
         href = path.href;
       }
-      res += `${parseParagraph2Text(element, iArticle)} - ${href}`;
+      res += `${parseParagraph2Text(element, iArticle)} - ${href} `;
     } else {
       res += parseParagraph2Text(element, iArticle);
     }

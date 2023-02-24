@@ -72,124 +72,124 @@ import {
 // })();
 
 (async () => {
-  const htmlString = `
-  <!DOCTYPE html>
-<html lang="ja" xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
-    <link rel="stylesheet" href="https://unpkg.com/a11y-css-reset/combo.css" />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;300;400;500;700;900&amp;display=swap"
-    />
-    <link
-      rel="stylesheet"
-      href="https://ragt-dev.s3.ap-southeast-1.amazonaws.com/public/ragt-convertor/ja.css?v=0.03504279427042811"
-    />
-  </head>
-  <body id="skg-style">
-    <p id="qbz88ndpog" tabindex="0">
-      Image:
-      https://images.pexels.com/photos/326055/pexels-photo-326055.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800
-    </p>
-    <p id="i9IbS5XRg8" tabindex="0">
-      Doc:
-      https://file-examples.com/wp-content/uploads/2017/02/file-sample_100kB.doc
-    </p>
-    <p id="54uc--t_iA" tabindex="0">
-      Excel:
-      https://file-examples.com/wp-content/uploads/2017/02/file_example_XLS_10.xls
-    </p>
-    <p id="4c6NEWK3m0" tabindex="0">
-      Powerpoint:
-      https://scholar.harvard.edu/files/torman_personal/files/samplepptx.pptx
-    </p>
-    <p id="4tTQivB4E8" tabindex="0">
-      Pdf: https://www.africau.edu/images/default/sample.pdf
-    </p>
-    <p id="Fi1DHZqgrD" tabindex="0">
-      Link: https://test-code.uni-voice.biz/projects/search
-    </p>
-    <p id="t1oXY6o9Xg" tabindex="0">
-      <a href="https://test-code.uni-voice.biz/projects/search"
-        >Link by editor</a
-      >
-    </p>
-    <p id="o0ioRdWDue" tabindex="0">Email: xuanhaphamse97@gmail.com</p>
-    <p id="lYYuVs_bh-" tabindex="0">
-      Address: 大津市京町四丁目1番1号 京都府 〒602-8570
-    </p>
-    <p id="J2yDGn3yx5" tabindex="0">
-      <a
-        href="https://www.google.co.jp/maps/place/大津市京町四丁目1番1号 京都府    〒602-8570"
-        >Address by editor</a
-      >
-    </p>
-    <p id="FahG1MPHKb" tabindex="0">Phone: ８６ー４２２ー５２５３４９</p>
-    <p id="XSRPL5oxQW" tabindex="0">
-      <a href="tel:８６ー４２２ー５２５３４９">Phone by editor</a>
-    </p>
-    <p id="w77ir7" tabindex="0">この下に、縦3行、横2列の表があります。</p>
-    <table id="olDIlgj1wf">
-      <tbody>
-        <tr
-          tabindex="0"
-          aria-label="データの1行目、８６ー４２２ー５２５３４９、大津市京町四丁目1番1号 京都府 〒602-8570、"
-        >
-          <td aria-hidden="true">８６ー４２２ー５２５３４９</td>
-          <td aria-hidden="true">大津市京町四丁目1番1号 京都府 〒602-8570</td>
-        </tr>
-        <tr
-          tabindex="0"
-          aria-label="2行目、xuanhaphamse97@gmail.com、https://test-code.uni-voice.biz/projects/searchです。"
-        >
-          <td aria-hidden="true">xuanhaphamse97@gmail.com</td>
-          <td aria-hidden="true">
-            https://test-code.uni-voice.biz/projects/search
-          </td>
-        </tr>
-        <tr
-          tabindex="0"
-          aria-label="3行目、https://file-examples.com/wp-content/uploads/2017/02/file_example_XLS_10.xls、https://images.pexels.com/photos/326055/pexels-photo-326055.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800、"
-        >
-          <td aria-hidden="true">
-            https://file-examples.com/wp-content/uploads/2017/02/file_example_XLS_10.xls
-          </td>
-          <td aria-hidden="true">
-            https://images.pexels.com/photos/326055/pexels-photo-326055.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <p id="r510vg" tabindex="0">表の終わりです。</p>
-  </body>
-</html>
+//   const htmlString = `
+//   <!DOCTYPE html>
+// <html lang="ja" xmlns="http://www.w3.org/1999/xhtml">
+//   <head>
+//     <meta name="viewport" content="width=device-width, initial-scale=1" />
+//     <meta charset="utf-8" />
+//     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+//     <link rel="preconnect" href="https://fonts.googleapis.com" />
+//     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+//     <link rel="stylesheet" href="https://unpkg.com/a11y-css-reset/combo.css" />
+//     <link
+//       rel="stylesheet"
+//       href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;300;400;500;700;900&amp;display=swap"
+//     />
+//     <link
+//       rel="stylesheet"
+//       href="https://ragt-dev.s3.ap-southeast-1.amazonaws.com/public/ragt-convertor/ja.css?v=0.03504279427042811"
+//     />
+//   </head>
+//   <body id="skg-style">
+//     <p id="qbz88ndpog" tabindex="0">
+//       Image:
+//       https://images.pexels.com/photos/326055/pexels-photo-326055.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800
+//     </p>
+//     <p id="i9IbS5XRg8" tabindex="0">
+//       Doc:
+//       https://file-examples.com/wp-content/uploads/2017/02/file-sample_100kB.doc
+//     </p>
+//     <p id="54uc--t_iA" tabindex="0">
+//       Excel:
+//       https://file-examples.com/wp-content/uploads/2017/02/file_example_XLS_10.xls
+//     </p>
+//     <p id="4c6NEWK3m0" tabindex="0">
+//       Powerpoint:
+//       https://scholar.harvard.edu/files/torman_personal/files/samplepptx.pptx
+//     </p>
+//     <p id="4tTQivB4E8" tabindex="0">
+//       Pdf: https://www.africau.edu/images/default/sample.pdf
+//     </p>
+//     <p id="Fi1DHZqgrD" tabindex="0">
+//       Link: https://test-code.uni-voice.biz/projects/search
+//     </p>
+//     <p id="t1oXY6o9Xg" tabindex="0">
+//       <a href="https://test-code.uni-voice.biz/projects/search"
+//         >Link by editor</a
+//       >
+//     </p>
+//     <p id="o0ioRdWDue" tabindex="0">Email: xuanhaphamse97@gmail.com</p>
+//     <p id="lYYuVs_bh-" tabindex="0">
+//       Address: 大津市京町四丁目1番1号 京都府 〒602-8570
+//     </p>
+//     <p id="J2yDGn3yx5" tabindex="0">
+//       <a
+//         href="https://www.google.co.jp/maps/place/大津市京町四丁目1番1号 京都府    〒602-8570"
+//         >Address by editor</a
+//       >
+//     </p>
+//     <p id="FahG1MPHKb" tabindex="0">Phone: ８６ー４２２ー５２５３４９</p>
+//     <p id="XSRPL5oxQW" tabindex="0">
+//       <a href="tel:８６ー４２２ー５２５３４９">Phone by editor</a>
+//     </p>
+//     <p id="w77ir7" tabindex="0">この下に、縦3行、横2列の表があります。</p>
+//     <table id="olDIlgj1wf">
+//       <tbody>
+//         <tr
+//           tabindex="0"
+//           aria-label="データの1行目、８６ー４２２ー５２５３４９、大津市京町四丁目1番1号 京都府 〒602-8570、"
+//         >
+//           <td aria-hidden="true">８６ー４２２ー５２５３４９</td>
+//           <td aria-hidden="true">大津市京町四丁目1番1号 京都府 〒602-8570</td>
+//         </tr>
+//         <tr
+//           tabindex="0"
+//           aria-label="2行目、xuanhaphamse97@gmail.com、https://test-code.uni-voice.biz/projects/searchです。"
+//         >
+//           <td aria-hidden="true">xuanhaphamse97@gmail.com</td>
+//           <td aria-hidden="true">
+//             https://test-code.uni-voice.biz/projects/search
+//           </td>
+//         </tr>
+//         <tr
+//           tabindex="0"
+//           aria-label="3行目、https://file-examples.com/wp-content/uploads/2017/02/file_example_XLS_10.xls、https://images.pexels.com/photos/326055/pexels-photo-326055.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800、"
+//         >
+//           <td aria-hidden="true">
+//             https://file-examples.com/wp-content/uploads/2017/02/file_example_XLS_10.xls
+//           </td>
+//           <td aria-hidden="true">
+//             https://images.pexels.com/photos/326055/pexels-photo-326055.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800
+//           </td>
+//         </tr>
+//       </tbody>
+//     </table>
+//     <p id="r510vg" tabindex="0">表の終わりです。</p>
+//   </body>
+// </html>
 
-  `;
-  html2Text({
-    html: htmlString,
-    contentSelectors: ['#olDIlgj1wf'],
-    // titleSelector: '#contents > h1 > span',
-    iArticle: {
-      title: '1234',
-      publishDate: '1234',
-      loadedUrl: 'https://baodang.com/test',
-    },
-    a11ySetting: {
-      lang: 'vi',
-      cssLinks: ['https://baodang/css/1', 'https://baodang/css/2'],
-      meta: {},
-      socialMeta: {},
-      favicon: 'https://baodang/favicon.ico',
-      googleAnalyticsId: 'GT_baodang',
-    },
-  }).then((res) => {
-    // console.log(res);
-  });
-  // const html = await fromUrl({ url: 'https://www.orixlife.co.jp/', opt: { contentSelectors: ['.content:nth-child(2) .inner-01'] }})
+//   `;
+//   html2Text({
+//     html: htmlString,
+//     contentSelectors: ['#olDIlgj1wf'],
+//     // titleSelector: '#contents > h1 > span',
+//     iArticle: {
+//       title: '1234',
+//       publishDate: '1234',
+//       loadedUrl: 'https://baodang.com/test',
+//     },
+//     a11ySetting: {
+//       lang: 'vi',
+//       cssLinks: ['https://baodang/css/1', 'https://baodang/css/2'],
+//       meta: {},
+//       socialMeta: {},
+//       favicon: 'https://baodang/favicon.ico',
+//       googleAnalyticsId: 'GT_baodang',
+//     },
+//   }).then((res) => {
+//     // console.log(res);
+//   });
+  const html = await fromUrl({ url: 'https://tinhte.vn/thread/tren-tay-ps-vr2-mang-thoai-mai-hien-thi-rat-dep.3637405/', opt: { contentSelectors: ['body'] }})
   // console.log(html)
 })();
