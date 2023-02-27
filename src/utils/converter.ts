@@ -443,9 +443,9 @@ const ragtJson2A11Y = (ragtJson, a11ySetting = {}) => {
     }
     //TODO: Image
     if (block.type === BLOCK_TYPE.IMAGE) {
-      // $('body').append(
-      //   `<p tabindex="0" class="annotation">${block.meta[0].polly}</p>`
-      // );
+      $('body').append(
+        `<p tabindex="0" class="annotation">${block.meta[0].polly}</p>`
+      );
       $('body').append(
         `<img id="${block.id}" src="${block.data?.file?.url || ''}" alt="${
           block.data.caption
