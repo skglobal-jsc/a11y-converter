@@ -95,6 +95,15 @@ const htmlSimplified2EditorJson = (html) => {
               },
             });
           }
+          if (['h4', 'h5', 'h6'].includes(el.name)) {
+            blocks.push({
+              id,
+              type: BLOCK_TYPE.PARAGRAPH,
+              data: {
+                text: cleanInline($(el).html()),
+              },
+            });
+          }
           //TODO: List
           if (['ul', 'ol'].includes(el.name)) {
             const items = parseListItems($, el.children);
@@ -187,7 +196,6 @@ const htmlSimplified2EditorJson = (html) => {
         }
       }
     });
-
   return {
     blocks,
     metaOpt: metaOpts,
