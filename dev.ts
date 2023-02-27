@@ -93,12 +93,7 @@ import {
   </head>
   <body id="skg-style">
     <h4>Test h4</h4>
-    <p>
-      text 123
-      <br></br>
-      text 456
-      <a href="https://local.google.com/">link</a>
-    </p>
+    <p>text 123text 456<a href="https://local.google.com/">link</a></p>
     <p id="qbz88ndpog" tabindex="0">
       Image:
       https://images.pexels.com/photos/326055/pexels-photo-326055.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800
@@ -195,7 +190,7 @@ import {
       googleAnalyticsId: 'GT_baodang',
     },
   }).then((res) => {
-    // console.log(res);
+    console.log(res);
   });
   // const html = await fromUrl({ url: 'https://tinhte.vn/thread/tren-tay-ps-vr2-mang-thoai-mai-hien-thi-rat-dep.3637405/', opt: { contentSelectors: ['body'] }})
   // console.log(html)

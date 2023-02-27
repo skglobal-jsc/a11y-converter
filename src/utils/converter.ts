@@ -25,17 +25,20 @@ const getMetaByDfs = (root, parentId, arr) => {
     sentences.forEach((sentence) => {
       const htmlTagRegex = /<\/?[a-z][a-z0-9]*[^<>]*>|<!--.*?-->/gim;
       const aTagRegex = /<a.+?\s*href\s*=\s*["\']?(?<href>[^"\'\s>]+)["\']?/gi;
-      arr.push({
-        parentId,
-        id,
-        ui: sentence,
-        polly: sentence.replace(htmlTagRegex, ''),
-        ssml: '',
-        user: '',
-        actions: [...sentence.matchAll(aTagRegex)]
-          .map((item) => item.groups?.href)
-          .filter((item) => !!item),
-      });
+
+      if (sentence.trim()) {
+        arr.push({
+          parentId,
+          id,
+          ui: sentence,
+          polly: sentence.replace(htmlTagRegex, ''),
+          ssml: '',
+          user: '',
+          actions: [...sentence.matchAll(aTagRegex)]
+            .map((item) => item.groups?.href)
+            .filter((item) => !!item),
+        });
+      }
     });
     root.items.forEach((item) => {
       getMetaByDfs(item, id, arr);
@@ -289,20 +292,22 @@ const editorJson2RagtJson = (editorJson) => {
     //TODO: Paragraph, Header
     if ([BLOCK_TYPE.HEADER, BLOCK_TYPE.PARAGRAPH].includes(block.type)) {
       const sentences = splitSentences(block.data.text, lang);
-      meta = sentences.map((sentence) => {
-        const htmlTagRegex = /<\/?[a-z][a-z0-9]*[^<>]*>|<!--.*?-->/gim;
-        const aTagRegex =
-          /<a.+?\s*href\s*=\s*["\']?(?<href>[^"\'\s>]+)["\']?/gi;
-        return {
-          ui: sentence,
-          polly: sentence.replace(htmlTagRegex, ''),
-          ssml: '',
-          user: '',
-          actions: [...sentence.matchAll(aTagRegex)]
-            .map((item) => item.groups?.href)
-            .filter((item) => !!item),
-        };
-      });
+      meta = sentences
+        .filter((sentence: string) => sentence.trim())
+        .map((sentence) => {
+          const htmlTagRegex = /<\/?[a-z][a-z0-9]*[^<>]*>|<!--.*?-->/gim;
+          const aTagRegex =
+            /<a.+?\s*href\s*=\s*["\']?(?<href>[^"\'\s>]+)["\']?/gi;
+          return {
+            ui: sentence,
+            polly: sentence.replace(htmlTagRegex, ''),
+            ssml: '',
+            user: '',
+            actions: [...sentence.matchAll(aTagRegex)]
+              .map((item) => item.groups?.href)
+              .filter((item) => !!item),
+          };
+        });
     }
 
     //TODO: List
