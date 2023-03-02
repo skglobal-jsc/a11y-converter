@@ -73,7 +73,7 @@ import {
 
 (async () => {
 
-  const {html} = await fromUrl({ url: 'https://www.town.horokanai.hokkaido.jp/archives/43800', opt: { contentSelectors: ['#post-43800 > div > div > p:nth-child(4)'] }})
+  const {html} = await fromUrl({ url: 'https://www.town.horokanai.hokkaido.jp/archives/43800', opt: { contentSelectors: ['#post-43800 > div > div'] }})
   html2Text({
     html,
     contentSelectors: ['body'],
