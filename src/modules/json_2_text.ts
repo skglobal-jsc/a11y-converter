@@ -22,7 +22,7 @@ const cleanText = (text: string = '') => {
     .replace(/\n +/g, '\n')
     .replace(/\n　+/g, '\n')
     .replace(/\n\t+/g, '\n')
-    .trim();
+    // .trim();
   return txt;
 };
 
@@ -38,15 +38,28 @@ const parseParagraph2Text = ($p, iArticle?: IArticle): any => {
   }
   $p?.children.forEach((element) => {
     // link tag
+    const innerText = parseParagraph2Text(element, iArticle)
     if (element.name === TAG_NAME.Link) {
       let href = element?.attribs?.href || '';
-      if (!href.includes('http') && iArticle?.loadedUrl) {
+      if (href.startsWith('tel:')) { // URL is telephone number
+        const telNumber = href.replace('tel:', '');
+        if (innerText.includes(telNumber)) {
+          res += innerText;
+        } else {
+          res += `${innerText} ${telNumber}`;
+        }
+      } else if (href.includes('#')) { // URL is id target
+        res += innerText;
+      } else if (!href.includes('http') && iArticle?.loadedUrl) { // URL is absolute path
         const path = new URL(href, iArticle.loadedUrl);
-        href = path.href;
+        res += `${innerText} - ${path.href} `;
+      } else if (href.trim() === innerText.trim()) {
+        res += innerText;
+      } else { // Normal url
+        res += `${innerText} - ${href} `;
       }
-      res += `${parseParagraph2Text(element, iArticle)} - ${href} `;
     } else {
-      res += parseParagraph2Text(element, iArticle);
+      res += innerText;
     }
   });
   return res;
