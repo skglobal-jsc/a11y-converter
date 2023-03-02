@@ -294,7 +294,7 @@ const editorJson2RagtJson = (editorJson) => {
           const aTagRegex =
             /<a.+?\s*href\s*=\s*["\']?(?<href>[^"\'\s>]+)["\']?/gi;
           return {
-            ui: sentence,
+            ui: sentence.replace('\n', '<br \>'),
             polly: sentence.replace(htmlTagRegex, ''),
             ssml: '',
             user: '',
