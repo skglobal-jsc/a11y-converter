@@ -23,7 +23,6 @@ const handleUVLogic = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
       }
     })
   }
-  console.log($.html())
   // Link
   $('a').each((i, el) => {
     // Hard code to adapt for UV system
