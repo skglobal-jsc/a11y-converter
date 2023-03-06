@@ -1,4 +1,5 @@
 import { Client, RequestsOptions } from './utils/client';
+import { IArticle } from './modules/html_2_text';
 
 import { ragtJson2A11Y, editorJson2RagtJson } from './utils/converter';
 
@@ -22,6 +23,7 @@ export interface ProcessOptions {
   url?: string; // url of the page
   contentSelectors?: string[];
   titleSelector?: string; // selector of the content
+  iArticle?: IArticle | null;
   hooks?: {
     before?: string;
     after?: string;

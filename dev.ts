@@ -73,7 +73,7 @@ import {
 
 (async () => {
 
-  const {html} = await fromUrl({ url: 'https://www.town.horokanai.hokkaido.jp/archives/43800', opt: { contentSelectors: ['#post-43800 > div > div'] }})
+  const {html} = await fromUrl({ url: 'https://www.city.fukuoka.lg.jp/shicho/koho/fsdweb/2022/0801/0601.html', opt: { contentSelectors: ['body > div.tpl6 > div > div.tpl6-1-2 > div.tpl6-1-2-1 > div > div > div.contents-sec > div > div'] }})
   html2Text({
     html,
     contentSelectors: ['body'],
@@ -92,7 +92,7 @@ import {
       googleAnalyticsId: 'GT_baodang',
     },
   }).then((res) => {
-    console.log(res);
+    // console.log(res);
   });
 
 })();

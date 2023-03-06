@@ -13,6 +13,37 @@ import {
 } from '../constant/index';
 import { ProcessOptions } from '../index';
 
+const handleUVLogic = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
+  // Images
+  if (opt?.iArticle?.loadedUrl) {
+    const urlPattern = /https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}/gi
+    $('img').each((i, el) => {
+      if (!urlPattern.test(el?.attribs?.src)) {
+        $(el).attr('src', opt.iArticle?.loadedUrl + el?.attribs?.src)
+      }
+    })
+  }
+  console.log($.html())
+  // Link
+  $('a').each((i, el) => {
+    // Hard code to adapt for UV system
+    const urlPattern = /https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}/gi
+    if (el.attribs?.href?.includes('#link')) { // URL include "#link"
+      el.tagName = 'p'
+      $(el).removeAttr('href')
+    } else if (!urlPattern.test(el?.attribs?.src)) { // Invalid url
+      $(el).remove()
+    } else if (
+      el.attribs?.href?.includes('twitter.com') ||
+      el.attribs?.href?.includes('line.me') ||
+      el.attribs?.href?.includes('facebook.com') ||
+      el.attribs?.href?.includes('hatena.ne')
+    ) {
+      $(el).remove()
+    }
+  })
+}
+
 const reduceHtml = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
   // clean head first
   $('head')
@@ -215,6 +246,9 @@ const tinyhtml = async (html: string, opt?: ProcessOptions) => {
 
   const $ = cheerio.load(cleanedHtml, { decodeEntities: true }, true);
 
+    // Handle some UV logic
+    handleUVLogic($, options);
+
   // execute the cleaning process
   if (options.hooks?.before) {
     await executeHookFn(options.hooks.before, $);
@@ -255,10 +289,10 @@ const tinyhtml = async (html: string, opt?: ProcessOptions) => {
       // replace the body with the new body
       $('body').replaceWith($body('body'));
     }
-
   }
   // clean and reduce html
   reduceHtml($, options);
+
   // execute the after hook
   if (options.hooks?.after) {
     await executeHookFn(options.hooks.after, $);

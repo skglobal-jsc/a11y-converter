@@ -42,6 +42,7 @@ const html2Text = async ({
   const { html: simplifiedHTML } = await tinyhtml(html, {
     contentSelectors,
     titleSelector,
+    iArticle
   });
 
   // Step2: Convert html simplified to ragt json
