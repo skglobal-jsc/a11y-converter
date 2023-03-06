@@ -74,6 +74,7 @@ import {
 (async () => {
 
   const {html} = await fromUrl({ url: 'https://www.city.fukuoka.lg.jp/shicho/koho/fsdweb/2022/0801/0201.html', opt: { contentSelectors: ['body > div.tpl6 > div > div.tpl6-1-2 > div.tpl6-1-2-1 > div > div > div.contents-sec > div > div > div.cbody'] }})
+
   html2Text({
     html,
     contentSelectors: ['body'],
@@ -92,7 +93,7 @@ import {
       googleAnalyticsId: 'GT_baodang',
     },
   }).then((res) => {
-    // console.log(res.plainText);
+    // console.log(res.a11yHTML);
   });
 
 })();

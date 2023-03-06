@@ -396,7 +396,9 @@ const ragtJson2A11Y = (ragtJson, a11ySetting = {}) => {
     if (block.type === BLOCK_TYPE.PARAGRAPH) {
       $('body').append(
         `<p id="${block.id}" tabindex="0">
-          ${(block?.meta || [])?.map((item) => item.ui)?.join(' ')}
+          ${(block?.meta || [])?.map((item) => {
+            return item.ui
+          })?.join(' ')}
         </p>`
       );
     }

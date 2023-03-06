@@ -135,7 +135,8 @@ const reduceHtml = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
           opt.removeEmptyElements &&
           el.name !== 'img' &&
           $(el).find('img').length === 0 &&
-          $(el).text().trim().length === 0
+          $(el).text().trim().length === 0 &&
+          el.name !== 'br'
         ) {
           $(el).remove();
         }
@@ -248,7 +249,6 @@ const tinyhtml = async (html: string, opt?: ProcessOptions) => {
 
     // Handle some UV logic
     handleUVLogic($, options);
-
   // execute the cleaning process
   if (options.hooks?.before) {
     await executeHookFn(options.hooks.before, $);
@@ -290,6 +290,7 @@ const tinyhtml = async (html: string, opt?: ProcessOptions) => {
       $('body').replaceWith($body('body'));
     }
   }
+
   // clean and reduce html
   reduceHtml($, options);
 
