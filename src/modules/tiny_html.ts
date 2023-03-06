@@ -19,7 +19,8 @@ const handleUVLogic = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
     const urlPattern = /https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}/gi
     $('img').each((i, el) => {
       if (!urlPattern.test(el?.attribs?.src)) {
-        $(el).attr('src', opt.iArticle?.loadedUrl + el?.attribs?.src)
+        const path = new URL(el?.attribs?.src, opt.iArticle?.loadedUrl);
+        $(el).attr('src', path.href)
       }
     })
   }
