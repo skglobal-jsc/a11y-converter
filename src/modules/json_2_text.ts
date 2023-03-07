@@ -250,8 +250,6 @@ const json2Text = ({ json, iArticle }: { json: any; iArticle: IArticle }) => {
     } else if (block.type === BLOCK_TYPE.HEADER) {
       res += parseHeading2Text(block, iArticle) + '\n\n';
     } else {
-      console.log(block.type)
-      console.log(block.data.text)
       const $p = cheerio.load(block?.data?.text || '')('body')[0];
       res += parseParagraph2Text($p, iArticle) + '\n\n';
     }
