@@ -32,18 +32,15 @@ const handleUVLogic = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
     if (href?.includes('#link')) { // URL include "#link"
       el.tagName = 'p'
       $(el).removeAttr('href')
-    }else if (
-      !href?.includes('tel:') &&
-      !href?.includes('mailto:') &&
-      !urlPattern.test(href)
-    ) { // Invalid url
-      $(el).remove()
-    } else if (
+    }
+    else if (
       href?.includes('twitter.com') ||
       href?.includes('line.me') ||
       href?.includes('facebook.com') ||
       href?.includes('hatena.ne')
     ) {
+      $(el).remove()
+    } else if (!href.includes('tel:') && !href.includes('mailto:') && !urlPattern.test(href)) {
       $(el).remove()
     }
   })

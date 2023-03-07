@@ -10,7 +10,7 @@ import {
 
 const cleanInline = (html) => {
   return sanitizeHtml(html, {
-    allowedTags: ['a', 'mark'],
+    allowedTags: ['a', 'mark', 'br'],
   });
 };
 

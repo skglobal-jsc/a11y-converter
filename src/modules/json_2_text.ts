@@ -229,7 +229,6 @@ const parseTable2Text = (block, lang = 'ja', iArticle?: IArticle): any => {
  * @return { string }
  */
 const json2Text = ({ json, iArticle }: { json: any; iArticle: IArticle }) => {
-  console.log(json)
   const blocks = json?.blocks || [],
     metaOpt = json?.metaOpt || {};
   let res = '';
