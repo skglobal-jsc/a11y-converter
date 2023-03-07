@@ -31,7 +31,7 @@ const handleUVLogic = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
     if (el.attribs?.href?.includes('#link')) { // URL include "#link"
       el.tagName = 'p'
       $(el).removeAttr('href')
-    } else if (!urlPattern.test(el?.attribs?.src)) { // Invalid url
+    } else if (!urlPattern.test(el?.attribs?.href)) { // Invalid url
       $(el).remove()
     } else if (
       el.attribs?.href?.includes('twitter.com') ||
@@ -290,7 +290,6 @@ const tinyhtml = async (html: string, opt?: ProcessOptions) => {
       $('body').replaceWith($body('body'));
     }
   }
-
   // clean and reduce html
   reduceHtml($, options);
 
