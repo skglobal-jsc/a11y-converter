@@ -28,16 +28,21 @@ const handleUVLogic = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
   $('a').each((i, el) => {
     // Hard code to adapt for UV system
     const urlPattern = /https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}/gi
-    if (el.attribs?.href?.includes('#link')) { // URL include "#link"
+    const href = el.attribs?.href || ''
+    if (href?.includes('#link')) { // URL include "#link"
       el.tagName = 'p'
       $(el).removeAttr('href')
-    } else if (!urlPattern.test(el?.attribs?.href)) { // Invalid url
+    }else if (
+      !href?.includes('tel:') &&
+      !href?.includes('mailto:') &&
+      !urlPattern.test(href)
+    ) { // Invalid url
       $(el).remove()
     } else if (
-      el.attribs?.href?.includes('twitter.com') ||
-      el.attribs?.href?.includes('line.me') ||
-      el.attribs?.href?.includes('facebook.com') ||
-      el.attribs?.href?.includes('hatena.ne')
+      href?.includes('twitter.com') ||
+      href?.includes('line.me') ||
+      href?.includes('facebook.com') ||
+      href?.includes('hatena.ne')
     ) {
       $(el).remove()
     }
