@@ -32,8 +32,10 @@ const cleanText = (text: string = '') => {
  */
 const parseParagraph2Text = ($p, iArticle?: IArticle): any => {
   let res = '';
-
   if (!$p?.children || $p.children.length === 0) {
+    if ($p.name === 'br') {
+      return '\n'
+    }
     return cleanText($p.data);
   }
   $p?.children.forEach((element) => {
@@ -248,6 +250,8 @@ const json2Text = ({ json, iArticle }: { json: any; iArticle: IArticle }) => {
     } else if (block.type === BLOCK_TYPE.HEADER) {
       res += parseHeading2Text(block, iArticle) + '\n\n';
     } else {
+      console.log(block.type)
+      console.log(block.data.text)
       const $p = cheerio.load(block?.data?.text || '')('body')[0];
       res += parseParagraph2Text($p, iArticle) + '\n\n';
     }
