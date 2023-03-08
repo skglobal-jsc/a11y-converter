@@ -260,7 +260,8 @@ const json2Text = ({ json, iArticle }: { json: any; iArticle: IArticle }) => {
     res +
     '\n\n' +
     useLocale('EndArticle', metaOpt?.lang);
-  return res;
+
+  return cleanText(res);
 };
 
 export default json2Text;

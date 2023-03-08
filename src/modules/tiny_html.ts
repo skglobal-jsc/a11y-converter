@@ -292,6 +292,7 @@ const tinyhtml = async (html: string, opt?: ProcessOptions) => {
       $('body').replaceWith($body('body'));
     }
   }
+
   // clean and reduce html
   reduceHtml($, options);
 
