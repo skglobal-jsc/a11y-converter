@@ -73,7 +73,7 @@ import {
 
 (async () => {
 
-  const {html} = await fromUrl({ url: 'https://www.city.fukuoka.lg.jp/shicho/koho/fsdweb/2022/0801/0403.html', opt: { contentSelectors: ['.cbody'] }})
+  const {html} = await fromUrl({ url: 'https://www.town.okuizumo.shimane.jp/www/contents/1670572412306/index.html', opt: { contentSelectors: ['.waku'] }})
   html2Text({
     html,
     contentSelectors: ['body'],

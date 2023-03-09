@@ -40,8 +40,22 @@ const handleUVLogic = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
       href?.includes('hatena.ne')
     ) {
       $(el).remove()
-    } else if (!href.includes('tel:') && !href.includes('mailto:') && !urlPattern.test(href)) {
+    }
+    else if (href.startsWith('http') && !urlPattern.test(href)) {
       $(el).remove()
+    }
+    else {
+      if (
+        !href.startsWith('tel:') &&
+        !href.startsWith('mailto:') &&
+        !href.startsWith('http') &&
+        !href.startsWith('www')
+      ) {
+        if (href && opt.iArticle?.loadedUrl) {
+          const path = new URL(href, opt.iArticle?.loadedUrl);
+          $(el).attr('href', path.href)
+        }
+      }
     }
   })
 }
