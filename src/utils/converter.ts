@@ -473,7 +473,12 @@ const ragtJson2A11Y = (ragtJson, a11ySetting = {}) => {
       );
     }
   });
-  return $.html();
+
+  // Clean "break-line" character from 2 up
+  const regexPattern = /(<br\s*\/?>\s*){3,}|(\\n\s*\s*){3,}/gi
+  const a11yHTML = $.html().replace(regexPattern, '<br><br>')
+
+  return a11yHTML;
 };
 
 export { editorJson2RagtJson, ragtJson2A11Y };

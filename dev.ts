@@ -73,7 +73,7 @@ import {
 
 (async () => {
 
-  const {html} = await fromUrl({ url: 'https://www.town.okuizumo.shimane.jp/www/contents/1670572412306/index.html', opt: { contentSelectors: ['.waku'] }})
+  const {html} = await fromUrl({ url: 'https://www.city.fukuoka.lg.jp/shicho/koho/fsdweb/2022/0801/0601.html', opt: { contentSelectors: ['.cbody'] }})
   html2Text({
     html,
     contentSelectors: ['body'],
@@ -92,7 +92,9 @@ import {
       googleAnalyticsId: 'GT_baodang',
     },
   }).then((res) => {
-    console.log(res.plainText)
+    console.log(res.a11yHTML);
   });
+
+  // /(<br\s*\/?>\s*){3,}|(\\n\s*\s*){3,}/gi
 
 })();
