@@ -10,7 +10,7 @@ import {
 
 const cleanInline = (html) => {
   return sanitizeHtml(html, {
-    allowedTags: ['a', 'mark', 'br'],
+    allowedTags: ['a', 'mark', 'br', 'img'],
   });
 };
 
@@ -76,13 +76,16 @@ const htmlSimplified2EditorJson = (html) => {
           }
           //TODO: Paragraph
           if (el.name === 'p') {
-            blocks.push({
-              id,
-              type: BLOCK_TYPE.PARAGRAPH,
-              data: {
-                text: cleanInline($(el).html()),
-              },
-            });
+            const imgTagPattern = /<img.*\/?>/g
+            if ($(el).text().trim() || imgTagPattern.test($(el).html() || '') ) {
+              blocks.push({
+                id,
+                type: BLOCK_TYPE.PARAGRAPH,
+                data: {
+                  text: cleanInline($(el).html()),
+                },
+              });
+            }
           }
           //TODO: Header
           if (['h1', 'h2', 'h3'].includes(el.name)) {
