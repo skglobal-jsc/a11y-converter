@@ -79,9 +79,10 @@ export const buildMetaOptions = (opt: {
 };
 
 export const isIgnoreText = (text: string): boolean => {
+  text = text.toLowerCase()
   if (
-    text.includes('Acrobat') ||
-    text.includes('Adobe') ||
+    text.includes('acrobat') ||
+    text.includes('adobe') ||
     text.toLowerCase().includes('adobe.com/jp') ||
     text.toLowerCase().includes('function(') ||
     text.toLowerCase().includes('connect.facebook.net') ||

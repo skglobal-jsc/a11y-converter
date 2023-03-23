@@ -178,6 +178,12 @@ const reduceHtml = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
             $(el).remove();
           }
         }
+
+        // remove link includes ['adobe', ...]
+        if (el.name === 'a' && el.attribs.href.includes('adobe')) {
+          $(el).remove();
+        }
+
       } else if (el.type === 'text') {
         // if the element is text and parent is div then wrap it with p tag
         const text = $(el).text().trim();

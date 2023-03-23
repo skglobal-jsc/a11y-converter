@@ -48,11 +48,11 @@ const getMetaByDfs = (root, parentId, arr) => {
 };
 const splitSentences = (rawText, lang = 'en') => {
   const htmlElementRegex =
-    /<(?:([A-Za-z0-9][A-Za-z0-9]*)\b[^>]*>(?:.*?)<\/\1>|[A-Za-z0-9][A-Za-z0-9]*\b[^>]*\/>)/gm;
+    /<(?:([A-Za-z0-9][A-Za-z0-9]*)\b[^>]*>(?:.*?)<\/\1>|[A-Za-z0-9][A-Za-z0-9]*\b[^>]*\/>)/gms;
   const htmlElements = rawText.match(htmlElementRegex) ?? [];
   let noHtml = rawText;
   htmlElements.forEach(
-    (element, idx) => (noHtml = noHtml.replace(element, `htmlElementNo${idx}`))
+    (element, idx) => (noHtml = noHtml.replace(element, `[htmlElementNo${idx}]`))
   );
   const regexSplitSentences =
     lang === 'ja'
@@ -62,8 +62,9 @@ const splitSentences = (rawText, lang = 'en') => {
     .split(regexSplitSentences)
   const sentences = noHtmlSentences.map((sentence) => {
     htmlElements.forEach(
-      (element, idx) =>
-        (sentence = sentence.replace(`htmlElementNo${idx}`, element))
+      (element, idx) => {
+        sentence = sentence.replace(`[htmlElementNo${idx}]`, element);
+      }
     );
     return sentence;
   });
