@@ -144,12 +144,13 @@ const editorJson2RagtJson = (editorJson) => {
         },
       ];
       content.forEach((row, idx) => {
-        const polly =
+        let polly =
           idx === 0
             ? `データの1行目、${row.join('、')}、`
             : idx === row.length - 1
             ? `${idx + 1}行目、${row.join('、')}です。`
             : `${idx + 1}行目、${row.join('、')}、`;
+        polly = cheerio.load(polly).text();
         let ui = `<tr tabindex="0" aria-label="${polly}">`;
         row.forEach((cell) => {
           ui =
@@ -198,10 +199,11 @@ const editorJson2RagtJson = (editorJson) => {
         },
       ];
       content.forEach((row, idx) => {
-        const polly =
+        let polly =
           idx === 0
             ? `Dữ liệu hàng thứ nhất là ${row.join(', ')}.`
             : `Hàng thứ ${idx + 1}: ${row.join(', ')}.`;
+        polly = cheerio.load(polly).text();
         let ui = `<tr tabindex="0" aria-label="${polly}">`;
         row.forEach((cell) => {
           ui =
@@ -250,10 +252,11 @@ const editorJson2RagtJson = (editorJson) => {
         },
       ];
       content.forEach((row, idx) => {
-        const polly =
+        let polly =
           idx === 0
             ? `The first line of data is ${row.join(', ')}.`
             : `Line ${idx + 1}: ${row.join(', ')}.`;
+        polly = cheerio.load(polly).text();
         let ui = `<tr tabindex="0" aria-label="${polly}">`;
         row.forEach((cell) => {
           ui =
