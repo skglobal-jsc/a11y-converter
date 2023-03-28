@@ -73,9 +73,9 @@ import {
 
 (async () => {
 
-  const {html} = await fromUrl({ url: 'https://www.town.okuizumo.shimane.jp/www/contents/1677831344746/index.html', opt: { contentSelectors: ['#main'] }})
+  const {html} = await fromUrl({ url: 'https://www.city.higashiosaka.lg.jp/0000029953.html', opt: { contentSelectors: ['#mol_contents'] }})
   html2Text({
-    html,
+    html: html,
     contentSelectors: ['body'],
     // titleSelector: '#contents > h1 > span',
     iArticle: {
@@ -92,7 +92,7 @@ import {
       googleAnalyticsId: 'GT_baodang',
     },
   }).then((res) => {
-    console.log(res.a11yHTML);
+    // console.log(res.a11yHTML);
   });
 
 })();

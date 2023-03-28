@@ -180,7 +180,7 @@ const reduceHtml = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
         }
 
         // remove link includes ['adobe', ...]
-        if (el.name === 'a' && el.attribs.href.includes('adobe')) {
+        if (el.name === 'a' && el.attribs?.href?.includes('adobe')) {
           $(el).remove();
         }
 
