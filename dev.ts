@@ -4,7 +4,8 @@ import {
   json2Text,
   html2Text,
   htmlSimplified2RagtJson,
-  fromUrl
+  fromUrl,
+  editorJson2RagtJson
 } from './src/index';
 
 // import { readFile, writeFile } from 'fs';
@@ -94,5 +95,6 @@ import {
   }).then((res) => {
     console.log(res.a11yHTML)
   });
+
 
 })();

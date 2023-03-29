@@ -102,9 +102,9 @@ const editorJson2RagtJson = (editorJson) => {
   const getImageAnnotation = (alt) => {
     if (alt) {
       const annotation = {
-        ja: `ここに「${alt}」の画像があります。`,
-        vi: `Đây là hình ảnh về ${alt}`,
-        en: `This image is about ${alt}.`,
+        ja: `ここに<span class="annotation-text">「${alt}」</span>の画像があります。`,
+        vi: `Đây là hình ảnh về <span class="annotation-text">${alt}</span>.`,
+        en: `This image is about <span class="annotation-text">${alt}</span>.`,
       };
       return annotation[lang] || annotation.en;
     } else {
@@ -118,25 +118,28 @@ const editorJson2RagtJson = (editorJson) => {
   };
 
   const buildMetaTable = (data) => {
-    const content = [...data.content];
     const withHeadings = data.withHeadings;
+    const content = [...(withHeadings ? [data.headers] : []), ...data.content];
     const totalRows = content?.length ?? 0;
     const totalCols = content[0]?.length ?? 0;
+
     if (lang === 'ja') {
-      let annotation = `この下に、縦${totalRows}行、横${totalCols}列の表があります。\n`;
+      let annotation = `この下に、<span class="annotation-text">縦${totalRows}行</span>、<span class="annotation-text">横${totalCols}列</span>、の表(ひょう)があります。\n`;
       if (data.caption) {
-        annotation += `表のタイトルは${data.caption}、です。\n`;
+        annotation += `表(ひょう)のタイトルは、<span class="annotation-text">${data.caption}</span>、です。\n`;
       }
-      if (data.headers?.length) {
-        annotation += `見出し行は左から${data.headers.join('、')}です。`;
-      } else if (withHeadings) {
-        annotation += `見出し行は左から${content[0].join('、')}です。`;
-      }
+      // if (data.headers?.length) {
+      //   annotation += `見出し行は左から、${data.headers.reduce((res, item) =>
+      //     res + `<span class="annotation-text">${item}</span>、`, ''
+      //   )}です。`;
+      // } else if (withHeadings) {
+      //   annotation += `見出し行は左から、${content[0].reduce((res, item) => res + `<span class="annotation-text">${item}</span>、`, '')}です。`;
+      // }
       const meta: any = [
         {
           id: Math.random().toString(36).substring(7),
           ui: annotation,
-          polly: annotation,
+          polly: cheerio?.load(annotation)?.text(),
           ssml: '',
           user: '',
           actions: [],
@@ -178,20 +181,20 @@ const editorJson2RagtJson = (editorJson) => {
       });
       return meta;
     } else if (lang === 'vi') {
-      let annotation = `Đây là dữ liệu dạng bảng, có ${totalRows} dòng, ${totalCols} cột.\n`;
+      let annotation = `Đây là dữ liệu dạng bảng, <span class="annotation-text">có ${totalRows} dòng</span>, <span class="annotation-text">${totalCols} cột</span>.\n`;
       if (data.caption) {
-        annotation += `Tiêu đề của bảng là ${data.caption}.\n`;
+        annotation += `Tiêu đề của bảng là <span class="annotation-text">${data.caption}</span>.\n`;
       }
-      if (data.headers?.length) {
-        annotation += `Các ô tiêu đề của bảng là ${data.headers.join(', ')}.`;
-      } else if (withHeadings) {
-        annotation += `Các ô tiêu đề của bảng là ${content[0].join(', ')}.`;
-      }
+      // if (data.headers?.length) {
+      //   annotation += `Các ô tiêu đề của bảng là ${data.headers.reduce((res, item, index) => res + `<span class="annotation-text">${item}</span>${index !== (data?.headers?.length - 1) ? ', ': ''}`, '')}.`;
+      // } else if (withHeadings) {
+      //   annotation += `Các ô tiêu đề của bảng là ${content[0].reduce((res, item, index) => res + `<span class="annotation-text">${item}</span>${index !== (content[0]?.length - 1) ? ', ' : ''}`, '')}.`;
+      // }
       const meta: any = [
         {
           id: Math.random().toString(36).substring(7),
           ui: annotation,
-          polly: annotation,
+          polly: cheerio?.load(annotation)?.text(),
           ssml: '',
           user: '',
           actions: [],
@@ -231,20 +234,20 @@ const editorJson2RagtJson = (editorJson) => {
       });
       return meta;
     } else {
-      let annotation = `This is table with ${totalRows} rows, ${totalCols} columns.\n`;
+      let annotation = `This is table with <span class="annotation-text">${totalRows} rows</span>, <span class="annotation-text">${totalCols} columns</span>.\n`;
       if (data.caption) {
-        annotation += `The title of the table is ${data.caption}.\n`;
+        annotation += `The title of the table is <span class="annotation-text">${data.caption}</span>.\n`;
       }
-      if (data.headers?.length) {
-        annotation += `The table headers are ${data.headers.join(', ')}.`;
-      } else if (withHeadings) {
-        annotation += `The table headers are ${content[0].join(', ')}.`;
-      }
+      // if (data.headers?.length) {
+      //   annotation += `The table headers are ${data.headers?.reduce((res, item, index) => res + `<span class="annotation-text">${item}</span>${index !== (data.headers?.length - 1) ? ', ': ''}`, '')}.`;
+      // } else if (withHeadings) {
+      //   annotation += `The table headers are ${content[0]?.reduce((res, item, index) => res + `<span class="annotation-text">${item}</span>${index !== (content[0]?.length - 1) ? ', ': ''}`, '')}.`;
+      // }
       const meta: any = [
         {
           id: Math.random().toString(36).substring(7),
           ui: annotation,
-          polly: annotation,
+          polly: cheerio?.load(annotation)?.text(),
           ssml: '',
           user: '',
           actions: [],
@@ -330,7 +333,8 @@ const editorJson2RagtJson = (editorJson) => {
     if (block.type === BLOCK_TYPE.IMAGE) {
       meta = [
         {
-          polly: getImageAnnotation(block.data.caption),
+          ui: getImageAnnotation(block.data.caption),
+          polly: cheerio?.load(getImageAnnotation(block.data.caption))?.text(),
           ssml: '',
           user: '',
           actions: [],
@@ -344,6 +348,8 @@ const editorJson2RagtJson = (editorJson) => {
       block.data = {
         withHeadings: block.data.heading,
         content: block.data.content,
+        caption: block.data?.caption || '',
+        headers: block.data?.headers || []
       };
     }
     return {
@@ -445,7 +451,7 @@ const ragtJson2A11Y = (ragtJson, a11ySetting = {}) => {
     //TODO: Image
     if (block.type === BLOCK_TYPE.IMAGE) {
       $('body').append(
-        `<p tabindex="0" class="annotation">${block.meta[0].polly}</p>`
+        `<p tabindex="0" class="annotation">${block.meta[0]?.ui}</p>`
       );
       $('body').append(
         `<img id="${block.id}" src="${block.data?.file?.url || ''}" alt="${
@@ -457,15 +463,12 @@ const ragtJson2A11Y = (ragtJson, a11ySetting = {}) => {
     //TODO: Table
     if (block.type === BLOCK_TYPE.TABLE) {
       $('body').append(
-        `<p id="${block.meta[0].id}" tabindex="0" class="annotation">${block.meta[0].polly}</p>`
+        `<p id="${block.meta[0].id}" tabindex="0" class="annotation">${block.meta[0].ui}</p>`
       );
-      const bodyTable = block.meta.reduce((res, cur, idx) => {
-        if (idx !== 0 && idx !== block.meta.length - 1) {
-          return res.concat(cur.ui);
-        } else {
-          return res;
-        }
-      }, '');
+      let bodyTable = ''
+      for(let i = 1; i < block?.meta?.length - 1; i++) {
+        bodyTable += block?.meta[i]?.ui || ''
+      }
       const table = `<table id="${block.id}">${bodyTable}</table>`;
       $('body').append(table);
       $('body').append(
