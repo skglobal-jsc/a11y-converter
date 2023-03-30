@@ -1,0 +1,63 @@
+export const typeTextByLanguage = {
+  image: {
+    default: 'Open the image file',
+    jpn: '画像を開く',
+    vie: 'Mở hình ảnh',
+  },
+  doc: {
+    default: 'Open the word file',
+    jpn: 'ワードファイルを開く',
+    vie: 'Mở file tài liệu',
+  },
+  excel: {
+    default: 'Open the excel file',
+    jpn: 'エクスファイルを開く',
+    vie: 'Mở file excel',
+  },
+  powerpoint: {
+    default: 'Open the powerpoint file',
+    jpn: 'パワーポイントファイルを開く',
+    vie: 'Mở file powerpoint',
+  },
+  pdf: {
+    default: 'Open the pdf file',
+    jpn: 'PDFファイルを開く',
+    vie: 'Mở file pdf',
+  },
+  other: {
+    default: 'Open link',
+    jpn: 'リンクを開く',
+    vie: 'Mở liên kết',
+  },
+};
+
+export const mapExtensionToType = {
+  jpg: 'image',
+  jpeg: 'image',
+  png: 'image',
+  gif: 'image',
+  svg: 'image',
+  bmp: 'image',
+  tiff: 'image',
+  tif: 'image',
+  ico: 'image',
+  avif: 'image',
+  webp: 'image',
+  heic: 'image',
+  heif: 'image',
+  jp2: 'image',
+  j2k: 'image',
+  jpf: 'image',
+  jpx: 'image',
+  jpm: 'image',
+  mj2: 'image',
+  doc: 'doc',
+  docx: 'doc',
+  xls: 'excel',
+  xlsx: 'excel',
+  xlsm: 'excel',
+  xlsb: 'excel',
+  ppt: 'powerpoint',
+  pptx: 'powerpoint',
+  pdf: 'pdf',
+};

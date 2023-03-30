@@ -7,7 +7,52 @@ import {
   _applyAccessibilityAttributes,
   _applyGoogleAnalytics,
 } from './css';
+import { replaceTextLinkToText, replaceTextLinkToHyperlink } from './hyperlink'
 import { BLOCK_TYPE } from '../constant/index';
+
+//TODO: Auto detect and hyperlink List block
+const recursiveReplaceTextLinkToHyperlinkList = (items: any[], metaOpt: any) => {
+  for (let i = 0; i < items.length; i++) {
+    const row = items[i]; // contain "content" and "items"
+    if (row.content) {
+      row.content = replaceTextLinkToText(row.content, metaOpt.lang);
+    }
+    if (row.items) {
+      recursiveReplaceTextLinkToHyperlinkList(row.items, metaOpt);
+    }
+  }
+};
+
+const convertRagtJsonTextToHyperlink = (ragtJson: any) => {
+  const { blocks, metaOpt } = ragtJson;
+  // loop function to get all text from meta in ragtJson
+  for (let i = 0; i < blocks.length; i++) {
+    const { type, data, meta } = blocks[i];
+    if (type === 'table') {
+      // only replace for table type
+      const { content } = data;
+      for (let i = 0; i < content.length; i++) {
+        const row = content[i];
+        for (let j = 0; j < row.length; j++) {
+          row[j] = replaceTextLinkToHyperlink(row[j], metaOpt.lang);
+        }
+      }
+    } else if (type === 'list') {
+      // only replace for list type
+      const { items } = data;
+      recursiveReplaceTextLinkToHyperlinkList(items, metaOpt);
+    }
+    meta.map((item) => {
+      // replace text link to hyperlink for each object.ui in meta array
+      if (!['list'].includes(type)) {
+        // except table and list type
+        item.ui = replaceTextLinkToHyperlink(item.ui, metaOpt.lang);
+      }
+      item.polly = replaceTextLinkToText(item.polly, metaOpt.lang);
+    });
+  }
+  return ragtJson;
+};
 
 //TODO: Util functions
 const dfsTree = (root, arr) => {
@@ -128,13 +173,13 @@ const editorJson2RagtJson = (editorJson) => {
       if (data.caption) {
         annotation += `表(ひょう)のタイトルは、<span class="annotation-text">${data.caption}</span>、です。\n`;
       }
-      // if (data.headers?.length) {
-      //   annotation += `見出し行は左から、${data.headers.reduce((res, item) =>
-      //     res + `<span class="annotation-text">${item}</span>、`, ''
-      //   )}です。`;
-      // } else if (withHeadings) {
-      //   annotation += `見出し行は左から、${content[0].reduce((res, item) => res + `<span class="annotation-text">${item}</span>、`, '')}です。`;
-      // }
+      if (data.headers?.length) {
+        annotation += `見出し行は左から、${data.headers.reduce((res, item) =>
+          res + `<span class="annotation-text">${item}</span>、`, ''
+        )}です。`;
+      } else if (withHeadings) {
+        annotation += `見出し行は左から、${content[0].reduce((res, item) => res + `<span class="annotation-text">${item}</span>、`, '')}です。`;
+      }
       const meta: any = [
         {
           id: Math.random().toString(36).substring(7),
@@ -185,11 +230,11 @@ const editorJson2RagtJson = (editorJson) => {
       if (data.caption) {
         annotation += `Tiêu đề của bảng là <span class="annotation-text">${data.caption}</span>.\n`;
       }
-      // if (data.headers?.length) {
-      //   annotation += `Các ô tiêu đề của bảng là ${data.headers.reduce((res, item, index) => res + `<span class="annotation-text">${item}</span>${index !== (data?.headers?.length - 1) ? ', ': ''}`, '')}.`;
-      // } else if (withHeadings) {
-      //   annotation += `Các ô tiêu đề của bảng là ${content[0].reduce((res, item, index) => res + `<span class="annotation-text">${item}</span>${index !== (content[0]?.length - 1) ? ', ' : ''}`, '')}.`;
-      // }
+      if (data.headers?.length) {
+        annotation += `Các ô tiêu đề của bảng là ${data.headers.reduce((res, item, index) => res + `<span class="annotation-text">${item}</span>${index !== (data?.headers?.length - 1) ? ', ': ''}`, '')}.`;
+      } else if (withHeadings) {
+        annotation += `Các ô tiêu đề của bảng là ${content[0].reduce((res, item, index) => res + `<span class="annotation-text">${item}</span>${index !== (content[0]?.length - 1) ? ', ' : ''}`, '')}.`;
+      }
       const meta: any = [
         {
           id: Math.random().toString(36).substring(7),
@@ -238,11 +283,11 @@ const editorJson2RagtJson = (editorJson) => {
       if (data.caption) {
         annotation += `The title of the table is <span class="annotation-text">${data.caption}</span>.\n`;
       }
-      // if (data.headers?.length) {
-      //   annotation += `The table headers are ${data.headers?.reduce((res, item, index) => res + `<span class="annotation-text">${item}</span>${index !== (data.headers?.length - 1) ? ', ': ''}`, '')}.`;
-      // } else if (withHeadings) {
-      //   annotation += `The table headers are ${content[0]?.reduce((res, item, index) => res + `<span class="annotation-text">${item}</span>${index !== (content[0]?.length - 1) ? ', ': ''}`, '')}.`;
-      // }
+      if (data.headers?.length) {
+        annotation += `The table headers are ${data.headers?.reduce((res, item, index) => res + `<span class="annotation-text">${item}</span>${index !== (data.headers?.length - 1) ? ', ': ''}`, '')}.`;
+      } else if (withHeadings) {
+        annotation += `The table headers are ${content[0]?.reduce((res, item, index) => res + `<span class="annotation-text">${item}</span>${index !== (content[0]?.length - 1) ? ', ': ''}`, '')}.`;
+      }
       const meta: any = [
         {
           id: Math.random().toString(36).substring(7),
@@ -358,10 +403,9 @@ const editorJson2RagtJson = (editorJson) => {
     };
   });
 
-  return {
-    ...editorJson,
-    blocks,
-  };
+  const ragtJson = convertRagtJsonTextToHyperlink({ ...editorJson, blocks })
+
+  return ragtJson
 };
 
 const ragtJson2A11Y = (ragtJson, a11ySetting = {}) => {
