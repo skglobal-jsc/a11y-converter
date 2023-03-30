@@ -12,7 +12,7 @@
     "dist/**/*.ts"
   ],
   "engines": {
-    "node": ">=14.16 && <= 18.1.0"
+    "node": ">=14.16"
   },
   "scripts": {
     "dev": "ts-node dev.ts",
