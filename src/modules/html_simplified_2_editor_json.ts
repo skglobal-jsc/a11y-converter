@@ -165,14 +165,16 @@ const htmlSimplified2EditorJson = (html) => {
             const headers = Array.from($(el).find('th'))?.map((th) =>
               $(th)?.html()
             );
+
+            const isHeading = !!firstRowHeading
             const data = {
-              withHeadings: !!firstRowHeading,
+              withHeadings: isHeading,
               content,
               ...(captionElement.length && {
                 caption: $(captionElement).html()?.trim(),
               }),
-              headers,
             };
+
             blocks.push({
               id,
               type: BLOCK_TYPE.TABLE,
@@ -199,6 +201,7 @@ const htmlSimplified2EditorJson = (html) => {
         }
       }
     });
+
   return {
     blocks,
     metaOpt: metaOpts,

@@ -1,5 +1,5 @@
 import tinyhtml from './tiny_html';
-import { htmlSimplified2EditorJson } from './index';
+import htmlSimplified2EditorJson from './html_simplified_2_editor_json';
 import json2Text from './json_2_text';
 import { editorJson2RagtJson, ragtJson2A11Y } from '../utils/converter';
 
@@ -46,16 +46,16 @@ const html2Text = async ({
   });
 
   // Step2: Convert html simplified to ragt json
-  const editorJson = htmlSimplified2EditorJson(simplifiedHTML);
+  const editorJson = await htmlSimplified2EditorJson(simplifiedHTML);
 
   // Step3: Convert editor json to plain text
-  const plainText = json2Text({ json: editorJson, iArticle });
+  const plainText = await json2Text({ json: editorJson, iArticle });
 
   // Step4: Convert editor json 2 ragt json
-  const ragtJson = editorJson2RagtJson(editorJson);
+  const ragtJson = await editorJson2RagtJson(editorJson);
 
   // Step4: Convert ragt json to a11y
-  const a11yHTML = ragtJson2A11Y(ragtJson, a11ySetting);
+  const a11yHTML = await ragtJson2A11Y(ragtJson, a11ySetting);
 
   return { plainText, a11yHTML, simplifiedHTML };
 };

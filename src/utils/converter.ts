@@ -164,7 +164,7 @@ const editorJson2RagtJson = (editorJson) => {
 
   const buildMetaTable = (data) => {
     const withHeadings = data.withHeadings;
-    const content = [...(withHeadings ? [data.headers] : []), ...data.content];
+    const content = [...data.content];
     const totalRows = content?.length ?? 0;
     const totalCols = content[0]?.length ?? 0;
 
@@ -173,12 +173,7 @@ const editorJson2RagtJson = (editorJson) => {
       if (data.caption) {
         annotation += `表(ひょう)のタイトルは、<span class="annotation-text">${data.caption}</span>、です。<br/>`;
       }
-      if (data.headers?.length) {
-        annotation += `見出し行は左から、${data.headers.reduce((res, item) =>
-          res + `<span class="annotation-text">${cheerio?.load(item)?.text()}</span>、`
-          , ''
-        )}です。`;
-      } else if (withHeadings) {
+      if (withHeadings) {
         annotation += `見出し行は左から、${content[0].reduce((res, item) =>
           res + `<span class="annotation-text">${cheerio?.load(item)?.text()}</span>、`
           , ''
@@ -234,12 +229,7 @@ const editorJson2RagtJson = (editorJson) => {
       if (data.caption) {
         annotation += `Tiêu đề của bảng là <span class="annotation-text">${data.caption}</span>.<br/>`;
       }
-      if (data.headers?.length) {
-        annotation += `Các ô tiêu đề của bảng là ${data.headers.reduce((res, item, index) =>
-          res + `<span class="annotation-text">${cheerio?.load(item)?.text()}</span>${index !== (data?.headers?.length - 1) ? ', ': ''}`
-          , ''
-        )}.`;
-      } else if (withHeadings) {
+      if (withHeadings) {
         annotation += `Các ô tiêu đề của bảng là ${content[0].reduce((res, item, index) =>
           res + `<span class="annotation-text">${cheerio?.load(item)?.text()}</span>${index !== (content[0]?.length - 1) ? ', ' : ''}`
           , ''
@@ -293,12 +283,7 @@ const editorJson2RagtJson = (editorJson) => {
       if (data.caption) {
         annotation += `The title of the table is <span class="annotation-text">${data.caption}</span>.<br/>`;
       }
-      if (data.headers?.length) {
-        annotation += `The table headers are ${data.headers?.reduce((res, item, index) =>
-          res + `<span class="annotation-text">${cheerio?.load(item)?.text()}</span>${index !== (data.headers?.length - 1) ? ', ': ''}`
-          , ''
-        )}.`;
-      } else if (withHeadings) {
+      if (withHeadings) {
         annotation += `The table headers are ${content[0]?.reduce((res, item, index) =>
           res + `<span class="annotation-text">${cheerio?.load(item)?.text()}</span>${index !== (content[0]?.length - 1) ? ', ': ''}`
           , ''
@@ -411,7 +396,6 @@ const editorJson2RagtJson = (editorJson) => {
         withHeadings: block.data.heading,
         content: block.data.content,
         caption: block.data?.caption || '',
-        headers: block.data?.headers || []
       };
     }
     return {

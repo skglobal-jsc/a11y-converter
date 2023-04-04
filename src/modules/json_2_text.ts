@@ -193,7 +193,7 @@ const parseTable2Text = (block, lang = 'ja', iArticle?: IArticle): any => {
     text += `${useLocale('TableCaption', lang, block.data?.caption)}`;
   }
 
-  const rows = block.data.content;
+  const rows = [...block.data.content];
 
   if (block.data?.withHeadings) {
     text += `${useLocale(
