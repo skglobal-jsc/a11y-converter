@@ -174,10 +174,12 @@ const editorJson2RagtJson = (editorJson) => {
         annotation += `表(ひょう)のタイトルは、<span class="annotation-text">${data.caption}</span>、です。<br/>`;
       }
       if (withHeadings) {
-        annotation += `見出し行は左から、${content[0].reduce((res, item) =>
-          res + `<span class="annotation-text">${cheerio?.load(item)?.text()}</span>、`
-          , ''
-        )}です。`;
+        annotation += `見出し行は左から、${content[0].reduce((res, item) => {
+          const header = cheerio?.load(item)?.text()
+          if (header) {
+            return res + `<span class="annotation-text">${header}</span>、`;
+          } return res;
+        }, '')}です。`;
       }
       const meta: any = [
         {
@@ -230,10 +232,12 @@ const editorJson2RagtJson = (editorJson) => {
         annotation += `Tiêu đề của bảng là <span class="annotation-text">${data.caption}</span>.<br/>`;
       }
       if (withHeadings) {
-        annotation += `Các ô tiêu đề của bảng là ${content[0].reduce((res, item, index) =>
-          res + `<span class="annotation-text">${cheerio?.load(item)?.text()}</span>${index !== (content[0]?.length - 1) ? ', ' : ''}`
-          , ''
-        )}.`;
+        annotation += `Các ô tiêu đề của bảng là ${content[0].reduce((res, item, index) => {
+          const header = cheerio?.load(item)?.text()
+          if (header) {
+            return res + `<span class="annotation-text">${header}</span>${index !== (content[0]?.length - 1) ? ', ' : ''}`;
+          } return res;
+        }, '')}.`;
       }
       const meta: any = [
         {
@@ -284,10 +288,12 @@ const editorJson2RagtJson = (editorJson) => {
         annotation += `The title of the table is <span class="annotation-text">${data.caption}</span>.<br/>`;
       }
       if (withHeadings) {
-        annotation += `The table headers are ${content[0]?.reduce((res, item, index) =>
-          res + `<span class="annotation-text">${cheerio?.load(item)?.text()}</span>${index !== (content[0]?.length - 1) ? ', ': ''}`
-          , ''
-        )}.`;
+        annotation += `The table headers are ${content[0]?.reduce((res, item, index) => {
+          const header = cheerio?.load(item)?.text()
+          if (header) {
+            return res + `<span class="annotation-text">${header}</span>${index !== (content[0]?.length - 1) ? ', ': ''}`
+          } return res
+        }, '')}.`;
       }
       const meta: any = [
         {

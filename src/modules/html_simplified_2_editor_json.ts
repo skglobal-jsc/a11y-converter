@@ -160,15 +160,13 @@ const htmlSimplified2EditorJson = (html) => {
                       .map((_, i) => (row[i] ? row[i] : ''))
                   : row;
               });
-            const firstRowHeading =
-              $(firstRow)?.find('th')?.length === totalCols;
+            const isHeaders = $(firstRow)?.find('th')?.length > 0;
             const headers = Array.from($(el).find('th'))?.map((th) =>
               $(th)?.html()
             );
 
-            const isHeading = !!firstRowHeading
             const data = {
-              withHeadings: isHeading,
+              withHeadings: isHeaders,
               content,
               ...(captionElement.length && {
                 caption: $(captionElement).html()?.trim(),
