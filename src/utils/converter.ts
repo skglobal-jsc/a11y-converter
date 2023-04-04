@@ -169,16 +169,20 @@ const editorJson2RagtJson = (editorJson) => {
     const totalCols = content[0]?.length ?? 0;
 
     if (lang === 'ja') {
-      let annotation = `この下に、<span class="annotation-text">縦${totalRows}行</span>、<span class="annotation-text">横${totalCols}列</span>、の表(ひょう)があります。\n`;
+      let annotation = `この下に、<span class="annotation-text">縦${totalRows}行</span>、<span class="annotation-text">横${totalCols}列</span>の表(ひょう)があります。<br/>`;
       if (data.caption) {
-        annotation += `表(ひょう)のタイトルは、<span class="annotation-text">${data.caption}</span>、です。\n`;
+        annotation += `表(ひょう)のタイトルは、<span class="annotation-text">${data.caption}</span>、です。<br/>`;
       }
       if (data.headers?.length) {
         annotation += `見出し行は左から、${data.headers.reduce((res, item) =>
-          res + `<span class="annotation-text">${item}</span>、`, ''
+          res + `<span class="annotation-text">${cheerio?.load(item)?.text()}</span>、`
+          , ''
         )}です。`;
       } else if (withHeadings) {
-        annotation += `見出し行は左から、${content[0].reduce((res, item) => res + `<span class="annotation-text">${item}</span>、`, '')}です。`;
+        annotation += `見出し行は左から、${content[0].reduce((res, item) =>
+          res + `<span class="annotation-text">${cheerio?.load(item)?.text()}</span>、`
+          , ''
+        )}です。`;
       }
       const meta: any = [
         {
@@ -226,14 +230,20 @@ const editorJson2RagtJson = (editorJson) => {
       });
       return meta;
     } else if (lang === 'vi') {
-      let annotation = `Đây là dữ liệu dạng bảng, <span class="annotation-text">có ${totalRows} dòng</span>, <span class="annotation-text">${totalCols} cột</span>.\n`;
+      let annotation = `Đây là dữ liệu dạng bảng, <span class="annotation-text">có ${totalRows} dòng</span>, <span class="annotation-text">${totalCols} cột</span>.<br/>`;
       if (data.caption) {
-        annotation += `Tiêu đề của bảng là <span class="annotation-text">${data.caption}</span>.\n`;
+        annotation += `Tiêu đề của bảng là <span class="annotation-text">${data.caption}</span>.<br/>`;
       }
       if (data.headers?.length) {
-        annotation += `Các ô tiêu đề của bảng là ${data.headers.reduce((res, item, index) => res + `<span class="annotation-text">${item}</span>${index !== (data?.headers?.length - 1) ? ', ': ''}`, '')}.`;
+        annotation += `Các ô tiêu đề của bảng là ${data.headers.reduce((res, item, index) =>
+          res + `<span class="annotation-text">${cheerio?.load(item)?.text()}</span>${index !== (data?.headers?.length - 1) ? ', ': ''}`
+          , ''
+        )}.`;
       } else if (withHeadings) {
-        annotation += `Các ô tiêu đề của bảng là ${content[0].reduce((res, item, index) => res + `<span class="annotation-text">${item}</span>${index !== (content[0]?.length - 1) ? ', ' : ''}`, '')}.`;
+        annotation += `Các ô tiêu đề của bảng là ${content[0].reduce((res, item, index) =>
+          res + `<span class="annotation-text">${cheerio?.load(item)?.text()}</span>${index !== (content[0]?.length - 1) ? ', ' : ''}`
+          , ''
+        )}.`;
       }
       const meta: any = [
         {
@@ -279,15 +289,22 @@ const editorJson2RagtJson = (editorJson) => {
       });
       return meta;
     } else {
-      let annotation = `This is table with <span class="annotation-text">${totalRows} rows</span>, <span class="annotation-text">${totalCols} columns</span>.\n`;
+      let annotation = `This is table with <span class="annotation-text">${totalRows} rows</span>, <span class="annotation-text">${totalCols} columns</span>.<br/>`;
       if (data.caption) {
-        annotation += `The title of the table is <span class="annotation-text">${data.caption}</span>.\n`;
+        annotation += `The title of the table is <span class="annotation-text">${data.caption}</span>.<br/>`;
       }
       if (data.headers?.length) {
-        annotation += `The table headers are ${data.headers?.reduce((res, item, index) => res + `<span class="annotation-text">${item}</span>${index !== (data.headers?.length - 1) ? ', ': ''}`, '')}.`;
+        annotation += `The table headers are ${data.headers?.reduce((res, item, index) =>
+          res + `<span class="annotation-text">${cheerio?.load(item)?.text()}</span>${index !== (data.headers?.length - 1) ? ', ': ''}`
+          , ''
+        )}.`;
       } else if (withHeadings) {
-        annotation += `The table headers are ${content[0]?.reduce((res, item, index) => res + `<span class="annotation-text">${item}</span>${index !== (content[0]?.length - 1) ? ', ': ''}`, '')}.`;
+        annotation += `The table headers are ${content[0]?.reduce((res, item, index) =>
+          res + `<span class="annotation-text">${cheerio?.load(item)?.text()}</span>${index !== (content[0]?.length - 1) ? ', ': ''}`
+          , ''
+        )}.`;
       }
+      console.log('annotation: ', annotation)
       const meta: any = [
         {
           id: Math.random().toString(36).substring(7),
