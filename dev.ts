@@ -74,14 +74,27 @@ import {
 
 (async () => {
 
-  const {html} = await fromUrl({ url: 'https://www.city.higashiosaka.lg.jp/0000029904.html', opt: { contentSelectors: ['#mol_contents > div:nth-child(9) > table'] }})
+  // const {html} = await fromUrl({ url: 'https://www.city.higashiosaka.lg.jp/0000029964.html', opt: { contentSelectors: ['#mol_contents > div > table'] }})
+  const html = `
+  <html>
+    <body>
+      <table>
+        <caption>相談窓口</caption>
+        <tbody>
+          <tr><th scope="col" align="center" class=" typesquare_option"><p class=" typesquare_option"><strong class=" typesquare_option">相談名</strong></p></th><th scope="col" align="center" colspan="3" class=" typesquare_option"><p class=" typesquare_option"><strong class=" typesquare_option">日時・場所</strong></p></th><th scope="col" align="center" class=" typesquare_option"><p class=" typesquare_option"><strong class=" typesquare_option">相談担当</strong></p></th><th scope="col" align="center" class=" typesquare_option"><p class=" typesquare_option"><strong class=" typesquare_option">内容</strong></p></th><th scope="col" align="center" class=" typesquare_option"><p class=" typesquare_option"><strong class=" typesquare_option">問合せ先</strong></p></th> </tr>
+          <tr><td><p>弁護士相談</p></td><td colspan="3"><p>市役所本庁舎1階相談室<br>  　月・水・金曜日 13時00～16時30<br>  　第2火曜日 17時00～20時00<br>  巡回法律相談<br>  　いずれも13時00～16時00<br>  日下リージョンセンター　奇数月第2火曜日<br>  四条リージョンセンター　第2・4木曜日<br>  中鴻池リージョンセンター　偶数月第4火曜日<br>  若江岩田駅前リージョンセンター　第1・3木曜日<br>  楠根リージョンセンター　偶数月第2火曜日<br>  布施駅前リージョンセンター　第1・3火曜日<br>  近江堂リージョンセンター　奇数月第4火曜日<br>  ※1週間前から予約が可能。</p></td><td><p>弁護士</p></td><td><p>専門的な知識のいる法律問題に関する相談※ 同一内容の相談は1か月以上あけてください。</p></td><td rowspan="5"><p>市政情報相談課<br>  電話06-4309-3104<br>  ファクス0 6-4309-3801</p></td> </tr>
+        </tbody>
+      </table>
+    </body>
+  </html>
+  `
   const data = htmlSimplified2RagtJson(html)
   console.log('ragt: ', JSON.stringify(data))
 
   // html2Text({
   //   html: html,
   //   contentSelectors: ['body'],
-  //   titleSelector: '#contents > h1 > span',
+  //   titleSelector: '',
   //   iArticle: {
   //     title: '1234',
   //     publishDate: '1234',

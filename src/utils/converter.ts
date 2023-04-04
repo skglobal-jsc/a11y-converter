@@ -289,7 +289,6 @@ const editorJson2RagtJson = (editorJson) => {
           , ''
         )}.`;
       }
-      console.log('annotation: ', annotation)
       const meta: any = [
         {
           id: Math.random().toString(36).substring(7),
@@ -393,7 +392,7 @@ const editorJson2RagtJson = (editorJson) => {
     if (block.type === BLOCK_TYPE.TABLE) {
       meta = buildMetaTable(block.data);
       block.data = {
-        withHeadings: block.data.heading,
+        withHeadings: block?.data?.withHeadings,
         content: block.data.content,
         caption: block.data?.caption || '',
       };
