@@ -273,8 +273,9 @@ const tinyhtml = async (html: string, opt?: ProcessOptions) => {
 
   const $ = cheerio.load(cleanedHtml, { decodeEntities: true }, true);
 
-    // Handle some UV logic
-    handleUVLogic($, options);
+  // Handle some UV logic
+  handleUVLogic($, options);
+
   // execute the cleaning process
   if (options.hooks?.before) {
     await executeHookFn(options.hooks.before, $);
@@ -316,6 +317,7 @@ const tinyhtml = async (html: string, opt?: ProcessOptions) => {
       $('body').replaceWith($body('body'));
     }
   }
+
   // clean and reduce html
   reduceHtml($, options);
 

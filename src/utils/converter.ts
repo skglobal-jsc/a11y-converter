@@ -15,7 +15,7 @@ const recursiveReplaceTextLinkToHyperlinkList = (items: any[], metaOpt: any) => 
   for (let i = 0; i < items.length; i++) {
     const row = items[i]; // contain "content" and "items"
     if (row.content) {
-      row.content = replaceTextLinkToText(row.content, metaOpt.lang);
+      row.content = replaceTextLinkToHyperlink(row.content, metaOpt.lang);
     }
     if (row.items) {
       recursiveReplaceTextLinkToHyperlinkList(row.items, metaOpt);
