@@ -74,8 +74,7 @@ import {
 
 (async () => {
 
-  const {html} = await fromUrl({ url: 'https://www.city.higashiosaka.lg.jp/0000029973.html', opt: { contentSelectors: ['#mol_contents > div:nth-child(3) > ul'] }})
-
+  const {html} = await fromUrl({ url: 'https://www.city.higashiosaka.lg.jp/0000029890.html', opt: { contentSelectors: ['#mol_contents > div:nth-child(8) > table'] }})
   // const data = htmlSimplified2RagtJson(html)
   // console.log('ragt: ', JSON.stringify(data))
   html2Text({
@@ -96,7 +95,7 @@ import {
       googleAnalyticsId: 'GT_baodang',
     },
   }).then((res) => {
-    console.log(res.a11yHTML)
+    console.log(res.plainText)
   });
 
 })();

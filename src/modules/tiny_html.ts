@@ -144,7 +144,7 @@ const reduceHtml = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
         // remove unnecessary attributes
         const attributes = Object.keys(el.attribs);
         attributes.forEach((key) => {
-          if (!['href', 'src', 'alt', 'height', 'width'].includes(key)) {
+          if (!['href', 'src', 'alt', 'height', 'width', 'rowspan', 'colspan'].includes(key)) {
             delete el.attribs[key];
           }
         });

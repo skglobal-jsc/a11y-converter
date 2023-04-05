@@ -48,11 +48,11 @@ const html2Text = async ({
   // Step2: Convert html simplified to ragt json
   const editorJson = await htmlSimplified2EditorJson(simplifiedHTML);
 
-  // Step3: Convert editor json to plain text
-  const plainText = await json2Text({ json: editorJson, iArticle });
-
   // Step4: Convert editor json 2 ragt json
   const ragtJson = await editorJson2RagtJson(editorJson);
+
+  // Step3: Convert editor json to plain text
+  const plainText = await json2Text({ json: ragtJson, iArticle });
 
   // Step4: Convert ragt json to a11y
   const a11yHTML = await ragtJson2A11Y(ragtJson, a11ySetting);

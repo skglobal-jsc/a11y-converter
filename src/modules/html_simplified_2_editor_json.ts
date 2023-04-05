@@ -151,15 +151,19 @@ const htmlSimplified2EditorJson = (html) => {
                 if (cols.length > totalCols) {
                   totalCols = cols.length;
                 }
-                return cols.map((cell) => $(cell).html());
+                return cols.map((cell) => {
+                  const rowSpan = $(cell)?.attr('rowspan') || 0
+                  const colSpan = $(cell)?.attr('colspan') || 0
+                  return { data: $(cell).html(), rowSpan, colSpan }
+                });
               })
-              .map((row) => {
-                return row.length < totalCols
-                  ? Array(totalCols)
-                      .fill('')
-                      .map((_, i) => (row[i] ? row[i] : ''))
-                  : row;
-              });
+              // .map((row) => {
+              //   return row.length < totalCols
+              //     ? Array(totalCols)
+              //         .fill('')
+              //         .map((_, i) => (row[i] ? row[i] : ''))
+              //     : row;
+              // });
             const isHeaders = $(firstRow)?.find('th')?.length > 0;
             const headers = Array.from($(el).find('th'))?.map((th) =>
               $(th)?.html()

@@ -175,7 +175,7 @@ const editorJson2RagtJson = (editorJson) => {
       }
       if (withHeadings) {
         annotation += `見出し行は左から、${content[0].reduce((res, item) => {
-          const header = cheerio?.load(item)?.text()
+          const header = cheerio?.load(item?.data)?.text()
           if (header) {
             return res + `<span class="annotation-text">${header}</span>、`;
           } return res;
@@ -195,17 +195,14 @@ const editorJson2RagtJson = (editorJson) => {
       content.forEach((row, idx) => {
         let polly =
           idx === 0
-            ? `データの1行目、${row.join('、')}、`
+            ? `データの1行目、${row.map(item => item?.data || '').join('、')}、`
             : idx === row.length - 1
-            ? `${idx + 1}行目、${row.join('、')}です。`
-            : `${idx + 1}行目、${row.join('、')}、`;
+            ? `${idx + 1}行目、${row.map(item => item?.data || '').join('、')}です。`
+            : `${idx + 1}行目、${row.map(item => item?.data || '').join('、')}、`;
         polly = cheerio.load(polly).text();
         let ui = `<tr tabindex="0" aria-label="${polly}">`;
         row.forEach((cell) => {
-          ui =
-            withHeadings && idx === 0
-              ? ui.concat(`<th aria-hidden="true">${cell}</th>`)
-              : ui.concat(`<td aria-hidden="true">${cell}</td>`);
+          ui += `<${(withHeadings && idx === 0) ? 'th' : 'td'} aria-hidden="true" ${cell.rowSpan ? `rowspan="${cell.rowSpan}"` : ''} ${cell.colSpan ? `colspan="${cell.colSpan}"` : ''}>${cell.data}</$th>`
         });
         ui = ui.concat('</tr>');
         meta.push({
@@ -233,7 +230,7 @@ const editorJson2RagtJson = (editorJson) => {
       }
       if (withHeadings) {
         annotation += `Các ô tiêu đề của bảng là ${content[0].reduce((res, item, index) => {
-          const header = cheerio?.load(item)?.text()
+          const header = cheerio?.load(item?.data)?.text()
           if (header) {
             return res + `<span class="annotation-text">${header}</span>${index !== (content[0]?.length - 1) ? ', ' : ''}`;
           } return res;
@@ -253,15 +250,12 @@ const editorJson2RagtJson = (editorJson) => {
       content.forEach((row, idx) => {
         let polly =
           idx === 0
-            ? `Dữ liệu hàng thứ nhất là ${row.join(', ')}.`
-            : `Hàng thứ ${idx + 1}: ${row.join(', ')}.`;
+            ? `Dữ liệu hàng thứ nhất là ${row.map(item => item?.data || '').join(', ')}.`
+            : `Hàng thứ ${idx + 1}: ${row.map(item => item?.data || '').join(', ')}.`;
         polly = cheerio.load(polly).text();
         let ui = `<tr tabindex="0" aria-label="${polly}">`;
         row.forEach((cell) => {
-          ui =
-            withHeadings && idx === 0
-              ? ui.concat(`<th aria-hidden="true">${cell}</th>`)
-              : ui.concat(`<td aria-hidden="true">${cell}</td>`);
+          ui += `<${(withHeadings && idx === 0) ? 'th' : 'td'} aria-hidden="true" ${cell.rowSpan ? `rowspan="${cell.rowSpan}"` : ''} ${cell.colSpan ? `colspan="${cell.colSpan}"` : ''}>${cell.data}</$th>`
         });
         ui = ui.concat('</tr>');
         meta.push({
@@ -289,7 +283,7 @@ const editorJson2RagtJson = (editorJson) => {
       }
       if (withHeadings) {
         annotation += `The table headers are ${content[0]?.reduce((res, item, index) => {
-          const header = cheerio?.load(item)?.text()
+          const header = cheerio?.load(item?.data)?.text()
           if (header) {
             return res + `<span class="annotation-text">${header}</span>${index !== (content[0]?.length - 1) ? ', ': ''}`
           } return res
@@ -309,15 +303,12 @@ const editorJson2RagtJson = (editorJson) => {
       content.forEach((row, idx) => {
         let polly =
           idx === 0
-            ? `The first line of data is ${row.join(', ')}.`
-            : `Line ${idx + 1}: ${row.join(', ')}.`;
+            ? `The first line of data is ${row.map(item => item?.data || '').join(', ')}.`
+            : `Line ${idx + 1}: ${row.map(item => item?.data || '').join(', ')}.`;
         polly = cheerio.load(polly).text();
         let ui = `<tr tabindex="0" aria-label="${polly}">`;
         row.forEach((cell) => {
-          ui =
-            withHeadings && idx === 0
-              ? ui.concat(`<th aria-hidden="true">${cell}</th>`)
-              : ui.concat(`<td aria-hidden="true">${cell}</td>`);
+          ui += `<${(withHeadings && idx === 0) ? 'th' : 'td'} aria-hidden="true" ${cell.rowSpan ? `rowspan="${cell.rowSpan}"` : ''} ${cell.colSpan ? `colspan="${cell.colSpan}"` : ''}>${cell.data}</$th>`
         });
         ui = ui.concat('</tr>');
         meta.push({
@@ -399,7 +390,9 @@ const editorJson2RagtJson = (editorJson) => {
       meta = buildMetaTable(block.data);
       block.data = {
         withHeadings: block?.data?.withHeadings,
-        content: block.data.content,
+        content: block.data?.content?.map(row => {
+          return row.map(cell => cell.data || '')
+        }),
         caption: block.data?.caption || '',
       };
     }

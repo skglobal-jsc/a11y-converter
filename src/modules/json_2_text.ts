@@ -33,10 +33,10 @@ const cleanText = (text: string = '') => {
 const parseParagraph2Text = ($p, iArticle?: IArticle): any => {
   let res = '';
   if (!$p?.children || $p.children.length === 0) {
-    if ($p.name === 'br') {
+    if ($p?.name === 'br') {
       return '\n'
     }
-    return cleanText($p.data);
+    return cleanText($p?.data);
   }
   $p?.children.forEach((element) => {
     // link tag
@@ -190,7 +190,7 @@ const parseTable2Text = (block, lang = 'ja', iArticle?: IArticle): any => {
   }\n`;
 
   if (block.data?.caption) {
-    text += `${useLocale('TableCaption', lang, block.data?.caption)}`;
+    text += `${useLocale('TableCaption', lang, block.data?.caption)}\n`;
   }
 
   const rows = [...block.data.content];
