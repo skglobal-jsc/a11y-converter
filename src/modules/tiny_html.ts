@@ -29,7 +29,11 @@ const handleUVLogic = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
     // Hard code to adapt for UV system
     const urlPattern = /https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}/gi
     const href = el.attribs?.href || ''
-    if (href?.includes('#link')) { // URL include "#link"
+    if (
+      opt?.iArticle?.loadedUrl &&
+      href?.includes(opt.iArticle.loadedUrl) &&
+      href?.includes('#link')
+    ) { // URL include "#link"
       el.tagName = 'p'
       $(el).removeAttr('href')
     }
