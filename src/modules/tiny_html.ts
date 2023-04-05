@@ -149,7 +149,7 @@ const reduceHtml = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
         // remove empty tags with cheerio, but also keep images:
         if (
           opt.removeEmptyElements &&
-          !['td', 'img'].includes(el.name) &&
+          !['td', 'th', 'img'].includes(el.name) &&
           el.name !== 'img' &&
           $(el).find('img').length === 0 &&
           $(el).text().trim().length === 0 &&
