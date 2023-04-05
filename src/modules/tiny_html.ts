@@ -149,6 +149,7 @@ const reduceHtml = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
         // remove empty tags with cheerio, but also keep images:
         if (
           opt.removeEmptyElements &&
+          !['td', 'img'].includes(el.name) &&
           el.name !== 'img' &&
           $(el).find('img').length === 0 &&
           $(el).text().trim().length === 0 &&
@@ -259,7 +260,6 @@ const tinyhtml = async (html: string, opt?: ProcessOptions) => {
     removeScriptTypeAttributes: true,
     ...opt,
   };
-
   const cleanedHtml = html
     .replace(/\xA0/g, ' ')
     .replace(/&amp;/g, '&')
@@ -312,7 +312,6 @@ const tinyhtml = async (html: string, opt?: ProcessOptions) => {
       $('body').replaceWith($body('body'));
     }
   }
-
   // clean and reduce html
   reduceHtml($, options);
 

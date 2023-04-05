@@ -39,7 +39,7 @@ const parseListItems = ($, items) => {
 const htmlSimplified2EditorJson = (html) => {
   let blocks: any[] = [];
   // Build meta option content
-  const $ = cheerio.load(html);
+  const $ = cheerio.load(html, { xmlMode: true, decodeEntities: false });
   const meta = {
     lang: $('html')?.attr('lang'),
     title:

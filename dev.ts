@@ -74,7 +74,7 @@ import {
 
 (async () => {
 
-  const {html} = await fromUrl({ url: 'https://www.city.higashiosaka.lg.jp/0000029964.html', opt: { contentSelectors: ['#mol_contents > div > table'] }})
+  const {html} = await fromUrl({ url: 'https://www.city.higashiosaka.lg.jp/0000029890.html', opt: { contentSelectors: ['#mol_contents > div:nth-child(8) > table'] }})
   // const data = htmlSimplified2RagtJson(html)
   // console.log('ragt: ', JSON.stringify(data))
 
