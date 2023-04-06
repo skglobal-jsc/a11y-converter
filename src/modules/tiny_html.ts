@@ -115,16 +115,18 @@ const reduceHtml = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
         }
 
         // fix dom: make sure inside p tag there is no any block tags
-        if (el.name === 'p') {
+        if (['p', 'span', 'strong'].includes(el.name)) {
           $(el)
             .contents()
-            .each((i, el) => {
+            .each((i, el: any) => {
               if (el.type === 'tag') {
                 if (el.name === 'img') {
                   $(el).unwrap();
                 } else if (BLOCK_TAGS.includes(el.name)) {
                   $(el).replaceWith($(el).contents());
                 }
+              } else if (el.type === 'text' && el.data) {
+                $(el).replaceWith(`<span>${el.data}</span>`)
               }
             });
         }
@@ -250,6 +252,8 @@ const reduceHtml = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
       }
     }
   });
+
+  console.log($.html())
 };
 
 const tinyhtml = async (html: string, opt?: ProcessOptions) => {
