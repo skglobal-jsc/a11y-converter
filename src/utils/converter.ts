@@ -215,8 +215,8 @@ const editorJson2RagtJson = (editorJson) => {
       });
       meta.push({
         id: Math.random().toString(36).substring(7),
-        ui: `表の終わりです。`,
-        polly: `表の終わりです。`,
+        ui: `表(ひょう)の終わりです。`,
+        polly: `表(ひょう)の終わりです。`,
         ssml: '',
         user: '',
         actions: [],

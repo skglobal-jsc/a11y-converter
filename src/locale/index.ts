@@ -35,7 +35,7 @@ const locale = (value) => ({
     vi: `Có tổng cộng ${value} cột`,
   },
   TableEnd: {
-    ja: `です。\n表の終わりです。`,
+    ja: `です。\n表(ひょう)の終わりです。`,
     en: `The table content ends.`,
     vi: `Kết thúc bảng`,
   },
