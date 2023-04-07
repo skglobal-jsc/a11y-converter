@@ -216,13 +216,14 @@ const editorJson2RagtJson = (editorJson) => {
             .filter(item => item?.data)
             .map(item => item.data)
             .join('、')
-          }${(idx === row.length - 1) ? '、です。' : ''}`
+          }${(idx === content.length - 1) ? '、です。' : ''}`
           index += 1
         }
         polly = cheerio.load(polly).text();
         let ui = `<tr tabindex="0" aria-label="${polly}">`;
         row.forEach((cell) => {
-          ui += `<${(withHeadings && idx === 0) ? 'th' : 'td'} aria-hidden="true" ${cell.rowSpan ? `rowspan="${cell.rowSpan}"` : ''} ${cell.colSpan ? `colspan="${cell.colSpan}"` : ''}>${cell.data}</$th>`
+          const type = (withHeadings && idx === 0) ? 'th' : 'td'
+          ui += `<${type} aria-hidden="true" ${cell.rowSpan ? `rowspan="${cell.rowSpan}"` : ''} ${cell.colSpan ? `colspan="${cell.colSpan}"` : ''}>${cell.data}</${type}>`
         });
         ui = ui.concat('</tr>');
         meta.push({
@@ -298,7 +299,8 @@ const editorJson2RagtJson = (editorJson) => {
         polly = cheerio.load(polly).text();
         let ui = `<tr tabindex="0" aria-label="${polly}">`;
         row.forEach((cell) => {
-          ui += `<${(withHeadings && idx === 0) ? 'th' : 'td'} aria-hidden="true" ${cell.rowSpan ? `rowspan="${cell.rowSpan}"` : ''} ${cell.colSpan ? `colspan="${cell.colSpan}"` : ''}>${cell.data}</$th>`
+          const type = (withHeadings && idx === 0) ? 'th' : 'td'
+          ui += `<${type} aria-hidden="true" ${cell.rowSpan ? `rowspan="${cell.rowSpan}"` : ''} ${cell.colSpan ? `colspan="${cell.colSpan}"` : ''}>${cell.data}</${type}>`
         });
         ui = ui.concat('</tr>');
         meta.push({
@@ -374,7 +376,8 @@ const editorJson2RagtJson = (editorJson) => {
         polly = cheerio.load(polly).text();
         let ui = `<tr tabindex="0" aria-label="${polly}">`;
         row.forEach((cell) => {
-          ui += `<${(withHeadings && idx === 0) ? 'th' : 'td'} aria-hidden="true" ${cell.rowSpan ? `rowspan="${cell.rowSpan}"` : ''} ${cell.colSpan ? `colspan="${cell.colSpan}"` : ''}>${cell.data}</$th>`
+          const type = (withHeadings && idx === 0) ? 'th' : 'td'
+          ui += `<${type} aria-hidden="true" ${cell.rowSpan ? `rowspan="${cell.rowSpan}"` : ''} ${cell.colSpan ? `colspan="${cell.colSpan}"` : ''}>${cell.data}</${type}>`
         });
         ui = ui.concat('</tr>');
         meta.push({
@@ -577,7 +580,7 @@ const ragtJson2A11Y = (ragtJson, a11ySetting = {}) => {
       );
       if (block.data?.caption) {
         $('body').append(
-          `<h3 id="${block.meta[1].id}" tabindex="0" aria-lable="${block.meta[1].polly}">${block.meta[1].ui}</h3>`
+          `<h4 id="${block.meta[1].id}" tabindex="0" aria-lable="${block.meta[1].polly}">${block.meta[1].ui}</h4>`
         );
       }
       let bodyTable = ''
