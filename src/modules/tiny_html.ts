@@ -253,7 +253,6 @@ const reduceHtml = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
     }
   });
 
-  console.log($.html())
 };
 
 const tinyhtml = async (html: string, opt?: ProcessOptions) => {
