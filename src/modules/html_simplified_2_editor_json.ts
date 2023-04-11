@@ -39,7 +39,7 @@ const parseListItems = ($, items) => {
 const htmlSimplified2EditorJson = (html) => {
   let blocks: any[] = [];
   // Build meta option content
-  const $ = cheerio.load(html, { xmlMode: true, decodeEntities: false });
+  const $ = cheerio.load(html);
   const meta = {
     lang: $('html')?.attr('lang'),
     title:
@@ -187,8 +187,7 @@ const htmlSimplified2EditorJson = (html) => {
           //Group tag in case not supporting
           groupUnSupportTag.push($.html(el));
         }
-      }
-      if (el.type === 'text') {
+      } else if (el.type === 'text') {
         // random attribute id
         const id = Math.random().toString(36).substring(7);
         const text = $(el).text().trim();
