@@ -144,7 +144,7 @@ export const replaceTextLinkToEmailHyperlink = (text: string) => {
 
 export const replaceTextLinkToAddressHyperlink = (text: string) => {
   const regex =
-    /(?:〒[0-9０-９]{3}[-－−][0-9０-９]{4}[\n\s　]*)?(?:[^\n\s　;<>。、,，.:：]{2,5}[都道府県市区町村]){0,3}(?:[^\n;<>。、.,，：]{2,}?[0-9０-９一二三四五六七八九十]+(?:-|－|−|丁目|地割|部|番町|号)[0-9０-９一二三四五六七八九十]+(?:-|－|−|番地|番)?(?:[0-9０-９一二三四五六七八九十]+号?)?)(?:[^\n;<>。、.,，]+ビル)?(?:[^\n;<>。、.,，]*?[0-9０-９一二三四五六七八九]+[階F])?/g;
+    /(〒[0-9０-９]{3}[-－−][0-9０-９]{4}[\n\s　]*)?([^\n\s　;<>。、,，.:：()【]{2,5}[都道府県市区町村]{1,3})?([^\n|\s|　|\d|;|<|>|。|、|.|,|，|：|(|)||所在地|【]{2,}[0-9|０-９|一|二|三|四|五|六|七|八|九|十|号|-|-|ー|-|－|−|丁目|地割|部|番町|階|ビル|F]{1,})/g
   let match: RegExpMatchArray | null;
   while ((match = regex.exec(text)) !== null) {
     // This is necessary to avoid infinite loops with zero-width matches
