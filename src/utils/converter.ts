@@ -103,9 +103,22 @@ const splitSentences = (rawText, lang = 'en') => {
     lang === 'ja'
       ? /(?<!\w\.\w.)(?<=\。|\？|\！|\n)/g
       : /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?|\!|\n)\s/g;
-  const noHtmlSentences = noHtml
-    .split(regexSplitSentences)
-  const sentences = noHtmlSentences.map((sentence) => {
+  const noHtmlSentences = noHtml.split(regexSplitSentences)
+
+  let newNoHtmlSentences: Array<string> = [], j = 0;
+  for(let i = 0; i < noHtmlSentences.length; i++) {
+    if (i === 0) {
+      newNoHtmlSentences[j] = noHtmlSentences[i]
+    } else {
+      if (newNoHtmlSentences[j].length <= 10) {
+        newNoHtmlSentences[j] += noHtmlSentences[i]
+      } else {
+        j += 1;
+        newNoHtmlSentences[j] = noHtmlSentences[i]
+      }
+    }
+  }
+  const sentences = newNoHtmlSentences.map((sentence) => {
     htmlElements.forEach(
       (element, idx) => {
         sentence = sentence.replace(`[htmlElementNo${idx}]`, element);
