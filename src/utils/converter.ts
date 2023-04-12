@@ -101,8 +101,8 @@ const splitSentences = (rawText, lang = 'en') => {
   );
   const regexSplitSentences =
     lang === 'ja'
-      ? /(?<!\w\.\w.)(?<=\。|\？|\！|\n)/g
-      : /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?|\!|\n)\s/g;
+      ? /(?<!\w\.\w.)(?<=\。|\n)/g
+      : /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\n)\s/g;
   const noHtmlSentences = noHtml.split(regexSplitSentences)
 
   let newNoHtmlSentences: Array<string> = [], j = 0;
