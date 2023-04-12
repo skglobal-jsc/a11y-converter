@@ -608,7 +608,7 @@ const ragtJson2A11Y = (ragtJson, a11ySetting = {}) => {
       );
       if (block.data?.caption) {
         $('body').append(
-          `<h4 id="${block.meta[1].id}" tabindex="0" aria-lable="${block.meta[1].polly}">${block.meta[1].ui}</h4>`
+          `<h4 id="${block.meta[1].id}" tabindex="0" aria-label="${block.meta[1].polly}">${block.meta[1].ui}</h4>`
         );
       }
       let bodyTable = ''
