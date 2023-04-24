@@ -96,6 +96,7 @@ const reduceHtml = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
         if (UN_SUPPORTED_STYLE_TAGS.includes(el.name)) {
           $(el).replaceWith($(el).contents());
         }
+
         // remove optional tags
         if (
           opt.removeOptionalTags &&
@@ -103,7 +104,8 @@ const reduceHtml = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
         ) {
           $(el).remove();
         }
-        //table 1 cell is not table
+
+        // table 1 cell is not table
         if (el.name === 'table') {
           const rows = $(el).find('tr:not(tr tr)').length;
           const cols = $(el).find('td:not(tr tr td), th:not(tr tr th)').length;
@@ -114,8 +116,8 @@ const reduceHtml = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
           }
         }
 
-        // fix dom: make sure inside p tag there is no any block tags
-        if (['p', 'span', 'strong'].includes(el.name)) {
+        // fix dom: make sure inside [p, span, strong, a] tag there is no any block tags
+        if (['p', 'span', 'strong', 'a'].includes(el.name)) {
           $(el)
             .contents()
             .each((i, el: any) => {
@@ -152,14 +154,12 @@ const reduceHtml = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
         });
 
         // TODO: some cleanup is required here
-        // remove empty tags with cheerio, but also keep images:
+        // remove empty tags with cheerio, except: [td, th, img, br]
         if (
           opt.removeEmptyElements &&
-          !['td', 'th', 'img'].includes(el.name) &&
-          el.name !== 'img' &&
+          !['td', 'th', 'img', 'br'].includes(el.name) &&
           $(el).find('img').length === 0 &&
-          $(el).text().trim().length === 0 &&
-          el.name !== 'br'
+          $(el).text().trim().length === 0
         ) {
           $(el).remove();
         }
@@ -173,7 +173,7 @@ const reduceHtml = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
         }
 
         // remove images with small width and height
-        if (el.name === 'img' && opt.removeSmallImages) {
+        if (opt.removeSmallImages && el.name === 'img') {
           const width = el.attribs.width;
           const height = el.attribs.height;
           if (
@@ -186,9 +186,17 @@ const reduceHtml = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
           }
         }
 
-        // remove link includes ['adobe', ...]
-        if (el.name === 'a' && el.attribs?.href?.includes('adobe')) {
-          $(el).remove();
+        // Check link
+        if (el.name === 'a') {
+          if (el.attribs?.href?.includes('adobe')) { // remove link includes ['adobe', ...]
+            $(el).remove();
+          } else {
+            $(el).contents().each((i, el) => {
+              if (el.type === 'tag' && el.name === 'img' ) {
+                $(el).unwrap()
+              }
+            })
+          }
         }
 
       } else if (el.type === 'text') {
