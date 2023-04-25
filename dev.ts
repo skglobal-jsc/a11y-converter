@@ -6,9 +6,8 @@ import {
   htmlSimplified2RagtJson,
   fromUrl,
   editorJson2RagtJson,
-  // tinyhtml,
+  tinyhtml,
 } from './src/index';
-import tinyhtml from './src/modules/tiny_html_improving';
 
 // import { readFile, writeFile } from 'fs';
 
