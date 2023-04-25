@@ -2,8 +2,8 @@ import * as cheerio from 'cheerio';
 import * as url from 'url';
 
 export const convertRelativeUrlsToAbsolute = (
-  baseUrl: string,
-  href: string
+  baseUrl: string = '',
+  href: string = ''
 ) => {
   const parsedUrl = url.parse(href);
   if (!parsedUrl.host) {

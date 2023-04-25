@@ -87,3 +87,6 @@ export const EDITOR_BLOCK_TAGS = [
   'a',
   'img',
 ];
+
+// Allowed Tags no text content
+export const ALLOWED_TAG_NO_TEXT_CONTENT = ['img', 'br', 'td', 'th']

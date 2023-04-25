@@ -1,111 +1,62 @@
 import * as cheerio from 'cheerio';
+const sanitizeHtml = require('sanitize-html');
+import { executeHookFn, isIgnoreText } from '../utils/helper';
 import {
-  executeHookFn,
-  convertRelativeUrlsToAbsolute,
-  isIgnoreText,
-} from '../utils/helper';
-import {
-  UN_SUPPORTED_STYLE_TAGS,
-  UN_SUPPORTED_TAGS,
-  BLOCK_TAGS,
-  SECTION_TAGS,
-  EDITOR_BLOCK_TAGS,
-} from '../constant/index';
+  allowedTags,
+  allowedAttributes,
+  transformImgTag,
+  transformLinkTag,
+  exclusiveFilter,
+} from '../utils/sanitize-html';
+import { ALLOWED_TAG_NO_TEXT_CONTENT, BLOCK_TAGS } from '../constant/index';
 import { ProcessOptions } from '../index';
 
-const handleUVLogic = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
-  // Images
-  if (opt?.iArticle?.loadedUrl) {
-    const urlPattern = /https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}/gi
-    $('img').each((i, el) => {
-      if (!urlPattern.test(el?.attribs?.src)) {
-        const path = new URL(el?.attribs?.src, opt.iArticle?.loadedUrl);
-        $(el).attr('src', path.href)
-      }
-    })
-  }
-  // Link
-  $('a').each((i, el) => {
-    // Hard code to adapt for UV system
-    const urlPattern = /https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}/gi
-    const href = el.attribs?.href || ''
-    if (
-      opt?.iArticle?.loadedUrl &&
-      href?.includes(opt.iArticle.loadedUrl) &&
-      href?.includes('#link')
-    ) { // URL include "#link"
-      el.tagName = 'p'
-      $(el).removeAttr('href')
+const _checkAndRemoveEmptyTag = ($, el) => {
+  if (ALLOWED_TAG_NO_TEXT_CONTENT.includes(el.name)) return;
+  if (!$(el).text() || isIgnoreText($(el).text())) return $(el).remove();
+
+  $(el)
+    .contents()
+    .each((i, newEl) => {
+      _checkAndRemoveEmptyTag($, newEl);
+    });
+};
+
+const _flattenHtml = ($: cheerio.CheerioAPI) => {
+  const _flattenElement = (el) => {
+    if ($(el)?.parent()?.is('body')) return;
+    let grandparent = $(el);
+    while (!grandparent?.parent()?.is('body')) {
+      grandparent = grandparent?.parent();
     }
-    else if (
-      href?.includes('twitter.com') ||
-      href?.includes('line.me') ||
-      href?.includes('facebook.com') ||
-      href?.includes('hatena.ne')
-    ) {
-      $(el).remove()
-    }
-    else if (href.startsWith('http') && !urlPattern.test(href)) {
-      $(el).remove()
-    }
-    else {
-      if (
-        !href.startsWith('tel:') &&
-        !href.startsWith('mailto:') &&
-        !href.startsWith('http') &&
-        !href.startsWith('www')
-      ) {
-        if (href && opt.iArticle?.loadedUrl) {
-          const path = new URL(href, opt.iArticle?.loadedUrl);
-          $(el).attr('href', path.href)
-        }
-      }
-    }
-  })
+    grandparent?.after($(el));
+  };
+
+  // Flatten img
+  $('img').each((i, el) => {
+    _flattenElement(el);
+  });
 }
 
-const reduceHtml = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
-  // clean head first
+const _reduceHtml = ($: cheerio.CheerioAPI, opts: ProcessOptions) => {
+  // Clean head
   $('head')
     .contents()
     .each((i, el) => {
-      if (el.type === 'tag') {
-        // remove  all except title
-        // we need to keep title because it is used to generate the slug
-        // if (el.name !== 'title') {
-        //   $(el).remove();
-        // }
-      } else {
+      if (el.type !== 'tag') {
         $(el).remove();
       }
     });
 
-  $('body *')
+  // Clean body
+  $('body')
     .contents()
     .each((i, el) => {
       if (el.type === 'tag') {
         // Converts the markup to HTML5 (if it is XHTML for example)
         el.name = el.name.toLowerCase();
 
-        // remove unsupported tags
-        if (UN_SUPPORTED_TAGS.includes(el.name)) {
-          $(el).remove();
-        }
-
-        // if element is a style tag then keep children and remove the style tag
-        if (UN_SUPPORTED_STYLE_TAGS.includes(el.name)) {
-          $(el).replaceWith($(el).contents());
-        }
-
-        // remove optional tags
-        if (
-          opt.removeOptionalTags &&
-          opt.removeOptionalTags.includes(el.name)
-        ) {
-          $(el).remove();
-        }
-
-        // table 1 cell is not table
+        // Table 1 cell is not table
         if (el.name === 'table') {
           const rows = $(el).find('tr:not(tr tr)').length;
           const cols = $(el).find('td:not(tr tr td), th:not(tr tr th)').length;
@@ -114,153 +65,35 @@ const reduceHtml = ($: cheerio.CheerioAPI, opt: ProcessOptions) => {
               $(el).find('td:not(tr tr td), th:not(tr tr th)').contents()
             );
           }
+        } else {
+          _checkAndRemoveEmptyTag($, el);
         }
-
-        // fix dom: make sure inside [p, span, strong, a] tag there is no any block tags
-        if (['p', 'span', 'strong', 'a'].includes(el.name)) {
-          $(el)
-            .contents()
-            .each((i, el: any) => {
-              if (el.type === 'tag') {
-                if (el.name === 'img') {
-                  $(el).unwrap();
-                } else if (BLOCK_TAGS.includes(el.name)) {
-                  $(el).replaceWith($(el).contents());
-                }
-              } else if (el.type === 'text' && el.data) {
-                $(el).replaceWith(`<span>${el.data}</span>`)
-              }
-            });
-        }
-
-        // replace section tags with div. section tags are not supported by EditorJS
-        if (SECTION_TAGS.includes(el.name)) {
-          el.name = 'div';
-        }
-        // if element is EDITOR_BLOCK_TAGS and parent is div then unwrap the element
-        if (EDITOR_BLOCK_TAGS.includes(el.name)) {
-          let child = $(el);
-          if ($(el).parent().is('div')) {
-            $(el).unwrap();
-          }
-        }
-
-        // remove unnecessary attributes
-        const attributes = Object.keys(el.attribs);
-        attributes.forEach((key) => {
-          if (!['href', 'src', 'alt', 'height', 'width', 'rowspan', 'colspan'].includes(key)) {
-            delete el.attribs[key];
-          }
-        });
-
-        // TODO: some cleanup is required here
-        // remove empty tags with cheerio, except: [td, th, img, br]
-        if (
-          opt.removeEmptyElements &&
-          !['td', 'th', 'img', 'br'].includes(el.name) &&
-          $(el).find('img').length === 0 &&
-          $(el).text().trim().length === 0
-        ) {
-          $(el).remove();
-        }
-
-        // if picture inside [picture] tag then unwrap img from picture
-        if (el.name === 'picture') {
-          const img = $(el).find('img');
-          if (img.length > 0) {
-            $(img).unwrap();
-          }
-        }
-
-        // remove images with small width and height
-        if (opt.removeSmallImages && el.name === 'img') {
-          const width = el.attribs.width;
-          const height = el.attribs.height;
-          if (
-            width &&
-            height &&
-            parseInt(width) < opt.removeSmallImages.minWidth &&
-            parseInt(height) < opt.removeSmallImages.minHeight
-          ) {
-            $(el).remove();
-          }
-        }
-
-        // Check link
-        if (el.name === 'a') {
-          if (el.attribs?.href?.includes('adobe')) { // remove link includes ['adobe', ...]
-            $(el).remove();
-          } else {
-            $(el).contents().each((i, el) => {
-              if (el.type === 'tag' && el.name === 'img' ) {
-                $(el).unwrap()
-              }
-            })
-          }
-        }
-
-      } else if (el.type === 'text') {
-        // if the element is text and parent is div then wrap it with p tag
-        const text = $(el).text().trim();
-        if (isIgnoreText(text)) {
-          $(el).remove();
-        } else if (
-          text &&
-          el.parent?.type === 'tag' &&
-          el.parent?.name == 'div'
-        ) {
-          $(el).wrap('<p></p>');
-        }
-      } else if (el.type === 'comment') {
-        if (opt.removeComments) {
-          $(el).remove();
-        }
-      } else if (el.type === 'root') {
-        // do nothing when element is root
-      } else {
-        // other types of elements are not supported, e.g. script, style, etc.
-        $(el).remove();
-        // console.warn(`Unsupported element type: ${el.type}`);
       }
     });
 
-  // step 2: after cleaning the html, the DOM now cleaned
-  $('body *').each((i, el) => {
-    // if element is SECTION_TAGS then unwrap children of the element
-    if (SECTION_TAGS.includes(el.name)) {
-      $(el).replaceWith($(el).contents());
-    }
+  //
+};
 
-    // some image has src is relative path, so we need to add domain to it
-    if (el.name === 'img' && opt.url) {
-      const src = el.attribs.src;
-      if (src) {
-        el.attribs.src = convertRelativeUrlsToAbsolute(opt.url, src);
-      } else {
-        $(el).remove();
-      }
-    }
+const _sanitizeHtml = (html, options) => {
+  const preCleanedHtml = html
+    .replace(/\xA0/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>');
 
-    // some links has href is relative path, so we need to add domain to it
-    if (el.name === 'a' && opt.url) {
-      const href = el.attribs.href;
-      if (href) {
-        el.attribs.href = convertRelativeUrlsToAbsolute(opt.url, href);
-      } else {
-        $(el).remove();
-      }
-    }
-    if (el.name === 'table') {
-      const rows = $(el).find('tr:not(tr tr)').length;
-      const cols = $(el).find('td:not(tr tr td), th:not(tr tr th)').length;
-      if (rows === 1 && cols === 1) {
-        $(el).replaceWith(
-          $(el).find('td:not(tr tr td), th:not(tr tr th)').contents()
-        );
-      }
-    }
+  const $ = cheerio.load(preCleanedHtml);
+  return sanitizeHtml($.html(), {
+    allowedTags: allowedTags, // allow only these tags
+    allowedAttributes: allowedAttributes,
+    allowedStyles: {}, // allow only these styles
+    textFilter: (text) => text.trim().replace(/\s\s+/g, ' '),
+    transformTags: {
+      img: (tagName, attribs) => transformImgTag(options, tagName, attribs),
+      a: (tagName, attribs) => transformLinkTag(options, tagName, attribs),
+    },
+    exclusiveFilter: (frame) => exclusiveFilter(options, frame),
   });
-
 };
 
 const tinyhtml = async (html: string, opt?: ProcessOptions) => {
@@ -275,22 +108,9 @@ const tinyhtml = async (html: string, opt?: ProcessOptions) => {
     removeScriptTypeAttributes: true,
     ...opt,
   };
-  const cleanedHtml = html
-    .replace(/\xA0/g, ' ')
-    .replace(/&amp;/g, '&')
-    .replace(/&quot;/g, '"')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>');
 
-  const $ = cheerio.load(cleanedHtml, { decodeEntities: true }, true);
-
-  // Handle some UV logic
-  handleUVLogic($, options);
-
-  // execute the cleaning process
-  if (options.hooks?.before) {
-    await executeHookFn(options.hooks.before, $);
-  }
+  // Load cheerio
+  let $ = cheerio.load(html);
 
   if (options.titleSelector) {
     const $content = $(options.contentSelectors?.join(',') || 'body');
@@ -299,13 +119,13 @@ const tinyhtml = async (html: string, opt?: ProcessOptions) => {
     $content.find('*').each((i, child) => {
       const $child = $(child);
       if (child.type === 'tag') {
-        // loop until meet the title element
+        // Loop until meet the title element
         if ($titleEl.is($child)) {
-          // remove itself
+          // Remove itself
           $child.remove();
           return false;
         } else {
-          // if not titleEle, remove it
+          // If not titleEle, remove it
           $child.remove();
         }
       }
@@ -329,8 +149,20 @@ const tinyhtml = async (html: string, opt?: ProcessOptions) => {
     }
   }
 
-  // clean and reduce html
-  reduceHtml($, options);
+  // execute the cleaning process
+  if (options.hooks?.before) {
+    await executeHookFn(options.hooks.before, $);
+  }
+
+  // Sanitize html
+  const sanitizedHtml = _sanitizeHtml($.html(), options);
+  $ = cheerio.load(sanitizedHtml);
+
+  // Flatter html
+  _flattenHtml($)
+
+  // Reduce html
+  _reduceHtml($, options);
 
   // execute the after hook
   if (options.hooks?.after) {
