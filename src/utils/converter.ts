@@ -196,11 +196,11 @@ const editorJson2RagtJson = (editorJson) => {
         },
       ];
       if (data.caption) {
-        const pollyTitle = `表のタイトルは、${data.caption}、です。`;
+        const pollyTitle = `表(ひょう)のタイトルは、${data.caption}、です。`;
         meta.push({
           id: Math.random().toString(36).substring(7),
           ui: data.caption,
-          polly: pollyTitle,
+          polly: cheerio?.load(pollyTitle)?.text(),
           ssml: '',
           user: '',
           actions: [],
