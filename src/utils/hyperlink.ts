@@ -91,7 +91,7 @@ export const replaceTextLinkToSpecialHyperlink = (text: string, lang = 'default'
 };
 export const replaceTextLinkToOtherHyperlink = (text: string, lang = 'default') => {
   const regex =
-    /(?:https?:\/\/(?:www\.|(?!www))(?:[a-zA-Z0-9][a-zA-Z0-9-]+(?:\.|(?!\.)))+(?:[\/,\?][^\s]{2,}|(?![\/,\?][^\s]{2,}))|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[a-zA-Z0-9]+(?:[\/,\?][^\s]{2,}|(?![\/,\?][^\s]{2,}))|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[a-zA-Z0-9]+(?:[\/,\?][^\s]{2,}|(?![\/,\?][^\s]{2,}))|www\.[a-zA-Z0-9]+\.[a-zA-Z0-9]+(?:[\/,\?][^\s]{2,}|(?![\/,\?][^\s]{2,})))/g;
+    /(?:https?:\/\/(?:www\.|(?!www))(?:[a-zA-Z0-9][a-zA-Z0-9-]+(?:\.|(?!\.)))+(?:[\/,\?][^\s]{0,}|(?![\/,\?][^\s]{2,}))|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[a-zA-Z0-9]+(?:[\/,\?][^\s]{2,}|(?![\/,\?][^\s]{2,}))|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[a-zA-Z0-9]+(?:[\/,\?][^\s]{2,}|(?![\/,\?][^\s]{2,}))|www\.[a-zA-Z0-9]+\.[a-zA-Z0-9]+(?:[\/,\?][^\s]{2,}|(?![\/,\?][^\s]{2,})))/g;
   let match: RegExpExecArray | null;
   while ((match = regex.exec(text)) !== null) {
     // This is necessary to avoid infinite loops with zero-width matches
@@ -199,18 +199,19 @@ const linkRegex = {
   byOther:
     /(?:https?:\/\/(?:www\.|(?!www))(?:[a-zA-Z0-9][a-zA-Z0-9-]+(?:\.|(?!\.)))+(?:[\/,\?][^\s]{2,}|(?![\/,\?][^\s]{2,}))|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[a-zA-Z0-9]+(?:[\/,\?][^\s]{2,}|(?![\/,\?][^\s]{2,}))|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[a-zA-Z0-9]+(?:[\/,\?][^\s]{2,}|(?![\/,\?][^\s]{2,}))|www\.[a-zA-Z0-9]+\.[a-zA-Z0-9]+(?:[\/,\?][^\s]{2,}|(?![\/,\?][^\s]{2,})))/g,
 };
+
 export const replaceTextLinkToText = (text: string, lang = 'default') => {
   const byExtensionRegex = linkRegex.byExtension;
-  const matchs = text.matchAll(byExtensionRegex);
-  for (const match of matchs) {
+  const matches = text.matchAll(byExtensionRegex);
+  for (const match of matches) {
     const { 0: url, 1: type } = match;
     const linkType = mapExtensionToType[type] || 'other';
     const anchorText = typeTextByLanguage[linkType][lang] || typeTextByLanguage[linkType].default;
     text = text.replace(url, anchorText);
   }
   const byOtherRegex = linkRegex.byOther;
-  const matchs2 = text.matchAll(byOtherRegex);
-  for (const match of matchs2) {
+  const matches2 = text.matchAll(byOtherRegex);
+  for (const match of matches2) {
     const { 0: url } = match;
     const anchorText = typeTextByLanguage['other'][lang] || typeTextByLanguage['other'].default;
     text = text.replace(url, anchorText);

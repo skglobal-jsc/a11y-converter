@@ -74,32 +74,26 @@ import {
 // })();
 
 (async () => {
-  const {html} = await fromUrl({ url: 'https://www.city.higashiosaka.lg.jp/0000029888.html', opt: { contentSelectors: ['#mol_contents > div:nth-child(22) > table'] }})
+  const {html} = await fromUrl({ url: 'https://www.city.higashiosaka.lg.jp/0000029888.html', opt: { contentSelectors: ['#mol_contents'] }})
 
-
-  const data = tinyhtml(html, { contentSelectors: ['body'] });
-  console.log(data)
-  // const data = htmlSimplified2RagtJson(html)
-  // console.log('ragt: ', JSON.stringify(data))
-  // console.log(html)
-  // html2Text({
-  //   html: html,
-  //   contentSelectors: ['body'],
-  //   titleSelector: '',
-  //   iArticle: {
-  //     title: '1234',
-  //     publishDate: '1234',
-  //     loadedUrl: 'https://baodang.com/test',
-  //   },
-  //   a11ySetting: {
-  //     lang: 'vi',
-  //     cssLinks: ['https://baodang/css/1', 'https://baodang/css/2'],
-  //     meta: {},
-  //     socialMeta: {},
-  //     favicon: 'https://baodang/favicon.ico',
-  //     googleAnalyticsId: 'GT_baodang',
-  //   },
-  // }).then((res) => {
-  //   // console.log(res.a11yHTML)
-  // });
+  html2Text({
+    html: html,
+    contentSelectors: ['body'],
+    titleSelector: '',
+    iArticle: {
+      title: '1234',
+      publishDate: '1234',
+      loadedUrl: 'https://baodang.com/test',
+    },
+    a11ySetting: {
+      lang: 'vi',
+      cssLinks: ['https://baodang/css/1', 'https://baodang/css/2'],
+      meta: {},
+      socialMeta: {},
+      favicon: 'https://baodang/favicon.ico',
+      googleAnalyticsId: 'GT_baodang',
+    },
+  }).then((res) => {
+    console.log(res.a11yHTML)
+  });
 })();
