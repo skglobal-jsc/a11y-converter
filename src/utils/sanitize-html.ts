@@ -47,6 +47,7 @@ export const allowedTags = [
   'a',
   'img',
   'table',
+  'caption',
   'tr',
   'th',
   'td',
