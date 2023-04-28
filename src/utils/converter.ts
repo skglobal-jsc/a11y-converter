@@ -237,8 +237,8 @@ const editorJson2RagtJson = (editorJson) => {
         polly = cheerio.load(polly).text();
         let ui = `<tr tabindex="0" aria-label="${polly}">`;
         row.forEach((cell) => {
-          const type = (withHeadings && idx === 0) ? 'th' : 'td'
-          ui += `<${type} aria-hidden="true" ${cell.rowSpan ? `rowspan="${cell.rowSpan}"` : ''} ${cell.colSpan ? `colspan="${cell.colSpan}"` : ''}>${cell.data}</${type}>`
+          const className = (withHeadings && idx === 0) ? 'class="tb-header"' : ''
+          ui += `<td ${className} aria-hidden="true" ${cell.rowSpan ? `rowspan="${cell.rowSpan}"` : ''} ${cell.colSpan ? `colspan="${cell.colSpan}"` : ''}>${cell.data}</td>`
         });
         ui = ui.concat('</tr>');
         meta.push({
@@ -318,8 +318,8 @@ const editorJson2RagtJson = (editorJson) => {
         polly = cheerio.load(polly).text();
         let ui = `<tr tabindex="0" aria-label="${polly}">`;
         row.forEach((cell) => {
-          const type = (withHeadings && idx === 0) ? 'th' : 'td'
-          ui += `<${type} aria-hidden="true" ${cell.rowSpan ? `rowspan="${cell.rowSpan}"` : ''} ${cell.colSpan ? `colspan="${cell.colSpan}"` : ''}>${cell.data}</${type}>`
+          const className = (withHeadings && idx === 0) ? 'class="tb-header"' : ''
+          ui += `<td ${className} aria-hidden="true" ${cell.rowSpan ? `rowspan="${cell.rowSpan}"` : ''} ${cell.colSpan ? `colspan="${cell.colSpan}"` : ''}>${cell.data}</td>`
         });
         ui = ui.concat('</tr>');
         meta.push({
@@ -399,8 +399,8 @@ const editorJson2RagtJson = (editorJson) => {
         polly = cheerio.load(polly).text();
         let ui = `<tr tabindex="0" aria-label="${polly}">`;
         row.forEach((cell) => {
-          const type = (withHeadings && idx === 0) ? 'th' : 'td'
-          ui += `<${type} aria-hidden="true" ${cell.rowSpan ? `rowspan="${cell.rowSpan}"` : ''} ${cell.colSpan ? `colspan="${cell.colSpan}"` : ''}>${cell.data}</${type}>`
+          const className = (withHeadings && idx === 0) ? 'class="tb-header"' : ''
+          ui += `<td ${className} aria-hidden="true" ${cell.rowSpan ? `rowspan="${cell.rowSpan}"` : ''} ${cell.colSpan ? `colspan="${cell.colSpan}"` : ''}>${cell.data}</td>`
         });
         ui = ui.concat('</tr>');
         meta.push({
