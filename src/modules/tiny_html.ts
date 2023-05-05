@@ -8,7 +8,7 @@ import {
   transformLinkTag,
   exclusiveFilter,
 } from '../utils/sanitize-html';
-import { ALLOWED_TAG_NO_TEXT_CONTENT, BLOCK_TAGS } from '../constant/index';
+import { ALLOWED_TAG_NO_TEXT_CONTENT } from '../constant/index';
 import { ProcessOptions } from '../index';
 
 const _checkAndRemoveEmptyTag = ($, el) => {

@@ -74,7 +74,7 @@ import {
 // })();
 
 (async () => {
-  const {html} = await fromUrl({ url: 'https://www.city.higashiosaka.lg.jp/0000029888.html', opt: { contentSelectors: ['#mol_contents'] }})
+  const {html} = await fromUrl({ url: 'https://www.city.higashiosaka.lg.jp/0000029937.html', opt: { contentSelectors: ['body'] }})
 
   html2Text({
     html: html,
@@ -94,6 +94,6 @@ import {
       googleAnalyticsId: 'GT_baodang',
     },
   }).then((res) => {
-    console.log(res.a11yHTML)
+    // console.log(res.a11yHTML)
   });
 })();

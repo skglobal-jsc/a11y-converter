@@ -2,6 +2,7 @@ import { convertRelativeUrlsToAbsolute } from '../utils/helper';
 
 export const allowedAttributes = {
   html: ['lang', 'xml', 'xml:lang', 'xmlns'],
+  title: [],
   meta: ['charset', 'http-equiv', 'content', 'name', 'property'],
   link: ['href', 'rel', 'type', 'as', 'media'],
 

@@ -13,22 +13,22 @@ export const convertRelativeUrlsToAbsolute = (
 };
 
 const evalFunction = (extendOutputFunction: string) => {
-  let extendOutputFunctionEvaled: any;
+  let extendOutputFunctionEvaluated: any;
   if (extendOutputFunction) {
     try {
-      extendOutputFunctionEvaled = eval(extendOutputFunction);
+      extendOutputFunctionEvaluated = eval(extendOutputFunction);
     } catch (e) {
       throw new Error(
         `extendOutputFunction is not a valid JavaScript! Error: ${e}`
       );
     }
-    if (typeof extendOutputFunctionEvaled !== 'function') {
+    if (typeof extendOutputFunctionEvaluated !== 'function') {
       throw new Error(
         `extendOutputFunction is not a function! Please fix it or use just default output!`
       );
     }
   }
-  return extendOutputFunctionEvaled;
+  return extendOutputFunctionEvaluated;
 };
 
 export const executeHookFn = async (
