@@ -134,19 +134,13 @@ const tinyhtml = async (html: string, opt?: ProcessOptions) => {
   }
 
   // select the content of the page using contentSelectors. If doesn't exist then select the whole body
-  if (options.contentSelectors && options.contentSelectors.length > 0) {
+  if (options?.contentSelectors && options.contentSelectors.length > 0 && !options.contentSelectors.includes('body')) {
     const $content = $(options.contentSelectors!.join(','));
     const $body = cheerio.load('<body></body>', { decodeEntities: true }, true);
-
-    // Content selector is body
-    if ($content.length === 1 && ($content[0] as any)?.name === 'body') {
-      $('body').replaceWith($content);
-    } else {
-      // append the content to the new body
-      $body('body').append($content);
-      // replace the body with the new body
-      $('body').replaceWith($body('body'));
-    }
+    // append the content to the new body
+    $body('body').append($content);
+    // replace the body with the new body
+    $('body').replaceWith($body('body'));
   }
 
   // execute the cleaning process

@@ -75,25 +75,24 @@ import {
 
 (async () => {
   const {html} = await fromUrl({ url: 'https://www.city.higashiosaka.lg.jp/0000029937.html', opt: { contentSelectors: ['body'] }})
-
-  html2Text({
-    html: html,
-    contentSelectors: ['body'],
-    titleSelector: '',
-    iArticle: {
-      title: '1234',
-      publishDate: '1234',
-      loadedUrl: 'https://baodang.com/test',
-    },
-    a11ySetting: {
-      lang: 'vi',
-      cssLinks: ['https://baodang/css/1', 'https://baodang/css/2'],
-      meta: {},
-      socialMeta: {},
-      favicon: 'https://baodang/favicon.ico',
-      googleAnalyticsId: 'GT_baodang',
-    },
-  }).then((res) => {
-    // console.log(res.a11yHTML)
-  });
+  // html2Text({
+  //   html: html,
+  //   contentSelectors: ['body'],
+  //   titleSelector: '',
+  //   iArticle: {
+  //     title: '1234',
+  //     publishDate: '1234',
+  //     loadedUrl: 'https://baodang.com/test',
+  //   },
+  //   a11ySetting: {
+  //     lang: 'vi',
+  //     cssLinks: ['https://baodang/css/1', 'https://baodang/css/2'],
+  //     meta: {},
+  //     socialMeta: {},
+  //     favicon: 'https://baodang/favicon.ico',
+  //     googleAnalyticsId: 'GT_baodang',
+  //   },
+  // }).then((res) => {
+  //   console.log(res.a11yHTML)
+  // });
 })();
