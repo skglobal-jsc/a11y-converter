@@ -57,7 +57,7 @@ const html2Text = async ({
   // Step4: Convert ragt json to a11y
   const a11yHTML = await ragtJson2A11Y(ragtJson, a11ySetting);
 
-  return { plainText, a11yHTML, simplifiedHTML };
+  return { plainText, a11yHTML, simplifiedHTML, ragtJson };
 };
 
 export default html2Text;

@@ -67,7 +67,7 @@ export const allowedTags = [
   's',
 ];
 
-export const transformImgTag = (options, tagName, attribs) => {
+export const transformImgTag = (options, attribs) => {
   const src = convertRelativeUrlsToAbsolute(options.url, attribs.src) || '';
   return {
     tagName: 'img',
@@ -75,10 +75,18 @@ export const transformImgTag = (options, tagName, attribs) => {
   };
 };
 
-export const transformLinkTag = (options, tagName, attribs) => {
+export const transformATag = (options, attribs) => {
   const href = convertRelativeUrlsToAbsolute(options.url, attribs.href) || ''
   return {
     tagName: 'a',
+    attribs: { ...attribs, href },
+  };
+};
+
+export const transformLinkTag = (options, attribs) => {
+  const href = convertRelativeUrlsToAbsolute(options.url, attribs.href) || ''
+  return {
+    tagName: 'link',
     attribs: { ...attribs, href },
   };
 };

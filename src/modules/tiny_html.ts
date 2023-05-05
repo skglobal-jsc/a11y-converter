@@ -5,6 +5,7 @@ import {
   allowedTags,
   allowedAttributes,
   transformImgTag,
+  transformATag,
   transformLinkTag,
   exclusiveFilter,
 } from '../utils/sanitize-html';
@@ -89,8 +90,9 @@ const _sanitizeHtml = (html, options) => {
     allowedStyles: {}, // allow only these styles
     textFilter: (text) => text.trim().replace(/\s\s+/g, ' '),
     transformTags: {
-      img: (tagName, attribs) => transformImgTag(options, tagName, attribs),
-      a: (tagName, attribs) => transformLinkTag(options, tagName, attribs),
+      img: (tagName, attribs) => transformImgTag(options, attribs),
+      a: (tagName, attribs) => transformATag(options, attribs),
+      link: (tagName, attribs) => transformLinkTag(options, attribs)
     },
     exclusiveFilter: (frame) => exclusiveFilter(options, frame),
   });
