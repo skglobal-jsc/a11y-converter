@@ -488,9 +488,10 @@ const editorJson2RagtJson = (editorJson) => {
       meta = buildMetaTable(block.data);
       block.data = {
         withHeadings: block?.data?.withHeadings,
-        content: block.data?.content?.map(row => {
-          return row.map(cell => cell.data || '')
-        }),
+        content: block.data?.content || [],
+        // ?.map(row => {
+        //   return row.map(cell => cell.data || '')
+        // }),
         caption: block.data?.caption || '',
       };
     }
