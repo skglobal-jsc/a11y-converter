@@ -8,7 +8,7 @@ import {
   _applyGoogleAnalytics,
 } from './css';
 import { replaceTextLinkToText, replaceTextLinkToHyperlink } from './hyperlink'
-import { BLOCK_TYPE } from '../constant/index';
+import { BLOCK_TYPE, CLASS_NAME } from '../constant/index';
 
 //TODO: Auto detect and hyperlink List block
 const recursiveReplaceTextLinkToHyperlinkList = (items: any[], metaOpt: any) => {
@@ -160,9 +160,9 @@ const editorJson2RagtJson = (editorJson) => {
   const getImageAnnotation = (alt) => {
     if (alt) {
       const annotation = {
-        ja: `ここに<span class="annotation-text">「${alt}」</span>の画像があります。`,
-        vi: `Đây là hình ảnh về <span class="annotation-text">${alt}</span>.`,
-        en: `This image is about <span class="annotation-text">${alt}</span>.`,
+        ja: `ここに<span class="${CLASS_NAME.highlightText}">「${alt}」</span>の画像があります。`,
+        vi: `Đây là hình ảnh về <span class="${CLASS_NAME.highlightText}">${alt}</span>.`,
+        en: `This image is about <span class="${CLASS_NAME.highlightText}">${alt}</span>.`,
       };
       return annotation[lang] || annotation.en;
     } else {
@@ -182,7 +182,7 @@ const editorJson2RagtJson = (editorJson) => {
     const totalCols = content[0]?.length ?? 0;
 
     if (lang === 'ja') {
-      const annotation = `この下に、<span class="annotation-text">縦${totalRows}行</span>、<span class="annotation-text">横${totalCols}列</span>の表(ひょう)があります。`;
+      const annotation = `この下に、<span class="${CLASS_NAME.highlightText}">縦${totalRows}行</span>、<span class="${CLASS_NAME.highlightText}">横${totalCols}列</span>の表(ひょう)があります。`;
       const meta: any = [
         {
           id: Math.random().toString(36).substring(7),
@@ -237,7 +237,7 @@ const editorJson2RagtJson = (editorJson) => {
         polly = cheerio.load(polly).text();
         let ui = `<tr tabindex="0" aria-label="${polly}">`;
         row.forEach((cell) => {
-          const className = (withHeadings && idx === 0) ? 'class="tb-header"' : ''
+          const className = (withHeadings && idx === 0) ? `class="${CLASS_NAME.tableHeader}"` : ''
           ui += `<td ${className} aria-hidden="true" ${cell.rowSpan ? `rowspan="${cell.rowSpan}"` : ''} ${cell.colSpan ? `colspan="${cell.colSpan}"` : ''}>${cell.data}</td>`
         });
         ui = ui.concat('</tr>');
@@ -262,7 +262,7 @@ const editorJson2RagtJson = (editorJson) => {
       });
       return meta;
     } else if (lang === 'vi') {
-      const annotation = `Đây là dữ liệu dạng bảng, <span class="annotation-text">có ${totalRows} dòng</span>, <span class="annotation-text">${totalCols} cột</span>.`;
+      const annotation = `Đây là dữ liệu dạng bảng, <span class="${CLASS_NAME.highlightText}">có ${totalRows} dòng</span>, <span class="${CLASS_NAME.highlightText}">${totalCols} cột</span>.`;
       const meta: any = [
         {
           id: Math.random().toString(36).substring(7),
@@ -277,7 +277,7 @@ const editorJson2RagtJson = (editorJson) => {
       ];
 
       if (data.caption) {
-        const title = `Tiêu đề của bảng là <span class="annotation-text">${data.caption}</span>.`;
+        const title = `Tiêu đề của bảng là <span class="${CLASS_NAME.highlightText}">${data.caption}</span>.`;
         meta.push({
             id: Math.random().toString(36).substring(7),
             ui: title,
@@ -318,7 +318,7 @@ const editorJson2RagtJson = (editorJson) => {
         polly = cheerio.load(polly).text();
         let ui = `<tr tabindex="0" aria-label="${polly}">`;
         row.forEach((cell) => {
-          const className = (withHeadings && idx === 0) ? 'class="tb-header"' : ''
+          const className = (withHeadings && idx === 0) ? `class="${CLASS_NAME.tableHeader}"` : ''
           ui += `<td ${className} aria-hidden="true" ${cell.rowSpan ? `rowspan="${cell.rowSpan}"` : ''} ${cell.colSpan ? `colspan="${cell.colSpan}"` : ''}>${cell.data}</td>`
         });
         ui = ui.concat('</tr>');
@@ -343,7 +343,7 @@ const editorJson2RagtJson = (editorJson) => {
       });
       return meta;
     } else {
-      let annotation = `This is table with <span class="annotation-text">${totalRows} rows</span>, <span class="annotation-text">${totalCols} columns</span>.`;
+      let annotation = `This is table with <span class="${CLASS_NAME.highlightText}">${totalRows} rows</span>, <span class="${CLASS_NAME.highlightText}">${totalCols} columns</span>.`;
       const meta: any = [
         {
           id: Math.random().toString(36).substring(7),
@@ -358,7 +358,7 @@ const editorJson2RagtJson = (editorJson) => {
       ];
 
       if (data.caption) {
-      const title = `The title of the table is <span class="annotation-text">${data.caption}</span>.`;
+      const title = `The title of the table is <span class="${CLASS_NAME.highlightText}">${data.caption}</span>.`;
         meta.push({
           id: Math.random().toString(36).substring(7),
           ui: title,
@@ -399,7 +399,7 @@ const editorJson2RagtJson = (editorJson) => {
         polly = cheerio.load(polly).text();
         let ui = `<tr tabindex="0" aria-label="${polly}">`;
         row.forEach((cell) => {
-          const className = (withHeadings && idx === 0) ? 'class="tb-header"' : ''
+          const className = (withHeadings && idx === 0) ? `class="${CLASS_NAME.tableHeader}"` : ''
           ui += `<td ${className} aria-hidden="true" ${cell.rowSpan ? `rowspan="${cell.rowSpan}"` : ''} ${cell.colSpan ? `colspan="${cell.colSpan}"` : ''}>${cell.data}</td>`
         });
         ui = ui.concat('</tr>');
@@ -593,7 +593,7 @@ const ragtJson2A11Y = (ragtJson, a11ySetting = {}) => {
     //TODO: Image
     if (block.type === BLOCK_TYPE.IMAGE) {
       $('body').append(
-        `<p tabindex="0" class="annotation">${block.meta[0]?.ui}</p>`
+        `<p tabindex="0" class="${CLASS_NAME.annotation}">${block.meta[0]?.ui}</p>`
       );
       $('body').append(
         `<img id="${block.id}" src="${block.data?.file?.url || ''}" alt="${
@@ -605,7 +605,7 @@ const ragtJson2A11Y = (ragtJson, a11ySetting = {}) => {
     //TODO: Table
     if (block.type === BLOCK_TYPE.TABLE) {
       $('body').append(
-        `<p id="${block.meta[0].id}" tabindex="0" class="annotation">${block.meta[0].ui}</p>`
+        `<p id="${block.meta[0].id}" tabindex="0" class="${CLASS_NAME.annotation}">${block.meta[0].ui}</p>`
       );
       if (block.data?.caption) {
         $('body').append(
@@ -621,7 +621,7 @@ const ragtJson2A11Y = (ragtJson, a11ySetting = {}) => {
       $('body').append(
         `<p id="${
           block.meta[block.meta.length - 1].id
-        }" tabindex="0" class="annotation">${
+        }" tabindex="0" class="${CLASS_NAME.annotation}">${
           block.meta[block.meta.length - 1].polly
         }</p>`
       );

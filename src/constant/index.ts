@@ -90,3 +90,10 @@ export const EDITOR_BLOCK_TAGS = [
 
 // Allowed Tags no text content
 export const ALLOWED_TAG_NO_TEXT_CONTENT = ['img', 'br', 'td', 'th']
+
+// All class name
+export const CLASS_NAME = {
+  highlightText: 'highlight-text',
+  tableHeader: 'tb-header',
+  annotation: 'annotation'
+}
