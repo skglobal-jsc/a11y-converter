@@ -62,19 +62,20 @@ const dfsTree = (root, arr) => {
   });
 };
 
-const getMetaByDfs = (root, parentId, arr) => {
+// level: { prefix: '', current: 0 }
+const getMetaByDfs = (root, parentId, arr, prefixLevel = '') => {
   if (root.content) {
     // random attribute id
     const id = Math.random().toString(36).substring(7);
     const sentences = splitSentences(root.content);
-    sentences.forEach((sentence) => {
+    sentences.forEach((sentence, index) => {
       const htmlTagRegex = /<\/?[a-z][a-z0-9]*[^<>]*>|<!--.*?-->/gim;
       const aTagRegex = /<a.+?\s*href\s*=\s*["\']?(?<href>[^"\'\s>]+)["\']?/gi;
       arr.push({
         parentId,
         id,
         ui: sentence,
-        polly: sentence.replace(htmlTagRegex, ''),
+        polly: (index === 0 ? prefixLevel : '') + sentence.replace(htmlTagRegex, ''),
         ssml: '',
         user: '',
         actions: [...sentence.matchAll(aTagRegex)]
@@ -82,12 +83,12 @@ const getMetaByDfs = (root, parentId, arr) => {
           .filter((item) => !!item),
       });
     });
-    root.items.forEach((item) => {
-      getMetaByDfs(item, id, arr);
+    root.items.forEach((item, index) => {
+      getMetaByDfs(item, 'root', arr, prefixLevel + (index + 1) + '.');
     });
   } else {
-    root.items.forEach((item) => {
-      getMetaByDfs(item, 'root', arr);
+    root.items.forEach((item, index) => {
+      getMetaByDfs(item, 'root', arr, prefixLevel + (index + 1) + '.');
     });
   }
 };

@@ -74,7 +74,25 @@ import {
 // })();
 
 (async () => {
-  const {html} = await fromUrl({ url: 'https://www.city.higashiosaka.lg.jp/0000029890.html', opt: { contentSelectors: ['#mol_contents > div:nth-child(8) > table'] }})
+  // const {html} = await fromUrl({ url: 'https://www.city.higashiosaka.lg.jp/0000029890.html', opt: { contentSelectors: ['#mol_contents > div:nth-child(8) > table'] }})
+  const html = `
+    <html>
+      <body>
+        <ol id="M17pGrEbrM">
+          <li tabindex="0">The sentence 1. The sentence 2</li>
+          <li tabindex="0">The sentence 3. the sentence 4. The sentence 5. </li>
+          <ol>
+              <li tabindex="0">level 2.1</li>
+              <li tabindex="0">level 2.2</li>
+              <ol>
+                <li tabindex="0">level 2.2.1</li>
+                <li tabindex="0">level 2.2.2</li>
+            </ol>
+          </ol>
+        </ol>
+      </body>
+    </html>
+  `
 
   html2Text({
     html: html,
