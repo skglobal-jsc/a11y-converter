@@ -152,8 +152,8 @@ const htmlSimplified2EditorJson = (html) => {
                   totalCols = cols.length;
                 }
                 return cols.map((cell) => {
-                  const rowSpan = $(cell)?.attr('rowspan') || 0
-                  const colSpan = $(cell)?.attr('colspan') || 0
+                  const rowSpan = parseInt($(cell)?.attr('rowspan') || '1')
+                  const colSpan = parseInt($(cell)?.attr('colspan') || '1')
                   return { data: $(cell).html(), rowSpan, colSpan }
                 });
               })
