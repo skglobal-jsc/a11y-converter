@@ -151,19 +151,17 @@ const htmlSimplified2EditorJson = (html) => {
                 if (cols.length > totalCols) {
                   totalCols = cols.length;
                 }
-                return cols.map((cell) => {
-                  const rowSpan = parseInt($(cell)?.attr('rowspan') || '1')
-                  const colSpan = parseInt($(cell)?.attr('colspan') || '1')
-                  return { data: $(cell).html(), rowSpan, colSpan }
+                let newCols: any = []
+                cols.forEach(element => {
+                  const rowSpan = parseInt($(element)?.attr('rowspan') || '1')
+                  const colSpan = parseInt($(element)?.attr('colspan') || '1')
+                  newCols.push({ data: $(element).html(), rowSpan, colSpan })
+                  for (let i = 0; i < colSpan - 1; i++) {
+                    newCols.push({ data: '', rowSpan: 1, colSpan: 1 })
+                  }
                 });
+                return newCols;
               })
-              // .map((row) => {
-              //   return row.length < totalCols
-              //     ? Array(totalCols)
-              //         .fill('')
-              //         .map((_, i) => (row[i] ? row[i] : ''))
-              //     : row;
-              // });
             const isHeaders = $(firstRow)?.find('th')?.length > 0;
             const headers = Array.from($(el).find('th'))?.map((th) =>
               $(th)?.html()

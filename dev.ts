@@ -74,26 +74,7 @@ import {
 // })();
 
 (async () => {
-  // const {html} = await fromUrl({ url: 'https://www.city.higashiosaka.lg.jp/0000029890.html', opt: { contentSelectors: ['#mol_contents > div:nth-child(8) > table'] }})
-  const html = `
-    <html>
-      <body>
-        <ol id="M17pGrEbrM">
-          <li tabindex="0">The sentence 1. The sentence 2</li>
-          <li tabindex="0">The sentence 3. the sentence 4. The sentence 5. </li>
-          <ol>
-              <li tabindex="0">level 2.1</li>
-              <li tabindex="0">level 2.2</li>
-              <ol>
-                <li tabindex="0">level 2.2.1</li>
-                <li tabindex="0">level 2.2.2</li>
-            </ol>
-          </ol>
-        </ol>
-      </body>
-    </html>
-  `
-
+  const {html} = await fromUrl({ url: 'https://www.city.higashiosaka.lg.jp/0000029890.html', opt: { contentSelectors: ['#mol_contents > div:nth-child(16) > table'] }})
   html2Text({
     html: html,
     contentSelectors: ['body'],
@@ -104,7 +85,6 @@ import {
       loadedUrl: 'https://baodang.com/test',
     },
     a11ySetting: {
-      lang: 'vi',
       cssLinks: ['https://baodang/css/1', 'https://baodang/css/2'],
       meta: {},
       socialMeta: {},
@@ -112,6 +92,9 @@ import {
       googleAnalyticsId: 'GT_baodang',
     },
   }).then((res) => {
-    // console.log(JSON.stringify(res.ragtJson.blocks))
+    console.log(res.ragtJson.blocks[0].data.content)
+    // .forEach(element => {
+    //   console.log(element)
+    // });
   });
 })();
