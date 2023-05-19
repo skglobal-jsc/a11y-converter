@@ -156,9 +156,9 @@ const htmlSimplified2EditorJson = (html) => {
                   const rowSpan = parseInt($(element)?.attr('rowspan') || '1')
                   const colSpan = parseInt($(element)?.attr('colspan') || '1')
                   newCols.push({ data: $(element).html(), rowSpan, colSpan })
-                  for (let i = 0; i < colSpan - 1; i++) {
-                    newCols.push({ data: '', rowSpan: 1, colSpan: 1 })
-                  }
+                  // for (let i = 0; i < colSpan - 1; i++) { // Add empty col for merge cell case
+                  //   newCols.push({ data: '', rowSpan: 1, colSpan: 1 })
+                  // }
                 });
                 return newCols;
               })
