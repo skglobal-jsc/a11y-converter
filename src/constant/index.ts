@@ -97,3 +97,9 @@ export const CLASS_NAME = {
   tableHeader: 'tb-header',
   annotation: 'annotation'
 }
+
+export const RAGT_PLAYER_INFO = {
+  name: "wc-ragt-player",
+  script:
+    "https://ragt-dev.s3.ap-southeast-1.amazonaws.com/public/ragt-player/ragt-player.js",
+};

@@ -7,6 +7,7 @@ import {
   fromUrl,
   editorJson2RagtJson,
   tinyhtml,
+  htmlSimplified2EditorJson
 } from './src/index';
 
 // import { readFile, writeFile } from 'fs';
@@ -74,7 +75,8 @@ import {
 // })();
 
 (async () => {
-  const {html} = await fromUrl({ url: 'https://www.city.higashiosaka.lg.jp/0000029941.html', opt: { contentSelectors: ['#mol_contents > div:nth-child(2) > table'] }})
+  const {html} = await fromUrl({ url: 'https://www.satsuma-net.jp/kurashi_tetsuzuki/sumai/4/6339.html', opt: { contentSelectors: ['#contents-in > div.free-layout-area > div'] }})
+
   html2Text({
     html: html,
     contentSelectors: ['body'],
@@ -85,11 +87,16 @@ import {
       loadedUrl: 'https://baodang.com/test',
     },
     a11ySetting: {
-      cssLinks: ['https://baodang/css/1', 'https://baodang/css/2'],
+      cssLinks: [],
       meta: {},
       socialMeta: {},
       favicon: 'https://baodang/favicon.ico',
       googleAnalyticsId: 'GT_baodang',
+      playerBar: {
+        isEnable: true,
+        ragtApiKey: '',
+        ragtClientId: ''
+      }
     },
   }).then((res) => {
     console.log(res.a11yHTML)

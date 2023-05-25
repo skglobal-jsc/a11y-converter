@@ -8,7 +8,8 @@ import {
   _applyGoogleAnalytics,
 } from './css';
 import { replaceTextLinkToText, replaceTextLinkToHyperlink } from './hyperlink'
-import { BLOCK_TYPE, CLASS_NAME } from '../constant/index';
+import { BLOCK_TYPE, CLASS_NAME, RAGT_PLAYER_INFO } from '../constant/index';
+import { A11YSetting } from '../modules/html_2_text'
 
 //TODO: Auto detect and hyperlink List block
 const recursiveReplaceTextLinkToHyperlinkList = (items: any[], metaOpt: any) => {
@@ -507,7 +508,7 @@ const editorJson2RagtJson = (editorJson) => {
   return ragtJson
 };
 
-const ragtJson2A11Y = (ragtJson, a11ySetting = {}) => {
+const ragtJson2A11Y = (ragtJson, a11ySetting?: A11YSetting) => {
   let metaOpt = { ...ragtJson?.metaOpt, ...a11ySetting } || {},
     blocks = ragtJson?.blocks || [];
   const htmlDefault = `<!DOCTYPE html><html><head></head><body></body></html>`;
@@ -532,6 +533,16 @@ const ragtJson2A11Y = (ragtJson, a11ySetting = {}) => {
     );
   }
 
+  // add player-bar script into head
+  const playerBar = a11ySetting?.playerBar || {}
+  if (playerBar?.id && playerBar?.ragtClientId) {
+    $("head").append(
+      `<script type="module" crossorigin="true" src="${
+        RAGT_PLAYER_INFO.script
+      }?v=${Math.random()}"></script>`
+    );
+  }
+
   // apply meta tags
   _applyMeta($, metaOpt.meta);
   _applySocialMeta($, metaOpt.socialMeta);
@@ -543,6 +554,14 @@ const ragtJson2A11Y = (ragtJson, a11ySetting = {}) => {
 
   // apply css
   _applyCssRules($, metaOpt.cssLinks);
+
+  // add player-bar component into body
+  if (playerBar?.id && playerBar?.ragtClientId) {
+    const playerData = JSON.stringify({ id: playerBar.id })
+    $("body").append(
+      `<${RAGT_PLAYER_INFO.name} player-data='${playerData}' ragt-client-id="${playerBar.ragtClientId}"></${RAGT_PLAYER_INFO.name}>`
+    );
+  }
 
   blocks.forEach((block) => {
     //TODO: Paragraph
