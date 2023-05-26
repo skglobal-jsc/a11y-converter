@@ -19,12 +19,28 @@ export interface IArticle {
   [key: string]: any;
 }
 
-export interface A11YSetting {
+interface SocialMeta {
+  title?: string;
+  type?: string;
+  image?: string;
+  description?: string;
+}
+
+export interface MetaOptions {
   lang?: string;
-  cssLinks?: string[];
-  meta?: {};
-  socialMeta?: {};
+  title?: string;
+  description?: string;
+  keywords?: string;
   favicon?: string;
+  image?: string;
+  type?: string;
+  socialMeta?: SocialMeta,
+  twitterMeta?: SocialMeta
+};
+
+export interface A11YSetting {
+  meta?: MetaOptions;
+  cssLinks?: string[];
   googleAnalyticsId?: string;
   playerBar?: {
     isEnable?: boolean;

@@ -54,15 +54,24 @@ export const _applyCssRules = ($: cheerio.CheerioAPI, cssRules?: string[]) => {
   const lang = $('html')?.attr('lang') === 'ja' ? 'ja' : 'en';
 
   // apply a11y stylesheets link
-  const cssList = [...new Set([...(cssRules || []), ...commonCssLinks[lang]])]
+  const cssList = [...new Set([
+    ...(cssRules || []),
+    ...(commonCssLinks[lang] || commonCssLinks.ja)
+  ])]
   cssList.forEach((link) => {
     $head.append(`<link rel="stylesheet" href="${link}">`);
   });
 };
 
-export const _applyMeta = ($: cheerio.CheerioAPI, meta?: any) => {
+export const _applyMetaHead = ($: cheerio.CheerioAPI, meta?: any) => {
   const $head = $('head');
   $head.find('meta').remove();
+
+  // add lang attribute to html tag
+  $('html').attr('lang', $('html').attr('lang') || meta?.lang || 'ja');
+
+  // namespace html tag
+  $('html').attr('xmlns', 'http://www.w3.org/1999/xhtml');
 
   $head.append(
     '<meta name="viewport" content="width=device-width, initial-scale=1">'
@@ -70,29 +79,39 @@ export const _applyMeta = ($: cheerio.CheerioAPI, meta?: any) => {
   $head.append('<meta charset="utf-8">');
   $head.append('<meta http-equiv="X-UA-Compatible" content="IE=edge">');
 
-  if (meta) {
-    Object.keys(meta).forEach((key) => {
-      $head.append(`<meta name="${key}" content="${meta[key]}">`);
-    });
+  // add title attribute to head tag
+  if (meta?.title) {
+    $('head').append(`<title>${meta.title}</title>`);
   }
-};
-export const _applySocialMeta = ($: cheerio.CheerioAPI, socialMeta?: any) => {
-  const $head = $('head');
-  if (!!socialMeta) {
-    Object.keys(socialMeta).forEach((key) => {
-      $head.append(`<meta property="${key}" content="${socialMeta[key]}">`);
-    });
-  } else {
-    // default social meta
-    // $head.append('<meta property="og:title" content="SK Global News" />');
-    // $head.append('<meta property="og:type" content="article" />');
-    // $head.append('<meta property="og:url" content="https://news.crawler.sk-global.io" />');
-    // $head.append('<meta property="og:image" content="https://news.crawler.sk-global.io/news/images/sk-global-logo.png" />');
-    // $head.append('<meta property="og:description" content="SK Global News" />');
-    // $head.append('<meta property="og:site_name" content="SK Global News" />');
-    // $head.append('<meta property="og:locale" content="en_US" />');
+
+  // add description to head tag
+  if (meta?.description) {
+    $head.append(`<meta name="description" content="${meta.description}">`);
   }
+
+  // add keyword to head tag
+  if (meta?.keywords) {
+    $head.append(`<meta name="keywords" content="${meta.keywords}">`);
+  }
+
+  // add favicon attribute to head tag
+  if (meta?.favicon) {
+    $('head').append(
+      `<link rel="icon" type="image/x-icon" href="${meta.favicon}">`
+    );
+  }
+  // add social meta
+  Object.keys(meta?.socialMeta)?.filter(key => meta?.socialMeta[key]).forEach(key => {
+    $head.append(`<meta name="${key}" content="${meta.socialMeta[key]}">`);
+  });
+
+  // add twitter meta
+  Object.keys(meta?.twitterMeta)?.filter(key => meta?.twitterMeta[key]).forEach(key => {
+    $head.append(`<meta name="${key}" content="${meta.twitterMeta[key]}">`);
+  });
+
 };
+
 export const _applyAccessibilityAttributes = ($: cheerio.CheerioAPI) => {
   const $body = $('body');
   $body.attr('role', 'main');

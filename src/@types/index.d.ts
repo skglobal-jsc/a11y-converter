@@ -1,11 +1,20 @@
-declare type MetaOptions = {
+interface SocialMeta {
   title?: string;
-  cssLinks?: string[];
-  meta?: {};
-  socialMeta?: {};
+  type?: string;
+  image?: string;
+  description?: string;
+}
+
+declare type MetaOptions = {
   lang?: string;
+  title?: string;
+  description?: string;
+  keywords?: string;
   favicon?: string;
-  googleAnalyticsId?: string;
+  image?: string;
+  type?: string;
+  socialMeta?: SocialMeta,
+  twitterMeta?: SocialMeta
 };
 
 declare type ProcessOptions = {

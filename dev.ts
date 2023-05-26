@@ -74,8 +74,10 @@ import {
 
 // })();
 
+// https://www.javis.jp/news-1/%E8%80%B3%E3%81%A7%E8%81%B4%E3%81%8Fweb%E3%82%B5%E3%82%A4%E3%83%88%E3%81%AB%E3%82%AA%E3%83%AA%E3%83%83%E3%82%AF%E3%82%B9%E7%94%9F%E5%91%BD%E3%81%8C%E8%BF%BD%E5%8A%A0%E3%81%95%E3%82%8C%E3%81%BE%E3%81%97%E3%81%9F%E3%80%82
+// https://www.satsuma-net.jp/kurashi_tetsuzuki/sumai/4/6339.html
 (async () => {
-  const {html} = await fromUrl({ url: 'https://www.satsuma-net.jp/kurashi_tetsuzuki/sumai/4/6339.html', opt: { contentSelectors: ['#contents-in > div.free-layout-area > div'] }})
+  const {html} = await fromUrl({ url: 'https://www.satsuma-net.jp/kurashi_tetsuzuki/sumai/4/6339.html', opt: { contentSelectors: ['body'] }})
 
   html2Text({
     html: html,
@@ -87,11 +89,29 @@ import {
       loadedUrl: 'https://baodang.com/test',
     },
     a11ySetting: {
+      meta: {
+        lang: 'ja',
+        title: '',
+        description: '',
+        keywords: '',
+        favicon: '',
+        image: '',
+        type: '',
+        socialMeta: {
+          title: '',
+          type: '',
+          image: '',
+          description: '',
+        },
+        twitterMeta: {
+          title: '',
+          type: '',
+          image: '',
+          description: '',
+        }
+      },
       cssLinks: [],
-      meta: {},
-      socialMeta: {},
-      favicon: 'https://baodang/favicon.ico',
-      googleAnalyticsId: 'GT_baodang',
+      googleAnalyticsId: '',
       playerBar: {
         isEnable: true,
         ragtApiKey: '',

@@ -2,8 +2,7 @@ import * as cheerio from 'cheerio';
 
 import {
   _applyCssRules,
-  _applyMeta,
-  _applySocialMeta,
+  _applyMetaHead,
   _applyAccessibilityAttributes,
   _applyGoogleAnalytics,
 } from './css';
@@ -509,31 +508,25 @@ const editorJson2RagtJson = (editorJson) => {
 };
 
 const ragtJson2A11Y = (ragtJson, a11ySetting?: A11YSetting) => {
-  let metaOpt = { ...ragtJson?.metaOpt, ...a11ySetting } || {},
+  let metaOpt = { ...ragtJson?.metaOpt, ...a11ySetting?.meta} || {},
     blocks = ragtJson?.blocks || [];
+
   const htmlDefault = `<!DOCTYPE html><html><head></head><body></body></html>`;
 
   const $ = cheerio.load(htmlDefault);
 
-  // add lang attribute to html tag
-  $('html').attr('lang', $('html').attr('lang') || metaOpt?.lang || 'en');
+  // apply meta tags
+  _applyMetaHead($, metaOpt);
 
-  // namespace html tag
-  $('html').attr('xmlns', 'http://www.w3.org/1999/xhtml');
+  // apply css
+  _applyCssRules($, metaOpt.cssLinks);
 
-  // add title attribute to head tag
-  if (metaOpt.title) {
-    $('head').append(`<title>${metaOpt.title}</title>`);
+   // apply google analytics, if needed
+   if (metaOpt.googleAnalyticsId) {
+    _applyGoogleAnalytics($, metaOpt.googleAnalyticsId);
   }
 
-  // add favicon attribute to head tag
-  if (metaOpt.favicon) {
-    $('head').append(
-      `<link rel="icon" type="image/x-icon" href="${metaOpt.favicon}">`
-    );
-  }
-
-  // add player-bar script into head
+  // add player-bar
   const playerBar = a11ySetting?.playerBar || {}
   if (playerBar?.id && playerBar?.ragtClientId) {
     $("head").append(
@@ -541,22 +534,6 @@ const ragtJson2A11Y = (ragtJson, a11ySetting?: A11YSetting) => {
         RAGT_PLAYER_INFO.script
       }?v=${Math.random()}"></script>`
     );
-  }
-
-  // apply meta tags
-  _applyMeta($, metaOpt.meta);
-  _applySocialMeta($, metaOpt.socialMeta);
-
-  // apply google analytics, if needed
-  if (metaOpt.googleAnalyticsId) {
-    _applyGoogleAnalytics($, metaOpt.googleAnalyticsId);
-  }
-
-  // apply css
-  _applyCssRules($, metaOpt.cssLinks);
-
-  // add player-bar component into body
-  if (playerBar?.id && playerBar?.ragtClientId) {
     const playerData = JSON.stringify({ id: playerBar.id })
     $("body").append(
       `<${RAGT_PLAYER_INFO.name} player-data='${playerData}' ragt-client-id="${playerBar.ragtClientId}"></${RAGT_PLAYER_INFO.name}>`

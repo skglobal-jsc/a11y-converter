@@ -1,5 +1,6 @@
 import * as cheerio from 'cheerio';
 import * as url from 'url';
+import { MetaOptions } from '../modules/html_2_text'
 
 export const convertRelativeUrlsToAbsolute = (
   baseUrl: string = '',
@@ -46,33 +47,26 @@ export const executeHookFn = async (
   }
 };
 
-export const buildMetaOptions = (opt: {
-  lang?: string;
-  title?: string;
-  description?: string;
-  keywords?: string;
-  favicon?: string;
-  image?: string;
-  type?: string;
-}) => {
+export const buildMetaOptions = (opt: MetaOptions) => {
+  const socialMeta = opt?.socialMeta || {}
+  const twitterMeta = opt?.twitterMeta || {}
   const metaOptions = {
     ...(!!opt.lang && { lang: opt.lang }),
     ...(!!opt.title && { title: opt.title }),
     ...(!!opt.favicon && { favicon: opt.favicon }),
-    meta: {
-      ...(!!opt.description && { description: opt.description }),
-      ...(!!opt.keywords && { keywords: opt.keywords }),
-
-      ...(!!opt.title && { 'twitter:title': opt.title }),
-      ...(!!opt.description && { 'twitter:description': opt.description }),
-      ...(!!opt.image && { 'twitter:image': opt.image }),
-      ...(!!opt.image && { 'twitter:card': 'summary_large_image' }),
-    },
+    ...(!!opt.description && { description: opt.description }),
+    ...(!!opt.keywords && { keywords: opt.keywords }),
     socialMeta: {
-      ...(!!opt.title && { 'og:title': opt.title }),
-      ...(!!opt.description && { 'og:description': opt.description }),
-      ...(!!opt.image && { 'og:image': opt.image }),
-      ...(!!opt.type && { 'og:type': opt.type }),
+      ...(!!socialMeta.title && { 'og:title': socialMeta.title }),
+      ...(!!socialMeta.description && { 'og:description': socialMeta.description }),
+      ...(!!socialMeta.image && { 'og:image': socialMeta.image }),
+      ...(!!socialMeta.type && { 'og:type': socialMeta.type }),
+    },
+    twitterMeta: {
+      ...(!!twitterMeta.title && { 'twitter:title': twitterMeta.title }),
+      ...(!!twitterMeta.description && { 'twitter:description': twitterMeta.description }),
+      ...(!!twitterMeta.image && { 'twitter:image': twitterMeta.image }),
+      ...(!!twitterMeta.image && { 'twitter:card': 'summary_large_image' }),
     },
   };
   return metaOptions;

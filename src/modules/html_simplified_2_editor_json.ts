@@ -51,6 +51,19 @@ const htmlSimplified2EditorJson = (html) => {
     favicon: $('link[rel*="icon"]')?.attr('href'),
     image: $('meta[property="og:image"]')?.attr('content'),
     type: $('meta[property="og:type"]')?.attr('content'),
+
+    socialMeta: {
+      title: $('meta[property="og:title"]')?.attr('content') || '',
+      type: $('meta[property="og:type"]')?.attr('content') || '',
+      image: $('meta[property="og:image"]')?.attr('content') || '',
+      description: $('meta[property="og:description"]')?.attr('content') || ''
+    },
+    twitterMeta: {
+      title: $('meta[name="twitter:title"]')?.attr('content') || '',
+      type: $('meta[name="twitter:type"]')?.attr('content') || '',
+      image: $('meta[name="twitter:image"]')?.attr('content') || '',
+      description: $('meta[name="twitter:description"]')?.attr('content') || ''
+    }
   };
   const metaOpts = buildMetaOptions(meta);
   let groupUnSupportTag: string[] = [];
