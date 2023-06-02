@@ -84,15 +84,17 @@ const _sanitizeHtml = (html, options) => {
     .replace(/&gt;/g, '>');
 
   const $ = cheerio.load(preCleanedHtml);
+
+  const baseURL = options?.iArticle?.url || options?.iArticle?.loadedUrl || ''
   return sanitizeHtml($.html(), {
     allowedTags: allowedTags, // allow only these tags
     allowedAttributes: allowedAttributes,
     allowedStyles: {}, // allow only these styles
     textFilter: (text) => text.trim().replace(/\s\s+/g, ' '),
     transformTags: {
-      img: (tagName, attribs) => transformImgTag(options, attribs),
-      a: (tagName, attribs) => transformATag(options, attribs),
-      link: (tagName, attribs) => transformLinkTag(options, attribs)
+      img: (tagName, attribs) => transformImgTag(baseURL, attribs),
+      a: (tagName, attribs) => transformATag(baseURL, attribs),
+      link: (tagName, attribs) => transformLinkTag(baseURL, attribs)
     },
     exclusiveFilter: (frame) => exclusiveFilter(options, frame),
   });

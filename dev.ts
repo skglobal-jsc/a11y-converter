@@ -77,7 +77,7 @@ import {
 // https://www.javis.jp/news-1/%E8%80%B3%E3%81%A7%E8%81%B4%E3%81%8Fweb%E3%82%B5%E3%82%A4%E3%83%88%E3%81%AB%E3%82%AA%E3%83%AA%E3%83%83%E3%82%AF%E3%82%B9%E7%94%9F%E5%91%BD%E3%81%8C%E8%BF%BD%E5%8A%A0%E3%81%95%E3%82%8C%E3%81%BE%E3%81%97%E3%81%9F%E3%80%82
 // https://www.satsuma-net.jp/kurashi_tetsuzuki/sumai/4/6339.html
 (async () => {
-  const {html} = await fromUrl({ url: 'https://www.satsuma-net.jp/kurashi_tetsuzuki/sumai/4/6339.html', opt: { contentSelectors: ['body'] }})
+  const {html} = await fromUrl({ url: 'https://www.city.sapporo.jp/shobo/kita/hashimoto/kitarennr5pato.html', opt: { contentSelectors: ['#tmp_contents > p:nth-child(6) > img:nth-child(1)'] }})
 
   html2Text({
     html: html,
@@ -119,6 +119,7 @@ import {
       }
     },
   }).then((res) => {
-    console.log(res.a11yHTML)
+    // console.log(JSON.stringify(res.ragtJson));
+    // console.log(res.a11yHTML);
   });
 })();
