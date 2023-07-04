@@ -17,6 +17,7 @@ export const BLOCK_TAGS = [
   'table',
   'p',
   'img',
+  'a'
 ];
 
 export const HEADER_LEVEL = {

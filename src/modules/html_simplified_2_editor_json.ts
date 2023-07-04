@@ -67,7 +67,6 @@ const htmlSimplified2EditorJson = (html) => {
   };
   const metaOpts = buildMetaOptions(meta);
   let groupUnSupportTag: string[] = [];
-
   $('body')
     .contents()
     .each((i, el) => {
@@ -99,6 +98,14 @@ const htmlSimplified2EditorJson = (html) => {
                 },
               });
             }
+          }
+          //TODO: A
+          if (el.name === 'a') {
+            blocks.push({
+              id,
+              type: BLOCK_TYPE.PARAGRAPH,
+              data: { text: $(el).toString() },
+            });
           }
           //TODO: Header
           if (['h1', 'h2', 'h3'].includes(el.name)) {
