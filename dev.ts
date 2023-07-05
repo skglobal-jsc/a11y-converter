@@ -90,6 +90,7 @@ import {
       publishDate: '1234',
       loadedUrl: 'https://www.fina-fukuoka2022.org/news/entry000462.html',
     },
+
     a11ySetting: {
       meta: {
         lang: 'ja',
@@ -112,7 +113,7 @@ import {
           description: '',
         }
       },
-      cssLinks: [],
+      cssLinks: ['https://baodang/example/file.css'],
       googleAnalyticsId: '',
       playerBar: {
         isEnable: true,
