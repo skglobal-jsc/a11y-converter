@@ -54,10 +54,10 @@ export const _applyCssRules = ($: cheerio.CheerioAPI, cssRules?: string[]) => {
   const lang = $('html')?.attr('lang') === 'ja' ? 'ja' : 'en';
 
   // apply a11y stylesheets link
-  const cssList = [...new Set([
+  const cssList = [
     ...(cssRules || []),
     ...(commonCssLinks[lang] || commonCssLinks.ja)
-  ])]
+  ]
   cssList.forEach((link) => {
     $head.append(`<link rel="stylesheet" href="${link}">`);
   });

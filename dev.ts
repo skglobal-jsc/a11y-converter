@@ -90,39 +90,64 @@ import {
       publishDate: '1234',
       loadedUrl: 'https://www.fina-fukuoka2022.org/news/entry000462.html',
     },
-
     a11ySetting: {
-      meta: {
-        lang: 'ja',
-        title: '',
-        description: '',
-        keywords: '',
-        favicon: '',
-        image: '',
-        type: '',
-        socialMeta: {
-          title: '',
-          type: '',
-          image: '',
-          description: '',
-        },
-        twitterMeta: {
-          title: '',
-          type: '',
-          image: '',
-          description: '',
-        }
-      },
-      cssLinks: ['https://baodang/example/file.css'],
+      cssLinks: [],
+      meta: {},
+      // socialMeta: {},
+      // favicon: undefined,
       googleAnalyticsId: '',
       playerBar: {
-        isEnable: true,
-        ragtApiKey: '',
-        ragtClientId: ''
+        isEnable: false,
+        ragtApiKey: 'JGFew89YsN3lOHSqfbNjD3ZjAa3WHMfG7xLJQYkm',
+        ragtClientId: 'uv_crawling_SXN3TN4P5NJICPBH'
       }
-    },
+      // cssLinks: [
+      //   'https://devstage-basestack-databuckete3889a50-1g1xv7rv7flx1.s3.amazonaws.com/news/a11y/3fbe9f8877.css',
+      //   'https://site.uni-voice.biz/css/1307.9f62991a.css'
+      // ],
+      // meta: {},
+      // // favicon: undefined,
+      // googleAnalyticsId: 'UA-XXXX-XXXXX',
+      // playerBar: {
+      //   isEnable: true,
+      //   ragtApiKey: 'JGFew89YsN3lOHSqfbNjD3ZjAa3WHMfG7xLJQYkm',
+      //   ragtClientId: 'uv_crawling_SXN3TN4P5NJICPBH'
+      // }
+    }
+    // a11ySetting: {
+    //   meta: {
+    //     lang: 'ja',
+    //     title: '',
+    //     description: '',
+    //     keywords: '',
+    //     favicon: '',
+    //     image: '',
+    //     type: '',
+    //     socialMeta: {
+    //       title: '',
+    //       type: '',
+    //       image: '',
+    //       description: '',
+    //     },
+    //     twitterMeta: {
+    //       title: '',
+    //       type: '',
+    //       image: '',
+    //       description: '',
+    //     }
+    //   },
+    //   cssLinks: undefined,
+    //   googleAnalyticsId: '',
+    //   playerBar: {
+    //     isEnable: true,
+    //     ragtApiKey: 'JGFew89YsN3lOHSqfbNjD3ZjAa3WHMfG7xLJQYkm',
+    //     ragtClientId: 'uv_crawling_SXN3TN4P5NJICPBH'
+    //   }
+    // },
   }).then((res) => {
     // console.log(JSON.stringify(res.ragtJson));
     console.log(res.a11yHTML);
   });
 })();
+
+
