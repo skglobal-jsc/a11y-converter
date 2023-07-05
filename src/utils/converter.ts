@@ -589,12 +589,12 @@ const ragtJson2A11Y = (ragtJson, a11ySetting?: A11YSetting) => {
     }
     //TODO: Image
     if (block.type === BLOCK_TYPE.IMAGE) {
-      $('body').append(
-        `<p tabindex="0" class="${CLASS_NAME.annotation}">${block.meta[0]?.ui}</p>`
-      );
+      // $('body').append(
+      //   `<p tabindex="0" class="${CLASS_NAME.annotation}">${block.meta[0]?.ui}</p>`
+      // );
       $('body').append(
         `<img id="${block.id}" src="${block.data?.file?.url || ''}" alt="${
-          block.data.caption
+          cheerio?.load(block.meta[0]?.ui)?.text()
         }" aria-hidden="true"></img>`
       );
     }
