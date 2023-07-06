@@ -101,15 +101,18 @@ export const _applyMetaHead = ($: cheerio.CheerioAPI, meta?: any) => {
     );
   }
   // add social meta
-  Object.keys(meta?.socialMeta)?.filter(key => meta?.socialMeta[key]).forEach(key => {
-    $head.append(`<meta name="${key}" content="${meta.socialMeta[key]}">`);
-  });
+  if (meta?.socialMeta) {
+    Object.keys(meta?.socialMeta)?.filter(key => meta?.socialMeta[key]).forEach(key => {
+      $head.append(`<meta name="${key}" content="${meta.socialMeta[key]}">`);
+    });
+  }
 
   // add twitter meta
-  Object.keys(meta?.twitterMeta)?.filter(key => meta?.twitterMeta[key]).forEach(key => {
-    $head.append(`<meta name="${key}" content="${meta.twitterMeta[key]}">`);
-  });
-
+  if (meta?.twitterMeta) {
+    Object.keys(meta?.twitterMeta)?.filter(key => meta?.twitterMeta[key]).forEach(key => {
+      $head.append(`<meta name="${key}" content="${meta.twitterMeta[key]}">`);
+    });
+  }
 };
 
 export const _applyAccessibilityAttributes = ($: cheerio.CheerioAPI) => {

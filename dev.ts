@@ -7,7 +7,8 @@ import {
   fromUrl,
   editorJson2RagtJson,
   tinyhtml,
-  htmlSimplified2EditorJson
+  htmlSimplified2EditorJson,
+  ragtJson2A11Y
 } from './src/index';
 
 // import { readFile, writeFile } from 'fs';
@@ -77,77 +78,98 @@ import {
 // https://www.javis.jp/news-1/%E8%80%B3%E3%81%A7%E8%81%B4%E3%81%8Fweb%E3%82%B5%E3%82%A4%E3%83%88%E3%81%AB%E3%82%AA%E3%83%AA%E3%83%83%E3%82%AF%E3%82%B9%E7%94%9F%E5%91%BD%E3%81%8C%E8%BF%BD%E5%8A%A0%E3%81%95%E3%82%8C%E3%81%BE%E3%81%97%E3%81%9F%E3%80%82
 // https://www.satsuma-net.jp/kurashi_tetsuzuki/sumai/4/6339.html
 (async () => {
-  const {html} = await fromUrl({ url: 'https://www.fina-fukuoka2022.org/news/entry000452.html', opt: { contentSelectors: ['#news_index > div.wrap > div.contents.contents--column2 > div > article'] }})
-  // const html = `<html lang="ja"><head><meta name="viewport" content="width=device-width, initial-scale=1"><meta charset="utf-8"><title>セイコーグループ株式会社と世界マスターズ水泳選手権2023九州大会のスポンサーになることに合意いたしました｜ニュース｜FINA世界水泳選手権大会2021福岡大会</title><meta name="description" content="セイコーグループ株式会社と世界マスターズ水泳選手権2023九州大会のスポンサーになることに合意いたしましたのページです。FINA世界水泳選手権大会2021福岡大会の公式Webサイトです。"><meta name="keywords" content=""><meta property="og:title" content="セイコーグループ株式会社と世界マスターズ水泳選手権2023九州大会のスポンサーになることに合意いたしました｜ニュース｜FINA世界水泳選手権大会2021福岡大会"><meta property="og:description" content="セイコーグループ株式会社と世界マスターズ水泳選手権2023九州大会のスポンサーになることに合意いたしましたのページです。FINA世界水泳選手権大会2021福岡大会の公式Webサイトです。"><meta property="og:type" content="article"><meta property="og:url" content="https://fina-fukuoka2021.org/news/20190806.html"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="format-detection" content="telephone=no"><link rel="icon" href="/common/img/common/favicon.ico"><link rel="apple-touch-icon" href="/common/img/common/apple-touch-icon.png"><meta property="og:locale" content="ja_JP"><meta property="og:site_name" content="世界水泳選手権2023福岡大会"><meta property="og:image" content="https://www.fina-fukuoka2022.org/common/img/common/og_image.png"><meta property="og:image:alt" content="世界水泳選手権2023福岡大会"></head><body><h2>セイコーグループ株式会社と世界マスターズ水泳選手権2023九州大会のスポンサーになることに合意いたしました</h2>2023年6月5日スポンサー<img src="/news/assets_c/2023/06/9bdb25a6a5c429eee8e1f9818d3e600f5715085e-thumb-800xauto-1553.jpg" alt="【修正】②セイコーロゴ.jpg"><p>世界水泳選手権2023福岡大会組織委員会は、セイコーグループ株式会社（東京都中央区銀座）と「世界マスターズ水泳選手権2023九州大会」のスポンサーになることについて合意いたしましたのでご報告いたします。</p><h4>契約内容</h4><p>「世界マスターズ水泳選手権2023九州大会」ナショナルサプライヤー</p><h4>契約の相手方</h4><p>会社名：セイコーグループ株式会社<br>本　社：東京都中央区銀座1丁目26番1号<br>代表者：代表取締役社長 高橋 修司</p></body></html>`
+  // const {html} = await fromUrl({ url: 'https://www.fina-fukuoka2022.org/news/entry000452.html', opt: { contentSelectors: ['#news_index > div.wrap > div.contents.contents--column2 > div > article'] }})
+  // const html = `<!DOCTYPE html><html lang="ja" xmlns="http://www.w3.org/1999/xhtml"><head><title>文化芸術意識調査について／札幌市</title><meta name="viewport" content="width=device-width, initial-scale=1"><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="twitter:title" content="文化芸術意識調査について／札幌市"><meta name="twitter:image" content="https://www.city.sapporo.jp/shared/system/images/municipal_emblem.jpg"><meta name="twitter:card" content="summary_large_image"><meta property="og:title" content="文化芸術意識調査について／札幌市"><meta property="og:image" content="https://www.city.sapporo.jp/shared/system/images/municipal_emblem.jpg"><meta property="og:type" content="article"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""><link rel="stylesheet" href="https://unpkg.com/a11y-css-reset/combo.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;300;400;500;700;900&amp;display=swap"><link rel="stylesheet" href="https://ragt-dev.s3.ap-southeast-1.amazonaws.com/public/ragt-convertor/ja.css"></head><body id="skg-style"></body></html>`
 
 
-  html2Text({
-    html: html,
-    contentSelectors: ['body'],
-    titleSelector: '',
-    iArticle: {
-      title: '1234',
-      publishDate: '1234',
-      loadedUrl: 'https://www.fina-fukuoka2022.org/news/entry000462.html',
-    },
-    a11ySetting: {
-      cssLinks: [],
-      meta: {},
-      // socialMeta: {},
-      // favicon: undefined,
-      googleAnalyticsId: '',
-      playerBar: {
-        isEnable: false,
-        ragtApiKey: 'JGFew89YsN3lOHSqfbNjD3ZjAa3WHMfG7xLJQYkm',
-        ragtClientId: 'uv_crawling_SXN3TN4P5NJICPBH'
+  // html2Text({
+  //   html: html,
+  //   contentSelectors: ['body'],
+  //   titleSelector: '',
+  //   iArticle: {
+  //     title: '1234',
+  //     publishDate: '1234',
+  //     loadedUrl: 'https://www.fina-fukuoka2022.org/news/entry000462.html',
+  //   },
+  //   a11ySetting: {
+  //     cssLinks: ['https://devstage-basestack-databuckete3889a50-1g1xv7rv7flx1.s3.amazonaws.com/news/a11y/ce8c10754d.css'],
+  //     meta: {},
+  //     // socialMeta: {},
+  //     // favicon: undefined,
+  //     googleAnalyticsId: '',
+  //     playerBar: {
+  //       isEnable: false,
+  //       ragtApiKey: 'JGFew89YsN3lOHSqfbNjD3ZjAa3WHMfG7xLJQYkm',
+  //       ragtClientId: 'uv_crawling_SXN3TN4P5NJICPBH'
+  //     }
+  //     // cssLinks: [
+  //     //   'https://devstage-basestack-databuckete3889a50-1g1xv7rv7flx1.s3.amazonaws.com/news/a11y/3fbe9f8877.css',
+  //     //   'https://site.uni-voice.biz/css/1307.9f62991a.css'
+  //     // ],
+  //     // meta: {},
+  //     // // favicon: undefined,
+  //     // googleAnalyticsId: 'UA-XXXX-XXXXX',
+  //     // playerBar: {
+  //     //   isEnable: true,
+  //     //   ragtApiKey: 'JGFew89YsN3lOHSqfbNjD3ZjAa3WHMfG7xLJQYkm',
+  //     //   ragtClientId: 'uv_crawling_SXN3TN4P5NJICPBH'
+  //     // }
+  //   }
+  //   // a11ySetting: {
+  //   //   meta: {
+  //   //     lang: 'ja',
+  //   //     title: '',
+  //   //     description: '',
+  //   //     keywords: '',
+  //   //     favicon: '',
+  //   //     image: '',
+  //   //     type: '',
+  //   //     socialMeta: {
+  //   //       title: '',
+  //   //       type: '',
+  //   //       image: '',
+  //   //       description: '',
+  //   //     },
+  //   //     twitterMeta: {
+  //   //       title: '',
+  //   //       type: '',
+  //   //       image: '',
+  //   //       description: '',
+  //   //     }
+  //   //   },
+  //   //   cssLinks: undefined,
+  //   //   googleAnalyticsId: '',
+  //   //   playerBar: {
+  //   //     isEnable: true,
+  //   //     ragtApiKey: 'JGFew89YsN3lOHSqfbNjD3ZjAa3WHMfG7xLJQYkm',
+  //   //     ragtClientId: 'uv_crawling_SXN3TN4P5NJICPBH'
+  //   //   }
+  //   // },
+  // }).then((res) => {
+  //   // console.log(JSON.stringify(res.ragtJson));
+  //   console.log(res.a11yHTML);
+  // });
+
+  const ragtJson = {
+    blocks: [],
+    metaOpt: {
+      lang: 'ja',
+      title: '文化芸術意識調査について／札幌市',
+      favicon: '/shared/images/favicon/favicon.ico',
+      meta: {
+        'twitter:title': '文化芸術意識調査について／札幌市',
+        'twitter:image': 'https://www.city.sapporo.jp/shared/system/images/municipal_emblem.jpg',
+        'twitter:card': 'summary_large_image'
+      },
+      socialMeta: {
+        'og:title': '文化芸術意識調査について／札幌市',
+        'og:image': 'https://www.city.sapporo.jp/shared/system/images/municipal_emblem.jpg',
+        'og:type': 'article'
       }
-      // cssLinks: [
-      //   'https://devstage-basestack-databuckete3889a50-1g1xv7rv7flx1.s3.amazonaws.com/news/a11y/3fbe9f8877.css',
-      //   'https://site.uni-voice.biz/css/1307.9f62991a.css'
-      // ],
-      // meta: {},
-      // // favicon: undefined,
-      // googleAnalyticsId: 'UA-XXXX-XXXXX',
-      // playerBar: {
-      //   isEnable: true,
-      //   ragtApiKey: 'JGFew89YsN3lOHSqfbNjD3ZjAa3WHMfG7xLJQYkm',
-      //   ragtClientId: 'uv_crawling_SXN3TN4P5NJICPBH'
-      // }
     }
-    // a11ySetting: {
-    //   meta: {
-    //     lang: 'ja',
-    //     title: '',
-    //     description: '',
-    //     keywords: '',
-    //     favicon: '',
-    //     image: '',
-    //     type: '',
-    //     socialMeta: {
-    //       title: '',
-    //       type: '',
-    //       image: '',
-    //       description: '',
-    //     },
-    //     twitterMeta: {
-    //       title: '',
-    //       type: '',
-    //       image: '',
-    //       description: '',
-    //     }
-    //   },
-    //   cssLinks: undefined,
-    //   googleAnalyticsId: '',
-    //   playerBar: {
-    //     isEnable: true,
-    //     ragtApiKey: 'JGFew89YsN3lOHSqfbNjD3ZjAa3WHMfG7xLJQYkm',
-    //     ragtClientId: 'uv_crawling_SXN3TN4P5NJICPBH'
-    //   }
-    // },
-  }).then((res) => {
-    // console.log(JSON.stringify(res.ragtJson));
-    console.log(res.a11yHTML);
-  });
+  }
+  const data = ragtJson2A11Y(ragtJson)
+  console.log(data)
 })();
 
 
