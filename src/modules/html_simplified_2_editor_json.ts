@@ -1,6 +1,6 @@
 import * as cheerio from 'cheerio';
 const sanitizeHtml = require('sanitize-html');
-import { buildMetaOptions } from '../utils/helper';
+import { buildMetaOptions, clearImageExtensions } from '../utils/helper';
 import {
   BLOCK_TAGS,
   BLOCK_TYPE,
@@ -148,7 +148,7 @@ const htmlSimplified2EditorJson = (html) => {
                 file: {
                   url: $(el)?.attr('src') ?? '',
                 },
-                caption: $(el)?.attr('alt') ?? '',
+                caption: clearImageExtensions($(el)?.attr('alt') ?? ''),
                 withBorder: false,
                 stretched: false,
                 withBackground: false,

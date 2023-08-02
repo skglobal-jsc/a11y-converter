@@ -94,3 +94,13 @@ export const isIgnoreText = (text: string): boolean => {
 
   return false;
 };
+
+export const clearImageExtensions = (text: string) => {
+  // Define a regular expression pattern to match common image extensions
+  const imageExtensionsRegex = /\.(jpg|jpeg|png|gif|bmp|svg)$/i;
+
+  // Use the replace method with the regex pattern to remove the extension
+  const cleanedFilename = text?.replace(imageExtensionsRegex, '');
+
+  return cleanedFilename || '';
+}
