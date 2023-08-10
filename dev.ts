@@ -76,7 +76,7 @@ import {
 // })();
 
 (async () => {
-  const {html} = await fromUrl({ url: 'https://www.fina-fukuoka2022.org/news/entry000474.html', opt: { contentSelectors: ['body'] }})
+  const {html} = await fromUrl({ url: 'https://www.cocos-jpn.co.jp/menu/fair/shaved_ice2306/shaved_ice_mini_greentea2306.html', opt: { contentSelectors: ['.menu_detail'] }})
 
 
   html2Text({
@@ -86,10 +86,10 @@ import {
     iArticle: {
       title: '1234',
       publishDate: '1234',
-      loadedUrl: 'https://www.fina-fukuoka2022.org/news/entry000462.html',
+      loadedUrl: 'https://www.cocos-jpn.co.jp/menu/fair/shaved_ice2306/shaved_ice_mini_greentea2306.html',
     },
     a11ySetting: {
-      cssLinks: ['https://devstage-basestack-databuckete3889a50-1g1xv7rv7flx1.s3.amazonaws.com/news/a11y/ce8c10754d.css'],
+      cssLinks: [],
       meta: {},
       // socialMeta: {},
       // favicon: undefined,

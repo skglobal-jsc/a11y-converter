@@ -68,7 +68,8 @@ export const allowedTags = [
 ];
 
 export const transformImgTag = (baseURL, attribs) => {
-  const src = convertRelativeUrlsToAbsolute(baseURL, attribs.src) || '';
+  const originalSrc = attribs?.src || attribs['data-src'] || ''
+  const src = convertRelativeUrlsToAbsolute(baseURL, originalSrc) || '';
   return {
     tagName: 'img',
     attribs: { ...attribs, src },
@@ -99,12 +100,10 @@ export const exclusiveFilter = (options, frame) => {
 
   // Remove images if src isn't exits or width & height < options?.min(Width/Height)
   if (frame.tag === 'img') {
-    const width = frame?.attribs?.width;
-    const height = frame?.attribs?.height;
+    const { width, height, src } = frame.attribs || {}
     return (
-      !frame.attribs.src ||
-      (width &&
-        height &&
+      !src ||
+      (width && height &&
         parseInt(width) < options?.removeSmallImages?.minWidth &&
         parseInt(height) < options?.removeSmallImages?.minHeight)
     );
