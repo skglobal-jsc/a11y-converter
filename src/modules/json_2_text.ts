@@ -254,13 +254,6 @@ const json2Text = ({ json, iArticle }: { json: any; iArticle: IArticle }) => {
       res += parseParagraph2Text($p, iArticle) + '\n\n';
     }
   });
-  res =
-    useLocale({ key: 'StartArticle', lang: metaOpt?.lang, value: null }) +
-    '\n\n' +
-    res +
-    '\n\n' +
-    useLocale({ key: 'EndArticle', lang: metaOpt?.lang, value: null });
-
   return cleanText(res);
 };
 

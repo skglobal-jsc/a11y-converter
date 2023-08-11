@@ -143,7 +143,7 @@ import {
     //   }
     // },
   }).then((res) => {
-    console.log(res.a11yHTML)
+    console.log(res.plainText)
   });
 })();
 
