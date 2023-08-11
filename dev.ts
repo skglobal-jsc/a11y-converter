@@ -95,7 +95,7 @@ import {
       // favicon: undefined,
       googleAnalyticsId: '',
       playerBar: {
-        isEnable: false,
+        isEnable: true,
         ragtApiKey: 'JGFew89YsN3lOHSqfbNjD3ZjAa3WHMfG7xLJQYkm',
         ragtClientId: 'uv_crawling_SXN3TN4P5NJICPBH'
       }
@@ -111,7 +111,7 @@ import {
       //   ragtApiKey: 'JGFew89YsN3lOHSqfbNjD3ZjAa3WHMfG7xLJQYkm',
       //   ragtClientId: 'uv_crawling_SXN3TN4P5NJICPBH'
       // }
-    }
+    },
     // a11ySetting: {
     //   meta: {
     //     lang: 'ja',
@@ -143,7 +143,7 @@ import {
     //   }
     // },
   }).then((res) => {
-    console.log(JSON.stringify(res.ragtJson.blocks.meta))
+    console.log(res.a11yHTML)
   });
 })();
 
