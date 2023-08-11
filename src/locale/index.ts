@@ -1,3 +1,7 @@
+import { CLASS_NAME } from '../constant/index';
+
+const defaultLang = 'ja'
+
 const locale = (value) => ({
   Image: {
     ja: `ここに「${value}」の画像があります。`,
@@ -35,14 +39,9 @@ const locale = (value) => ({
     vi: `Có tổng cộng ${value} cột`,
   },
   TableEnd: {
-    ja: `です。\n表(ひょう)の終わりです。`,
+    ja: `表(ひょう)の終わりです。`,
     en: `The table content ends.`,
     vi: `Kết thúc bảng`,
-  },
-  TableEndRAGT: {
-    ja: `です。\n`,
-    en: ``,
-    vi: ``,
   },
   Table1stRow: {
     ja: `データの1行目、`,
@@ -69,8 +68,58 @@ const locale = (value) => ({
     en: 'DD MM YYYY',
     vi: 'Ngày DD tháng MM năm YYYY',
   },
+  ListIntroduction: {
+    ja: value?.subItemNum > 0
+      ? `ここに親${value?.rootItemNum}行と子${value?.subItemNum}行の箇条書きのリストがあります。`
+      : `ここに${value?.rootItemNum}行の箇条書きのリストがあります。`,
+    en: `This is ${
+      value?.style === 'ordered' ? 'Numbered' : 'Bulleted'
+      } list, there are ${value?.rootItemNum} items and ${
+        value?.subItemNum
+      } sub items`,
+    vi: `Đây là danh sách được ${
+      value?.style === 'ordered' ? 'đánh số' : 'gạch đầu dòng'
+      }, danh sách có ${value?.rootItemNum} mục chính và ${
+        value?.subItemNum
+      } mục phụ.`
+  },
+  ImageAnnotation: {
+    ja: value?.alt ? `ここに<span class="${CLASS_NAME.highlightText}">「${value?.alt}」</span>の画像があります。` : 'ここに画像があります。',
+    en: value?.alt ? `This image is about <span class="${CLASS_NAME.highlightText}">${value?.alt}</span>.` : 'There is a image',
+    vi: value?.alt ? `Đây là hình ảnh về <span class="${CLASS_NAME.highlightText}">${value?.alt}</span>.` : 'Đây là một bức hình',
+  },
+  TableIntroduction: {
+    ja: `この下に、<span class="${CLASS_NAME.highlightText}">縦${value?.totalRows}行</span>、<span class="${CLASS_NAME.highlightText}">横${value?.totalCols}列</span>の表(ひょう)があります。`,
+    en: `This is table with <span class="${CLASS_NAME.highlightText}">${value?.totalRows} rows</span>, <span class="${CLASS_NAME.highlightText}">${value?.totalCols} columns</span>.`,
+    vi: `Đây là dữ liệu dạng bảng, <span class="${CLASS_NAME.highlightText}">có ${value?.totalRows} dòng</span>, <span class="${CLASS_NAME.highlightText}">${value?.totalCols} cột</span>.`
+  },
+  TableCaptionForDisplay: {
+    ja: `表(ひょう)のタイトルは、${value?.caption}、です。`,
+    en: `The title of the table is <span class="${CLASS_NAME.highlightText}">${value?.caption}</span>.`,
+    vi: `Tiêu đề của bảng là <span class="${CLASS_NAME.highlightText}">${value?.caption}</span>.`
+  },
+  TableHeader: {
+    ja: `見出し行は左から、${value?.header}です。`,
+    en: `The table headers are ${value?.header}.`,
+    vi: `Dòng tiêu đề là ${value?.header}, bắt đầu từ trái sang phải.`
+  },
+  TableFirstLine: {
+    ja: `データの1行目、${value?.rowData}`,
+    en: `The first line of data is ${value?.rowData}`,
+    vi: `Dòng thứ nhất là ${value?.rowData}`
+  },
+  TableOtherLine: {
+    ja: `${value?.line}行目、${value?.rowData}${value?.isEndRow ? '、です。' : ''}`,
+    en: `Line ${value?.line}: ${value?.rowData}`,
+    vi: `Dòng thứ ${value?.line} là ${value?.rowData}`
+  },
+  // TableEnd: {
+  //   ja: '表(ひょう)の終わりです。',
+  //   en: 'End table.',
+  //   vi: 'Kết thúc bảng.'
+  // }
 });
 
-export const useLocale = (key, lang = 'ja', value = '') => {
-  return locale(value)[key][lang];
+export const useLocale = ({ key, lang, value }) => {
+  return locale(value)[key][lang || defaultLang];
 };

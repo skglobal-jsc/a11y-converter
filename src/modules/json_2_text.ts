@@ -152,8 +152,8 @@ const parseImage2Text = (block, lang = 'ja', iArticle?: IArticle): any => {
   if (!block?.data?.file?.url) return '';
 
   let text = block?.data?.caption
-    ? `${useLocale('Image', lang, block.data.caption)}\n`
-    : `${useLocale('ImageNoAlt')}\n`;
+    ? `${useLocale({ key: 'Image', lang, value: block.data.caption })}\n`
+    : `${useLocale({ key: 'ImageNoAlt', lang, value: '' })}\n`;
 
   if (block.data.file.url.includes('http')) {
     text += block.data.file.url;
@@ -184,30 +184,30 @@ const parseTable2Text = (block, lang = 'ja', iArticle?: IArticle): any => {
   const totalRows = block?.data?.content?.length;
   const totalColumns = block?.data?.content[0]?.length;
   let text = `${
-    useLocale('TableNumberRow', lang, (totalRows - 1).toString())
+    useLocale({ key: 'TableNumberRow', lang, value: (totalRows - 1).toString() })
   }、${
-    useLocale('TableNumberColumn', lang, totalColumns.toString())
+    useLocale({ key: 'TableNumberColumn', lang, value: totalColumns.toString() })
   }\n`;
 
   if (block.data?.caption) {
-    text += `${useLocale('TableCaption', lang, block.data?.caption)}\n`;
+    text += `${useLocale({ key: 'TableCaption', lang, value: block.data?.caption })}\n`;
   }
 
   const rows = [...block.data.content];
 
   if (block.data?.withHeadings) {
-    text += `${useLocale(
-      'TableTitle',
+    text += `${useLocale({
+      key: 'TableTitle',
       lang,
-      rows?.shift()?.join(lang === 'ja' ? '、' : ', ')
-    )}\n`;
+      value: rows?.shift()?.join(lang === 'ja' ? '、' : ', ')
+    })}\n`;
   }
 
   for (let i = 0; i < rows?.length; i++) {
     if (i === 0) {
-      text += useLocale('Table1stRow', lang);
+      text += useLocale({ key: 'Table1stRow', lang, value: null });
     } else {
-      text += useLocale('TableRow', lang, (i + 1).toString());
+      text += useLocale({ key: 'TableRow', lang, value: (i + 1).toString() });
     }
     text += rows[i]
       ?.map((item) => {
@@ -221,7 +221,7 @@ const parseTable2Text = (block, lang = 'ja', iArticle?: IArticle): any => {
     }
   }
 
-  return text + `${lang === 'ja' ? '、' : ', '}${useLocale('TableEnd', lang)}`;
+  return text + `${lang === 'ja' ? '、' : ', '}${useLocale({ key: 'TableEnd', lang, value: null })}`;
 };
 
 /**
@@ -255,11 +255,11 @@ const json2Text = ({ json, iArticle }: { json: any; iArticle: IArticle }) => {
     }
   });
   res =
-    useLocale('StartArticle', metaOpt?.lang) +
+    useLocale({ key: 'StartArticle', lang: metaOpt?.lang, value: null }) +
     '\n\n' +
     res +
     '\n\n' +
-    useLocale('EndArticle', metaOpt?.lang);
+    useLocale({ key: 'EndArticle', lang: metaOpt?.lang, value: null });
 
   return cleanText(res);
 };

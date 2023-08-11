@@ -76,7 +76,7 @@ import {
 // })();
 
 (async () => {
-  const {html} = await fromUrl({ url: 'https://www.cocos-jpn.co.jp/menu/fair/shaved_ice2306/shaved_ice_mini_greentea2306.html', opt: { contentSelectors: ['.menu_detail'] }})
+  const {html} = await fromUrl({ url: 'https://www.cocos-jpn.co.jp/menu/fair/shaved_ice2306/shaved_ice_mini_mini_koguma2306.html', opt: { contentSelectors: ['#container > main > div.basic_container > section > div > div > div > div.nutrients > ul'] }})
 
 
   html2Text({
@@ -143,8 +143,7 @@ import {
     //   }
     // },
   }).then((res) => {
-    // console.log(JSON.stringify(res.ragtJson));
-    console.log(res.a11yHTML);
+    console.log(JSON.stringify(res.ragtJson.blocks.meta))
   });
 })();
 

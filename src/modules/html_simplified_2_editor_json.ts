@@ -7,6 +7,7 @@ import {
   HEADER_LEVEL,
   LIST_STYLE,
 } from '../constant/index';
+import { useLocale } from '../locale/index';
 
 const cleanInline = (html) => {
   return sanitizeHtml(html, {
@@ -38,6 +39,7 @@ const parseListItems = ($, items) => {
 
 const htmlSimplified2EditorJson = (html) => {
   let blocks: any[] = [];
+
   // Build meta option content
   const $ = cheerio.load(html);
   const meta = {
@@ -67,6 +69,16 @@ const htmlSimplified2EditorJson = (html) => {
   };
   const metaOpts = buildMetaOptions(meta);
   let groupUnSupportTag: string[] = [];
+
+  // Build "Start Article sentence"
+  blocks.push({
+    id: Math.random().toString(36).substring(7),
+    type: BLOCK_TYPE.PARAGRAPH,
+    data: {
+      text: useLocale({ key: 'StartArticle', lang: metaOpts?.lang, value: null }),
+    },
+  });
+
   $('body')
     .contents()
     .each((i, el) => {
@@ -220,6 +232,15 @@ const htmlSimplified2EditorJson = (html) => {
         }
       }
     });
+
+  // Build "End Article sentence"
+  blocks.push({
+    id: Math.random().toString(36).substring(7),
+    type: BLOCK_TYPE.PARAGRAPH,
+    data: {
+      text: useLocale({ key: 'EndArticle', lang: metaOpts?.lang, value: null })
+    },
+  });
 
   return {
     blocks,
