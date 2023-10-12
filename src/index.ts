@@ -1,3 +1,4 @@
+import { version } from '../package.json';
 import { Client, RequestsOptions } from './utils/client';
 import { IArticle } from './modules/html_2_text';
 
@@ -10,6 +11,8 @@ import {
   htmlSimplified2EditorJson,
   htmlSimplified2RagtJson,
 } from './modules/index';
+
+console.log('Version: ', version);
 
 export interface ProcessOptions {
   removeComments?: boolean;
