@@ -199,7 +199,7 @@ const parseTable2Text = (block, lang = 'ja', iArticle?: IArticle): any => {
     text += `${useLocale({
       key: 'TableTitle',
       lang,
-      value: rows?.shift()?.join(lang === 'ja' ? '、' : ', ')
+      value: rows?.shift()?.map(item => item?.data)?.join(lang === 'ja' ? '、' : ', ')
     })}\n`;
   }
 
@@ -211,7 +211,7 @@ const parseTable2Text = (block, lang = 'ja', iArticle?: IArticle): any => {
     }
     text += rows[i]
       ?.map((item) => {
-        const $p = cheerio.load(item || '')('body')[0];
+        const $p = cheerio.load(item?.data || '')('body')[0];
         return parseParagraph2Text($p, iArticle);
       })
       .filter(item => item)
@@ -234,6 +234,8 @@ const json2Text = ({ json, iArticle }: { json: any; iArticle: IArticle }) => {
   const blocks = json?.blocks || [],
     metaOpt = json?.metaOpt || {};
   let res = '';
+
+  console.log(JSON.stringify(blocks));
 
   (blocks || []).forEach((block) => {
     if (block.type === BLOCK_TYPE.LIST && block.data?.style === LIST_STYLE.ul) {

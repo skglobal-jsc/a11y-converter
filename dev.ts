@@ -8,7 +8,7 @@ import {
   editorJson2RagtJson,
   tinyhtml,
   htmlSimplified2EditorJson,
-  ragtJson2A11Y
+  ragtJson2A11Y,
 } from './src/index';
 
 // import { readFile, writeFile } from 'fs';
@@ -76,8 +76,17 @@ import {
 // })();
 
 (async () => {
-  const {html} = await fromUrl({ url: 'https://www.cocos-jpn.co.jp/menu/fair/shaved_ice2306/shaved_ice_mini_mini_koguma2306.html', opt: { contentSelectors: ['#container > main > div.basic_container > section > div > div > div > div.nutrients > ul'] }})
-
+  const { html } = await fromUrl({
+    url: 'https://www.pref.shiga.lg.jp/kensei/koho/e-shinbun/oshirase/322424.html',
+    opt: {
+      contentSelectors: [],
+      iArticle: {
+        title: '',
+        publishDate: '',
+        loadedUrl: 'https://www.pref.shiga.lg.jp/kensei/koho/e-shinbun/oshirase/322424.html',
+      },
+    },
+  });
 
   html2Text({
     html: html,
@@ -86,7 +95,7 @@ import {
     iArticle: {
       title: '1234',
       publishDate: '1234',
-      loadedUrl: 'https://www.cocos-jpn.co.jp/menu/fair/shaved_ice2306/shaved_ice_mini_greentea2306.html',
+      loadedUrl: 'https://www.pref.shiga.lg.jp/kensei/koho/e-shinbun/oshirase/322424.html',
     },
     a11ySetting: {
       cssLinks: [],
@@ -146,5 +155,3 @@ import {
     console.log(res.plainText)
   });
 })();
-
-
