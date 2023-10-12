@@ -152,6 +152,6 @@ import {
     //   }
     // },
   }).then((res) => {
-    console.log(res.plainText)
+    // console.log(res.plainText)
   });
 })();

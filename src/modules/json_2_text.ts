@@ -235,8 +235,6 @@ const json2Text = ({ json, iArticle }: { json: any; iArticle: IArticle }) => {
     metaOpt = json?.metaOpt || {};
   let res = '';
 
-  console.log(JSON.stringify(blocks));
-
   (blocks || []).forEach((block) => {
     if (block.type === BLOCK_TYPE.LIST && block.data?.style === LIST_STYLE.ul) {
       res += parseUoL2Text(block, iArticle) + '\n';

@@ -28,7 +28,8 @@
       "./node_modules/@types",
       "src/@custom_types",
       "src/@types/index.d.ts"
-    ]
+    ],
+    "resolveJsonModule": true
   },
   "ts-node": {
     "compilerOptions": {

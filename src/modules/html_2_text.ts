@@ -1,3 +1,5 @@
+import { version } from '../../package.json';
+
 import tinyhtml from './tiny_html';
 import htmlSimplified2EditorJson from './html_simplified_2_editor_json';
 import json2Text from './json_2_text';
@@ -64,6 +66,7 @@ const html2Text = async ({
   a11ySetting?: A11YSetting;
 }) => {
   try {
+    console.log('Version: ', version);
 
     // Step1: Simplify html
     const { html: simplifiedHTML } = await tinyhtml(html, {
