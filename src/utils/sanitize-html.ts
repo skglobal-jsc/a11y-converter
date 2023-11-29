@@ -79,9 +79,9 @@ export const transformImgTag = (baseURL, attribs) => {
 export const transformATag = (baseURL, attribs) => {
   const href = convertRelativeUrlsToAbsolute(baseURL, attribs.href) || ''
   return {
-    tagName: 'a',
-    attribs: { ...attribs, href },
-  };
+    tagName: !attribs.href ? 'p' : 'a',
+    attribs: { ...attribs, ...(attribs.href ? { href } : {}) },
+  }
 };
 
 export const transformLinkTag = (baseURL, attribs) => {

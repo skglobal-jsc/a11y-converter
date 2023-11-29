@@ -1,15 +1,7 @@
 const fs = require('fs');
 import {
-  // editorJson2A11yHtml,
-  // html2editorJson,
-  json2Text,
   html2Text,
-  htmlSimplified2RagtJson,
   fromUrl,
-  editorJson2RagtJson,
-  tinyhtml,
-  htmlSimplified2EditorJson,
-  ragtJson2A11Y,
 } from './src/index';
 
 // import { readFile, writeFile } from 'fs';
@@ -78,13 +70,13 @@ import {
 
 (async () => {
   const { html } = await fromUrl({
-    url: 'https://www.env.go.jp/park/akan/guide/view.html',
+    url: 'https://www.env.go.jp/park/akan/point/index.html',
     opt: {
-      contentSelectors: ['body > div.l-wrapper > div.l-main'],
+      contentSelectors: ['body > div.l-wrapper > div.l-main > div > div.p-cont.u-mb80'],
       iArticle: {
         title: '',
         publishDate: '',
-        loadedUrl: 'https://www.env.go.jp/park/akan/guide/view.html',
+        loadedUrl: 'https://www.env.go.jp/park/akan/point/index.html',
       },
     },
   });
@@ -95,7 +87,7 @@ import {
     iArticle: {
       title: '1234',
       publishDate: '1234',
-      loadedUrl: 'https://www.env.go.jp/park/akan/guide/view.html',
+      loadedUrl: 'https://www.env.go.jp/park/akan/point/index.html',
     },
     a11ySetting: {
       cssLinks: [],

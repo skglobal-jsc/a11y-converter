@@ -122,8 +122,8 @@ const _replaceDivWithParagraph = ($) => {
 
       // Check if the div contains only text nodes
       if (
-          divElement.children.length === 1 &&
-          divElement.children[0].type === 'text'
+          divElement?.children?.length === 1 &&
+          divElement?.children[0]?.type === 'text'
         ) {
           // Create a new paragraph element
           const p = $('<p>').text(divElement.children[0].data);
