@@ -13,8 +13,13 @@ import { ALLOWED_TAG_NO_TEXT_CONTENT } from '../constant/index';
 import { ProcessOptions } from '../index';
 
 const _checkAndRemoveEmptyTag = ($, el) => {
-  if (ALLOWED_TAG_NO_TEXT_CONTENT.includes(el.name)) return;
-  if (!$(el).text() || isIgnoreText($(el).text())) return $(el).remove();
+  if (ALLOWED_TAG_NO_TEXT_CONTENT.includes(el.name)) {
+    return;
+  }
+  const hasImg = $(el).find('img').length > 0
+  if (!hasImg && (!$(el).text() || isIgnoreText($(el).text()))) {
+    return $(el).remove();
+  }
 
   $(el)
     .contents()
@@ -90,32 +95,47 @@ const _sanitizeHtml = (html, options) => {
     allowedTags: allowedTags, // allow only these tags
     allowedAttributes: allowedAttributes,
     allowedStyles: {}, // allow only these styles
-    textFilter: (text) => text.trim().replace(/\s\s+/g, ' '),
+    textFilter: (text) => {
+      const data = text
+        // .trim()
+        .replace(/\s{2,}/g, ' ')
+        .replace(/\t/g, '');
+      return data
+    },
     transformTags: {
-      img: (tagName, attribs) => transformImgTag(baseURL, attribs),
-      a: (tagName, attribs) => transformATag(baseURL, attribs),
-      link: (tagName, attribs) => transformLinkTag(baseURL, attribs)
+      img: (_, attribs) => transformImgTag(baseURL, attribs),
+      a: (_, attribs) => transformATag(baseURL, attribs),
+      link: (_, attribs) => transformLinkTag(baseURL, attribs),
+
     },
     exclusiveFilter: (frame) => exclusiveFilter(options, frame),
   });
 };
 
-const tinyhtml = async (html: string, opt?: ProcessOptions) => {
-  const options: ProcessOptions = {
-    removeComments: true,
-    removeEmptyElements: true,
-    removeSmallImages: {
-      minWidth: 100,
-      minHeight: 100,
-    },
-    removeOptionalTags: [],
-    removeScriptTypeAttributes: true,
-    ...opt,
-  };
+const _replaceDivWithParagraph = ($) => {
+  // Get all div elements
+  const divElements = $('div');
 
-  // Load cheerio
-  let $ = cheerio.load(html);
+  // Iterate through each div element
+  for (let i = 0; i < divElements.length; i++) {
+      const divElement = divElements[i];
 
+      // Check if the div contains only text nodes
+      if (
+          divElement.children.length === 1 &&
+          divElement.children[0].type === 'text'
+        ) {
+          // Create a new paragraph element
+          const p = $('<p>').text(divElement.children[0].data);
+
+          // Replace the div with the paragraph
+          $(divElement).replaceWith(p);
+      }
+  }
+}
+
+const _preTinyHTMlProcessing = async ($, options) => {
+  // Remove unnecessary elements by title selector
   if (options.titleSelector) {
     const $content = $(options.contentSelectors?.join(',') || 'body');
     const $titleEl = $(options.titleSelector);
@@ -137,20 +157,51 @@ const tinyhtml = async (html: string, opt?: ProcessOptions) => {
     });
   }
 
-  // select the content of the page using contentSelectors. If doesn't exist then select the whole body
-  if (options?.contentSelectors && options.contentSelectors.length > 0 && !options.contentSelectors.includes('body')) {
+  // Select the content of the page using contentSelectors. If doesn't exist then select the whole body
+  if (
+    options?.contentSelectors &&
+    options.contentSelectors.length > 0 &&
+    !options.contentSelectors.includes('body')
+  ) {
     const $content = $(options.contentSelectors!.join(','))
-    const $body = cheerio.load('<body></body>', { decodeEntities: true }, true);
+    const $body = cheerio.load(
+      '<body></body>',
+      { decodeEntities: true },
+      true
+    );
     // append the content to the new body
     $body('body').append($content);
     // replace the body with the new body
     $('body').replaceWith($body('body'));
   }
 
-  // execute the cleaning process
+  // Execute the cleaning process
   if (options.hooks?.before) {
     await executeHookFn(options.hooks.before, $);
   }
+
+  // Replace all div(contains text only) to paragraph
+  _replaceDivWithParagraph($);
+}
+
+const tinyhtml = async (html: string, opt?: ProcessOptions) => {
+  const options: ProcessOptions = {
+    removeComments: true,
+    removeEmptyElements: true,
+    removeSmallImages: {
+      minWidth: 100,
+      minHeight: 100,
+    },
+    removeOptionalTags: [],
+    removeScriptTypeAttributes: true,
+    ...opt,
+  };
+
+  // Load cheerio
+  let $ = cheerio.load(html);
+
+  // Pre processing of tiny HTML
+  await _preTinyHTMlProcessing($, options)
 
   // Sanitize html
   const sanitizedHtml = _sanitizeHtml($.html(), options);
@@ -159,11 +210,10 @@ const tinyhtml = async (html: string, opt?: ProcessOptions) => {
   // Flatter html
   _flattenHtml($)
 
-
   // Reduce html
   _reduceHtml($, options);
 
-  // execute the after hook
+  // Execute the after hook
   if (options.hooks?.after) {
     await executeHookFn(options.hooks.after, $);
   }

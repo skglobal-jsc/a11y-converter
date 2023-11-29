@@ -1,3 +1,4 @@
+const fs = require('fs');
 import {
   // editorJson2A11yHtml,
   // html2editorJson,
@@ -77,17 +78,16 @@ import {
 
 (async () => {
   const { html } = await fromUrl({
-    url: 'https://www.pref.shiga.lg.jp/kensei/koho/e-shinbun/oshirase/322424.html',
+    url: 'https://www.env.go.jp/park/akan/guide/view.html',
     opt: {
-      contentSelectors: [],
+      contentSelectors: ['body > div.l-wrapper > div.l-main'],
       iArticle: {
         title: '',
         publishDate: '',
-        loadedUrl: 'https://www.pref.shiga.lg.jp/kensei/koho/e-shinbun/oshirase/322424.html',
+        loadedUrl: 'https://www.env.go.jp/park/akan/guide/view.html',
       },
     },
   });
-
   html2Text({
     html: html,
     contentSelectors: ['body'],
@@ -95,7 +95,7 @@ import {
     iArticle: {
       title: '1234',
       publishDate: '1234',
-      loadedUrl: 'https://www.pref.shiga.lg.jp/kensei/koho/e-shinbun/oshirase/322424.html',
+      loadedUrl: 'https://www.env.go.jp/park/akan/guide/view.html',
     },
     a11ySetting: {
       cssLinks: [],
@@ -152,6 +152,11 @@ import {
     //   }
     // },
   }).then((res) => {
-    // console.log(res.plainText)
+    fs.writeFile("index.html", res.a11yHTML, function(err) {
+      if(err) {
+        return console.log(err);
+      }
+      console.log("The file was saved!");
+    });
   });
 })();
