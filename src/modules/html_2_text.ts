@@ -21,7 +21,7 @@ export interface IArticle {
   [key: string]: any;
 }
 
-interface SocialMeta {
+export interface SocialMeta {
   title?: string;
   type?: string;
   image?: string;
