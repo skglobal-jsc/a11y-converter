@@ -234,7 +234,7 @@ const editorJson2RagtJson = (editorJson) => {
         index += 1;
       }
 
-      polly = cheerio.load(polly.replace(/<br\s*\/?>/g, '\n')).text();
+      polly = cheerio.load(polly.replace(/<br\s*\/?>/g, '.')).text();
       let ui = `<tr tabindex="0" aria-label="${polly}">`;
       row.forEach((cell) => {
         const className =
@@ -347,7 +347,6 @@ const editorJson2RagtJson = (editorJson) => {
   });
 
   const ragtJson = convertRagtJsonTextToHyperlink({ ...editorJson, blocks });
-
   return ragtJson;
 };
 
