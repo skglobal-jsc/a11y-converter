@@ -234,7 +234,17 @@ const editorJson2RagtJson = (editorJson) => {
         index += 1;
       }
 
-      polly = cheerio.load(polly.replace(/<br\s*\/?>/g, '.')).text();
+      polly = cheerio
+        .load(
+          polly.replace(
+            /<br\s*\/?>/g,
+            useLocale({
+              key: 'Dot',
+              lang,
+            })
+          )
+        )
+        .text();
       let ui = `<tr tabindex="0" aria-label="${polly}">`;
       row.forEach((cell) => {
         const className =
