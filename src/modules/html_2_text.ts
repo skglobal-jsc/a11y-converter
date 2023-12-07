@@ -91,7 +91,6 @@ const html2Text = async ({
         data: { json: ragtJson, html: '<html></html>' },
       });
     }
-
     // Step3: Convert editor json to plain text
     const plainText = await json2Text({ json: ragtJson, iArticle });
 

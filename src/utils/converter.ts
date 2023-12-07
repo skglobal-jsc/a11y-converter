@@ -344,9 +344,6 @@ const editorJson2RagtJson = (editorJson) => {
       block.data = {
         withHeadings: block?.data?.withHeadings,
         content: block.data?.content || [],
-        // ?.map(row => {
-        //   return row.map(cell => cell.data || '')
-        // }),
         caption: block.data?.caption || '',
       };
     }

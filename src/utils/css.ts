@@ -4,12 +4,12 @@ export const commonCssLinks = {
   ja: [
     'https://unpkg.com/a11y-css-reset/combo.css',
     'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;300;400;500;700;900&display=swap',
-    'https://ragt-dev.s3.ap-southeast-1.amazonaws.com/public/ragt-convertor/ja.css',
+    'https://ragt-dev.s3.ap-southeast-1.amazonaws.com/public/ragt-editor/ja.css',
   ],
   en: [
     'https://unpkg.com/a11y-css-reset/combo.css',
     'https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100;300;400;500;700;900&display=swap',
-    'https://ragt-dev.s3.ap-southeast-1.amazonaws.com/public/ragt-convertor/en.css',
+    'https://ragt-dev.s3.ap-southeast-1.amazonaws.com/public/ragt-editor/en.css',
   ],
 };
 
@@ -56,8 +56,8 @@ export const _applyCssRules = ($: cheerio.CheerioAPI, cssRules?: string[]) => {
   // apply a11y stylesheets link
   const cssList = [
     ...(cssRules || []),
-    ...(commonCssLinks[lang] || commonCssLinks.ja)
-  ]
+    ...(commonCssLinks[lang] || commonCssLinks.ja),
+  ];
   cssList.forEach((link) => {
     $head.append(`<link rel="stylesheet" href="${link}">`);
   });
@@ -102,16 +102,20 @@ export const _applyMetaHead = ($: cheerio.CheerioAPI, meta?: any) => {
   }
   // add social meta
   if (meta?.socialMeta) {
-    Object.keys(meta?.socialMeta)?.filter(key => meta?.socialMeta[key]).forEach(key => {
-      $head.append(`<meta name="${key}" content="${meta.socialMeta[key]}">`);
-    });
+    Object.keys(meta?.socialMeta)
+      ?.filter((key) => meta?.socialMeta[key])
+      .forEach((key) => {
+        $head.append(`<meta name="${key}" content="${meta.socialMeta[key]}">`);
+      });
   }
 
   // add twitter meta
   if (meta?.twitterMeta) {
-    Object.keys(meta?.twitterMeta)?.filter(key => meta?.twitterMeta[key]).forEach(key => {
-      $head.append(`<meta name="${key}" content="${meta.twitterMeta[key]}">`);
-    });
+    Object.keys(meta?.twitterMeta)
+      ?.filter((key) => meta?.twitterMeta[key])
+      .forEach((key) => {
+        $head.append(`<meta name="${key}" content="${meta.twitterMeta[key]}">`);
+      });
   }
 };
 

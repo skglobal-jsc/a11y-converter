@@ -1,8 +1,5 @@
 const fs = require('fs');
-import {
-  html2Text,
-  fromUrl,
-} from './src/index';
+import { html2Text, fromUrl } from './src/index';
 
 // import { readFile, writeFile } from 'fs';
 
@@ -70,16 +67,19 @@ import {
 
 (async () => {
   const { html } = await fromUrl({
-    url: 'https://www.env.go.jp/park/akan/point/index.html',
+    url: 'https://www.env.go.jp/park/shikotsu/access/index.html',
     opt: {
-      contentSelectors: ['body > div.l-wrapper > div.l-main > div > div.p-cont.u-mb80'],
+      contentSelectors: [
+        '#cont-accordion-3 > div:nth-child(2) > div:nth-child(1) > div.p-contact__add',
+      ],
       iArticle: {
         title: '',
         publishDate: '',
-        loadedUrl: 'https://www.env.go.jp/park/akan/point/index.html',
+        loadedUrl: 'https://www.env.go.jp/park/shikotsu/access/index.html',
       },
     },
   });
+
   html2Text({
     html: html,
     contentSelectors: ['body'],
@@ -98,8 +98,8 @@ import {
       playerBar: {
         isEnable: true,
         ragtApiKey: 'JGFew89YsN3lOHSqfbNjD3ZjAa3WHMfG7xLJQYkm',
-        ragtClientId: 'uv_crawling_SXN3TN4P5NJICPBH'
-      }
+        ragtClientId: 'uv_crawling_SXN3TN4P5NJICPBH',
+      },
       // cssLinks: [
       //   'https://devstage-basestack-databuckete3889a50-1g1xv7rv7flx1.s3.amazonaws.com/news/a11y/3fbe9f8877.css',
       //   'https://site.uni-voice.biz/css/1307.9f62991a.css'
@@ -144,11 +144,11 @@ import {
     //   }
     // },
   }).then((res) => {
-    fs.writeFile("index.html", res.a11yHTML, function(err) {
-      if(err) {
+    fs.writeFile('index.html', res.a11yHTML, function (err) {
+      if (err) {
         return console.log(err);
       }
-      console.log("The file was saved!");
+      console.log('The file was saved!');
     });
   });
 })();
