@@ -6,6 +6,7 @@ import {
   _applyAccessibilityAttributes,
   _applyGoogleAnalytics,
 } from './css';
+import { _applyScript } from './script';
 import { replaceTextLinkToText, replaceTextLinkToHyperlink } from './hyperlink';
 import { BLOCK_TYPE, CLASS_NAME, RAGT_PLAYER_INFO } from '../constant/index';
 import { A11YSetting } from '../modules/html_2_text';
@@ -481,6 +482,9 @@ const ragtJson2A11Y = (ragtJson, a11ySetting?: A11YSetting) => {
       );
     }
   });
+
+  // Apply js script
+  $('body').append(_applyScript());
 
   // Clean "break-line" character from 2 up
   const regexPattern = /(<br\s*\/?>\s*){3,}|(\\n\s*\s*){3,}/gi;
