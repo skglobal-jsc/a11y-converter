@@ -1,8 +1,5 @@
 import { version } from '../package.json';
 import { Client, RequestsOptions } from './utils/client';
-import { IArticle } from './modules/html_2_text';
-
-import { ragtJson2A11Y, editorJson2RagtJson } from './utils/converter';
 
 import {
   html2Text,
@@ -11,8 +8,9 @@ import {
   htmlSimplified2EditorJson,
   htmlSimplified2RagtJson,
 } from './modules/index';
-
-console.log('Version: ', version);
+import { IArticle } from './@types';
+import { editorJson2RagtJson } from './modules/editor_json_2_ragt_json';
+import { ragtJson2A11Y } from './modules/ragt_json_2_a11y';
 
 export interface ProcessOptions {
   removeComments?: boolean;

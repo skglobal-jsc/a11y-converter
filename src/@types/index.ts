@@ -13,8 +13,8 @@ export declare type MetaOptions = {
   favicon?: string;
   image?: string;
   type?: string;
-  socialMeta?: SocialMeta,
-  twitterMeta?: SocialMeta
+  socialMeta?: SocialMeta;
+  twitterMeta?: SocialMeta;
 };
 
 export declare type ProcessOptions = {
@@ -72,17 +72,29 @@ export declare type BlockItem = {
   type: string;
 };
 
-export declare type IArticle = {
-  id: string;
+export interface IArticle {
+  id?: string;
   title: string;
   publishDate: string;
-  crawledAt: string;
-  URL: string;
-  description: string;
+  crawledAt?: string;
+  URL?: string;
+  description?: string;
   thumbnailURL?: string;
   topic?: string | string[];
   loadedUrl?: string;
 
   // IF can be added many more fields
   [key: string]: any;
-};
+}
+
+export interface A11YSetting {
+  meta?: MetaOptions;
+  cssLinks?: string[];
+  googleAnalyticsId?: string;
+  playerBar?: {
+    isEnable?: boolean;
+    ragtApiKey?: string;
+    ragtClientId?: string;
+    id?: string;
+  };
+}

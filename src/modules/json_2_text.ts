@@ -1,7 +1,7 @@
 import * as cheerio from 'cheerio';
 import { BLOCK_TYPE, LIST_STYLE } from '../constant/index';
 import { useLocale } from '../locale/index';
-import { IArticle } from './html_2_text';
+import { IArticle } from '../@types';
 
 enum TAG_NAME {
   Link = 'a',
@@ -21,8 +21,8 @@ const cleanText = (text: string = '') => {
     .replace(/  +/g, ' ')
     .replace(/\n +/g, '\n')
     .replace(/\n　+/g, '\n')
-    .replace(/\n\t+/g, '\n')
-    // .trim();
+    .replace(/\n\t+/g, '\n');
+  // .trim();
   return txt;
 };
 
@@ -34,30 +34,34 @@ const parseParagraph2Text = ($p, iArticle?: IArticle): any => {
   let res = '';
   if (!$p?.children || $p.children.length === 0) {
     if ($p?.name === 'br') {
-      return '\n'
+      return '\n';
     }
     return cleanText($p?.data);
   }
   $p?.children.forEach((element) => {
     // link tag
-    const innerText = parseParagraph2Text(element, iArticle)
+    const innerText = parseParagraph2Text(element, iArticle);
     if (element.name === TAG_NAME.Link) {
       let href = element?.attribs?.href || '';
-      if (href.startsWith('tel:')) { // URL is telephone number
+      if (href.startsWith('tel:')) {
+        // URL is telephone number
         const telNumber = href.replace('tel:', '');
         if (innerText.includes(telNumber)) {
           res += innerText;
         } else {
           res += `${innerText} ${telNumber}`;
         }
-      } else if (href.includes('#')) { // URL is id target
+      } else if (href.includes('#')) {
+        // URL is id target
         res += innerText;
-      } else if (!href.includes('http') && iArticle?.loadedUrl) { // URL is absolute path
+      } else if (!href.includes('http') && iArticle?.loadedUrl) {
+        // URL is absolute path
         const path = new URL(href, iArticle.loadedUrl);
         res += `${innerText} - ${path.href} `;
       } else if (href.trim() === innerText.trim()) {
         res += innerText;
-      } else { // Normal url
+      } else {
+        // Normal url
         res += `${innerText} - ${href} `;
       }
     } else {
@@ -183,14 +187,22 @@ const parseTable2Text = (block, lang = 'ja', iArticle?: IArticle): any => {
   }
   const totalRows = block?.data?.content?.length;
   const totalColumns = block?.data?.content[0]?.length;
-  let text = `${
-    useLocale({ key: 'TableNumberRow', lang, value: (totalRows - 1).toString() })
-  }、${
-    useLocale({ key: 'TableNumberColumn', lang, value: totalColumns.toString() })
-  }\n`;
+  let text = `${useLocale({
+    key: 'TableNumberRow',
+    lang,
+    value: (totalRows - 1).toString(),
+  })}、${useLocale({
+    key: 'TableNumberColumn',
+    lang,
+    value: totalColumns.toString(),
+  })}\n`;
 
   if (block.data?.caption) {
-    text += `${useLocale({ key: 'TableCaption', lang, value: block.data?.caption })}\n`;
+    text += `${useLocale({
+      key: 'TableCaption',
+      lang,
+      value: block.data?.caption,
+    })}\n`;
   }
 
   const rows = [...block.data.content];
@@ -199,7 +211,10 @@ const parseTable2Text = (block, lang = 'ja', iArticle?: IArticle): any => {
     text += `${useLocale({
       key: 'TableTitle',
       lang,
-      value: rows?.shift()?.map(item => item?.data)?.join(lang === 'ja' ? '、' : ', ')
+      value: rows
+        ?.shift()
+        ?.map((item) => item?.data)
+        ?.join(lang === 'ja' ? '、' : ', '),
     })}\n`;
   }
 
@@ -214,14 +229,21 @@ const parseTable2Text = (block, lang = 'ja', iArticle?: IArticle): any => {
         const $p = cheerio.load(item?.data || '')('body')[0];
         return parseParagraph2Text($p, iArticle);
       })
-      .filter(item => item)
+      .filter((item) => item)
       .join(lang === 'ja' ? '、' : ', ');
     if (i + 1 !== rows.length) {
-      text += '\n'
+      text += '\n';
     }
   }
 
-  return text + `${lang === 'ja' ? '、' : ', '}${useLocale({ key: 'TableEnd', lang, value: null })}`;
+  return (
+    text +
+    `${lang === 'ja' ? '、' : ', '}${useLocale({
+      key: 'TableEnd',
+      lang,
+      value: null,
+    })}`
+  );
 };
 
 /**

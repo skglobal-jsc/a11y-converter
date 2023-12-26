@@ -21,13 +21,14 @@
     "allowSyntheticDefaultImports": true,
     "baseUrl": "./",
     "paths": {
-      "*": ["src/@custom_types/*"]
+      "*": ["src/@custom_types/*"],
+      "@src/*": ["src/*"]
     },
     "allowJs": true,
     "typeRoots": [
       "./node_modules/@types",
       "src/@custom_types",
-      "src/@types/index.d.ts"
+      "src/@types/index.ts"
     ],
     "resolveJsonModule": true
   },

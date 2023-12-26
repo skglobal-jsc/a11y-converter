@@ -1,6 +1,6 @@
+import { MetaOptions } from '../@types';
 import * as cheerio from 'cheerio';
 import * as url from 'url';
-import { MetaOptions } from '../modules/html_2_text'
 
 export const convertRelativeUrlsToAbsolute = (
   baseUrl: string = '',
@@ -48,8 +48,8 @@ export const executeHookFn = async (
 };
 
 export const buildMetaOptions = (opt: MetaOptions) => {
-  const socialMeta = opt?.socialMeta || {}
-  const twitterMeta = opt?.twitterMeta || {}
+  const socialMeta = opt?.socialMeta || {};
+  const twitterMeta = opt?.twitterMeta || {};
   const metaOptions = {
     ...(!!opt.lang && { lang: opt.lang }),
     ...(!!opt.title && { title: opt.title }),
@@ -58,13 +58,17 @@ export const buildMetaOptions = (opt: MetaOptions) => {
     ...(!!opt.keywords && { keywords: opt.keywords }),
     socialMeta: {
       ...(!!socialMeta.title && { 'og:title': socialMeta.title }),
-      ...(!!socialMeta.description && { 'og:description': socialMeta.description }),
+      ...(!!socialMeta.description && {
+        'og:description': socialMeta.description,
+      }),
       ...(!!socialMeta.image && { 'og:image': socialMeta.image }),
       ...(!!socialMeta.type && { 'og:type': socialMeta.type }),
     },
     twitterMeta: {
       ...(!!twitterMeta.title && { 'twitter:title': twitterMeta.title }),
-      ...(!!twitterMeta.description && { 'twitter:description': twitterMeta.description }),
+      ...(!!twitterMeta.description && {
+        'twitter:description': twitterMeta.description,
+      }),
       ...(!!twitterMeta.image && { 'twitter:image': twitterMeta.image }),
       ...(!!twitterMeta.image && { 'twitter:card': 'summary_large_image' }),
     },
@@ -73,7 +77,7 @@ export const buildMetaOptions = (opt: MetaOptions) => {
 };
 
 export const isIgnoreText = (text: string): boolean => {
-  text = text.toLowerCase()
+  text = text.toLowerCase();
   if (
     text.includes('acrobat') ||
     text.includes('adobe') ||
@@ -103,4 +107,4 @@ export const clearImageExtensions = (text: string) => {
   const cleanedFilename = text?.replace(imageExtensionsRegex, '');
 
   return cleanedFilename || '';
-}
+};

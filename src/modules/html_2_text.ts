@@ -3,54 +3,10 @@ import { version } from '../../package.json';
 import tinyhtml from './tiny_html';
 import htmlSimplified2EditorJson from './html_simplified_2_editor_json';
 import json2Text from './json_2_text';
-import { editorJson2RagtJson, ragtJson2A11Y } from '../utils/converter';
 import RagtService from '../services/ragt';
-
-export interface IArticle {
-  id?: string;
-  title: string;
-  publishDate: string;
-  crawledAt?: string;
-  URL?: string;
-  description?: string;
-  thumbnailURL?: string;
-  topic?: string | string[];
-  loadedUrl?: string;
-
-  // IF can be added many more fields
-  [key: string]: any;
-}
-
-export interface SocialMeta {
-  title?: string;
-  type?: string;
-  image?: string;
-  description?: string;
-}
-
-export interface MetaOptions {
-  lang?: string;
-  title?: string;
-  description?: string;
-  keywords?: string;
-  favicon?: string;
-  image?: string;
-  type?: string;
-  socialMeta?: SocialMeta;
-  twitterMeta?: SocialMeta;
-}
-
-export interface A11YSetting {
-  meta?: MetaOptions;
-  cssLinks?: string[];
-  googleAnalyticsId?: string;
-  playerBar?: {
-    isEnable?: boolean;
-    ragtApiKey?: string;
-    ragtClientId?: string;
-    id?: string;
-  };
-}
+import { A11YSetting, IArticle } from '../@types';
+import { editorJson2RagtJson } from './editor_json_2_ragt_json';
+import { ragtJson2A11Y } from './ragt_json_2_a11y';
 
 const html2Text = async ({
   html,
@@ -84,10 +40,10 @@ const html2Text = async ({
     const playerBar = a11ySetting?.playerBar || {};
     let ragtRes;
     if (playerBar?.isEnable && playerBar?.ragtApiKey) {
-      const ragtService = new RagtService({
+      const ragtApi = new RagtService({
         ragtApiKey: playerBar?.ragtApiKey,
       });
-      ragtRes = await ragtService.upsertMetadata({
+      ragtRes = await ragtApi.upsertMetadata({
         data: { json: ragtJson, html: '<html></html>' },
       });
     }

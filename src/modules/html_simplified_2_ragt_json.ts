@@ -1,5 +1,5 @@
+import { editorJson2RagtJson } from './editor_json_2_ragt_json';
 import htmlSimplified2EditorJson from './html_simplified_2_editor_json';
-import { editorJson2RagtJson } from '../utils/converter';
 
 const htmlSimplified2RagtJson = (htmlSimplified: string) => {
   // Step1: Convert html simplified to editor json
