@@ -1,13 +1,8 @@
 import * as cheerio from 'cheerio';
 const sanitizeHtml = require('sanitize-html');
 import { buildMetaOptions, clearImageExtensions } from '../utils/helper';
-import {
-  BLOCK_TAGS,
-  BLOCK_TYPE,
-  HEADER_LEVEL,
-  LIST_STYLE,
-} from '../constant/index';
-import { useLocale } from '../locale/index';
+import { BLOCK_TAGS, BLOCK_TYPE, HEADER_LEVEL, LIST_STYLE } from '../constant';
+import { useLocale } from '../locale';
 
 const cleanInline = (html) => {
   return sanitizeHtml(html, {
@@ -58,14 +53,14 @@ const htmlSimplified2EditorJson = (html) => {
       title: $('meta[property="og:title"]')?.attr('content') || '',
       type: $('meta[property="og:type"]')?.attr('content') || '',
       image: $('meta[property="og:image"]')?.attr('content') || '',
-      description: $('meta[property="og:description"]')?.attr('content') || ''
+      description: $('meta[property="og:description"]')?.attr('content') || '',
     },
     twitterMeta: {
       title: $('meta[name="twitter:title"]')?.attr('content') || '',
       type: $('meta[name="twitter:type"]')?.attr('content') || '',
       image: $('meta[name="twitter:image"]')?.attr('content') || '',
-      description: $('meta[name="twitter:description"]')?.attr('content') || ''
-    }
+      description: $('meta[name="twitter:description"]')?.attr('content') || '',
+    },
   };
   const metaOpts = buildMetaOptions(meta);
   let groupUnSupportTag: string[] = [];
@@ -75,7 +70,10 @@ const htmlSimplified2EditorJson = (html) => {
     id: Math.random().toString(36).substring(7),
     type: BLOCK_TYPE.PARAGRAPH,
     data: {
-      text: useLocale({ key: 'StartArticle', lang: metaOpts?.lang, value: null }),
+      text: useLocale({
+        key: 'StartArticle',
+        lang: metaOpts?.lang,
+      }),
     },
   });
 
@@ -100,8 +98,8 @@ const htmlSimplified2EditorJson = (html) => {
           }
           //TODO: Paragraph
           if (el.name === 'p') {
-            const imgTagPattern = /<img.*\/?>/g
-            if ($(el).text().trim() || imgTagPattern.test($(el).html() || '') ) {
+            const imgTagPattern = /<img.*\/?>/g;
+            if ($(el).text().trim() || imgTagPattern.test($(el).html() || '')) {
               blocks.push({
                 id,
                 type: BLOCK_TYPE.PARAGRAPH,
@@ -174,26 +172,25 @@ const htmlSimplified2EditorJson = (html) => {
             const firstRow = $(el).find('tr')?.[0];
             const rows = Array.from($(el).find('tr'));
             let totalCols = 0;
-            const content = rows
-              .map((row) => {
-                const cols = [
-                  ...Array.from($(row).find('th')),
-                  ...Array.from($(row).find('td')),
-                ];
-                if (cols.length > totalCols) {
-                  totalCols = cols.length;
-                }
-                let newCols: any = []
-                cols.forEach(element => {
-                  const rowSpan = parseInt($(element)?.attr('rowspan') || '1')
-                  const colSpan = parseInt($(element)?.attr('colspan') || '1')
-                  newCols.push({ data: $(element).html(), rowSpan, colSpan })
-                  // for (let i = 0; i < colSpan - 1; i++) { // Add empty col for merge cell case
-                  //   newCols.push({ data: '', rowSpan: 1, colSpan: 1 })
-                  // }
-                });
-                return newCols;
-              })
+            const content = rows.map((row) => {
+              const cols = [
+                ...Array.from($(row).find('th')),
+                ...Array.from($(row).find('td')),
+              ];
+              if (cols.length > totalCols) {
+                totalCols = cols.length;
+              }
+              let newCols: any = [];
+              cols.forEach((element) => {
+                const rowSpan = parseInt($(element)?.attr('rowspan') || '1');
+                const colSpan = parseInt($(element)?.attr('colspan') || '1');
+                newCols.push({ data: $(element).html(), rowSpan, colSpan });
+                // for (let i = 0; i < colSpan - 1; i++) { // Add empty col for merge cell case
+                //   newCols.push({ data: '', rowSpan: 1, colSpan: 1 })
+                // }
+              });
+              return newCols;
+            });
             const isHeaders = $(firstRow)?.find('th')?.length > 0;
             const headers = Array.from($(el).find('th'))?.map((th) =>
               $(th)?.html()
@@ -238,7 +235,7 @@ const htmlSimplified2EditorJson = (html) => {
     id: Math.random().toString(36).substring(7),
     type: BLOCK_TYPE.PARAGRAPH,
     data: {
-      text: useLocale({ key: 'EndArticle', lang: metaOpts?.lang, value: null })
+      text: useLocale({ key: 'EndArticle', lang: metaOpts?.lang, value: null }),
     },
   });
 

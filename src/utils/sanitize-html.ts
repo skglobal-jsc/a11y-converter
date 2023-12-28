@@ -68,7 +68,7 @@ export const allowedTags = [
 ];
 
 export const transformImgTag = (baseURL, attribs) => {
-  const originalSrc = attribs?.src || attribs['data-src'] || ''
+  const originalSrc = attribs?.src || attribs['data-src'] || '';
   const src = convertRelativeUrlsToAbsolute(baseURL, originalSrc) || '';
   return {
     tagName: 'img',
@@ -77,15 +77,15 @@ export const transformImgTag = (baseURL, attribs) => {
 };
 
 export const transformATag = (baseURL, attribs) => {
-  const href = convertRelativeUrlsToAbsolute(baseURL, attribs.href) || ''
+  const href = convertRelativeUrlsToAbsolute(baseURL, attribs.href) || '';
   return {
     tagName: !attribs.href ? 'p' : 'a',
     attribs: { ...attribs, ...(attribs.href ? { href } : {}) },
-  }
+  };
 };
 
 export const transformLinkTag = (baseURL, attribs) => {
-  const href = convertRelativeUrlsToAbsolute(baseURL, attribs.href) || ''
+  const href = convertRelativeUrlsToAbsolute(baseURL, attribs.href) || '';
   return {
     tagName: 'link',
     attribs: { ...attribs, href },
@@ -100,10 +100,11 @@ export const exclusiveFilter = (options, frame) => {
 
   // Remove images if src isn't exits or width & height < options?.min(Width/Height)
   if (frame.tag === 'img') {
-    const { width, height, src } = frame.attribs || {}
+    const { width, height, src } = frame.attribs || {};
     return (
       !src ||
-      (width && height &&
+      (width &&
+        height &&
         parseInt(width) < options?.removeSmallImages?.minWidth &&
         parseInt(height) < options?.removeSmallImages?.minHeight)
     );

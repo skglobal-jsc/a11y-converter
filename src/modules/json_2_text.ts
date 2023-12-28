@@ -1,6 +1,6 @@
 import * as cheerio from 'cheerio';
-import { BLOCK_TYPE, LIST_STYLE } from '../constant/index';
-import { useLocale } from '../locale/index';
+import { BLOCK_TYPE, LIST_STYLE } from '../constant';
+import { useLocale } from '../locale';
 import { IArticle } from '../@types';
 
 enum TAG_NAME {

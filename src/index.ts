@@ -1,4 +1,3 @@
-import { version } from '../package.json';
 import { Client, RequestsOptions } from './utils/client';
 
 import {
@@ -7,7 +6,7 @@ import {
   json2Text,
   htmlSimplified2EditorJson,
   htmlSimplified2RagtJson,
-} from './modules/index';
+} from './modules';
 import { IArticle } from './@types';
 import { editorJson2RagtJson } from './modules/editor_json_2_ragt_json';
 import { ragtJson2A11Y } from './modules/ragt_json_2_a11y';

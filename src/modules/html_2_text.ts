@@ -1,10 +1,10 @@
 import { version } from '../../package.json';
 
+import RagtService from '../services/ragt';
+import { A11YSetting, IArticle } from '../@types';
 import tinyhtml from './tiny_html';
 import htmlSimplified2EditorJson from './html_simplified_2_editor_json';
 import json2Text from './json_2_text';
-import RagtService from '../services/ragt';
-import { A11YSetting, IArticle } from '../@types';
 import { editorJson2RagtJson } from './editor_json_2_ragt_json';
 import { ragtJson2A11Y } from './ragt_json_2_a11y';
 

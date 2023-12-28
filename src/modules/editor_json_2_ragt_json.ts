@@ -177,7 +177,7 @@ export const editorJson2RagtJson = (editorJson) => {
     // TODO: List
     if (block.type === BLOCK_TYPE.LIST) {
       let items = [];
-      getMetaByDfs(block.data, 'id', items);
+      getMetaByDfs({ data: block.data, parentId: 'root', resultArr: items });
       meta = [...items];
       meta = [
         {

@@ -9,14 +9,14 @@ import {
   transformLinkTag,
   exclusiveFilter,
 } from '../utils/sanitize-html';
-import { ALLOWED_TAG_NO_TEXT_CONTENT } from '../constant/index';
+import { ALLOWED_TAG_NO_TEXT_CONTENT } from '../constant';
 import { ProcessOptions } from '../index';
 
 const _checkAndRemoveEmptyTag = ($, el) => {
   if (ALLOWED_TAG_NO_TEXT_CONTENT.includes(el.name)) {
     return;
   }
-  const hasImg = $(el).find('img').length > 0
+  const hasImg = $(el).find('img').length > 0;
   if (!hasImg && (!$(el).text() || isIgnoreText($(el).text()))) {
     return $(el).remove();
   }
@@ -42,7 +42,7 @@ const _flattenHtml = ($: cheerio.CheerioAPI) => {
   $('img').each((i, el) => {
     _flattenElement(el);
   });
-}
+};
 
 const _reduceHtml = ($: cheerio.CheerioAPI, opts: ProcessOptions) => {
   // Clean head
@@ -90,7 +90,7 @@ const _sanitizeHtml = (html, options) => {
 
   const $ = cheerio.load(preCleanedHtml);
 
-  const baseURL = options?.iArticle?.url || options?.iArticle?.loadedUrl || ''
+  const baseURL = options?.iArticle?.url || options?.iArticle?.loadedUrl || '';
   return sanitizeHtml($.html(), {
     allowedTags: allowedTags, // allow only these tags
     allowedAttributes: allowedAttributes,
@@ -100,13 +100,12 @@ const _sanitizeHtml = (html, options) => {
         // .trim()
         .replace(/\s{2,}/g, ' ')
         .replace(/\t/g, '');
-      return data
+      return data;
     },
     transformTags: {
       img: (_, attribs) => transformImgTag(baseURL, attribs),
       a: (_, attribs) => transformATag(baseURL, attribs),
       link: (_, attribs) => transformLinkTag(baseURL, attribs),
-
     },
     exclusiveFilter: (frame) => exclusiveFilter(options, frame),
   });
@@ -118,21 +117,21 @@ const _replaceDivWithParagraph = ($) => {
 
   // Iterate through each div element
   for (let i = 0; i < divElements.length; i++) {
-      const divElement = divElements[i];
+    const divElement = divElements[i];
 
-      // Check if the div contains only text nodes
-      if (
-          divElement?.children?.length === 1 &&
-          divElement?.children[0]?.type === 'text'
-        ) {
-          // Create a new paragraph element
-          const p = $('<p>').text(divElement.children[0].data);
+    // Check if the div contains only text nodes
+    if (
+      divElement?.children?.length === 1 &&
+      divElement?.children[0]?.type === 'text'
+    ) {
+      // Create a new paragraph element
+      const p = $('<p>').text(divElement.children[0].data);
 
-          // Replace the div with the paragraph
-          $(divElement).replaceWith(p);
-      }
+      // Replace the div with the paragraph
+      $(divElement).replaceWith(p);
+    }
   }
-}
+};
 
 const _preTinyHTMlProcessing = async ($, options) => {
   // Remove unnecessary elements by title selector
@@ -163,12 +162,8 @@ const _preTinyHTMlProcessing = async ($, options) => {
     options.contentSelectors.length > 0 &&
     !options.contentSelectors.includes('body')
   ) {
-    const $content = $(options.contentSelectors!.join(','))
-    const $body = cheerio.load(
-      '<body></body>',
-      { decodeEntities: true },
-      true
-    );
+    const $content = $(options.contentSelectors!.join(','));
+    const $body = cheerio.load('<body></body>', { decodeEntities: true }, true);
     // append the content to the new body
     $body('body').append($content);
     // replace the body with the new body
@@ -182,7 +177,7 @@ const _preTinyHTMlProcessing = async ($, options) => {
 
   // Replace all div(contains text only) to paragraph
   _replaceDivWithParagraph($);
-}
+};
 
 const tinyhtml = async (html: string, opt?: ProcessOptions) => {
   const options: ProcessOptions = {
@@ -201,14 +196,14 @@ const tinyhtml = async (html: string, opt?: ProcessOptions) => {
   let $ = cheerio.load(html);
 
   // Pre processing of tiny HTML
-  await _preTinyHTMlProcessing($, options)
+  await _preTinyHTMlProcessing($, options);
 
   // Sanitize html
   const sanitizedHtml = _sanitizeHtml($.html(), options);
   $ = cheerio.load(sanitizedHtml);
 
   // Flatter html
-  _flattenHtml($)
+  _flattenHtml($);
 
   // Reduce html
   _reduceHtml($, options);

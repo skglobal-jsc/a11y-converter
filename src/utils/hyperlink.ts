@@ -61,7 +61,10 @@ export const listImgTag = (text: string) => {
   }
   return matches;
 };
-export const replaceTextLinkToSpecialHyperlink = (text: string, lang = 'default') => {
+export const replaceTextLinkToSpecialHyperlink = (
+  text: string,
+  lang = 'default'
+) => {
   const regex =
     /(?:http[s]*:\/\/)(?:[a-zA-Z\-_0-9\/.]+)\.(?:[a-zA-Z.]{2,3})\/(?:[a-zA-Z0-9\-_\/._~:?#\[\]@!$&'()*+,;=%]*)(?:[a-zA-Z0-9]+\.)(jpg|jpeg|png|svg|gif|avif|webp|bmp|ico|docx|doc|xlsx|xlsm|xlsb|xls|pptx|ppt|pdf)+(?:[\/,\?][^\s]{2,}|(?![\/,\?][^\s]{2,}))/g;
   let match: RegExpExecArray | null;
@@ -70,17 +73,23 @@ export const replaceTextLinkToSpecialHyperlink = (text: string, lang = 'default'
     if (match.index === regex.lastIndex) {
       regex.lastIndex++;
     }
-    const exceptRanges = [...listLinkTag(text), ...listImgTag(text), ...listUnuseText(text)];
+    const exceptRanges = [
+      ...listLinkTag(text),
+      ...listImgTag(text),
+      ...listUnuseText(text),
+    ];
     const isExcept = exceptRanges.some(({ start, end }) => {
       if (match?.index !== null && match?.index !== undefined) {
         return start <= match.index && match.index <= end;
       }
-      return false
+      return false;
     });
     if (isExcept) continue;
     const { 0: url, 1: type } = match;
     const linkType = mapExtensionToType[type] || 'other';
-    const anchorText = typeTextByLanguage[linkType][lang] || typeTextByLanguage[linkType].default;
+    const anchorText =
+      typeTextByLanguage[linkType][lang] ||
+      typeTextByLanguage[linkType].default;
     let link = `<a href="${url}" rel="nofollow">${anchorText}</a>`;
     if (linkType === 'image')
       link = `<img src="${url}"  alt="${anchorText}" width="100%" height="100%"/>`;
@@ -89,7 +98,10 @@ export const replaceTextLinkToSpecialHyperlink = (text: string, lang = 'default'
   }
   return text;
 };
-export const replaceTextLinkToOtherHyperlink = (text: string, lang = 'default') => {
+export const replaceTextLinkToOtherHyperlink = (
+  text: string,
+  lang = 'default'
+) => {
   const regex =
     /(?:https?:\/\/(?:www\.|(?!www))(?:[a-zA-Z0-9][a-zA-Z0-9-]+(?:\.|(?!\.)))+(?:[\/,\?][^\s]{0,}|(?![\/,\?][^\s]{2,}))|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[a-zA-Z0-9]+(?:[\/,\?][^\s]{2,}|(?![\/,\?][^\s]{2,}))|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[a-zA-Z0-9]+(?:[\/,\?][^\s]{2,}|(?![\/,\?][^\s]{2,}))|www\.[a-zA-Z0-9]+\.[a-zA-Z0-9]+(?:[\/,\?][^\s]{2,}|(?![\/,\?][^\s]{2,})))/g;
   let match: RegExpExecArray | null;
@@ -98,12 +110,16 @@ export const replaceTextLinkToOtherHyperlink = (text: string, lang = 'default') 
     if (match.index === regex.lastIndex) {
       regex.lastIndex++;
     }
-    const exceptRanges = [...listLinkTag(text), ...listImgTag(text), ...listUnuseText(text)];
+    const exceptRanges = [
+      ...listLinkTag(text),
+      ...listImgTag(text),
+      ...listUnuseText(text),
+    ];
     const isExcept = exceptRanges.some(({ start, end }) => {
       if (match?.index !== null && match?.index !== undefined) {
         return start <= match.index && match.index <= end;
       }
-      return false
+      return false;
     });
     if (isExcept) {
       continue;
@@ -125,12 +141,17 @@ export const replaceTextLinkToEmailHyperlink = (text: string) => {
     if (match.index === regex.lastIndex) {
       regex.lastIndex++;
     }
-    const exceptRanges = [...listLinkTag(text), ...listImgTag(text), ...listUnuseText(text)];
+    const exceptRanges = [
+      ...listLinkTag(text),
+      ...listImgTag(text),
+      ...listUnuseText(text),
+    ];
 
     const isExcept = exceptRanges.some(({ start, end }) => {
       if (match?.index !== null && match?.index !== undefined) {
         return start <= match.index && match.index <= end;
-      } return false
+      }
+      return false;
     });
     if (isExcept) continue;
     const { 0: email } = match;
@@ -151,12 +172,16 @@ export const replaceTextLinkToAddressHyperlink = (text: string) => {
     if (match.index === regex.lastIndex) {
       regex.lastIndex++;
     }
-    const exceptRanges = [...listLinkTag(text), ...listImgTag(text), ...listUnuseText(text)];
+    const exceptRanges = [
+      ...listLinkTag(text),
+      ...listImgTag(text),
+      ...listUnuseText(text),
+    ];
     const isExcept = exceptRanges.some(({ start, end }) => {
       if (match?.index !== null && match?.index !== undefined) {
         return start <= match.index && match.index <= end;
       }
-      return false
+      return false;
     });
     if (isExcept) continue;
     const { 0: address } = match;
@@ -176,13 +201,17 @@ export const replaceTextLinkToPhoneHyperlink = (text: string) => {
     if (match.index === regex.lastIndex) {
       regex.lastIndex++;
     }
-    const exceptRanges = [...listLinkTag(text), ...listImgTag(text), ...listUnuseText(text)];
+    const exceptRanges = [
+      ...listLinkTag(text),
+      ...listImgTag(text),
+      ...listUnuseText(text),
+    ];
 
     const isExcept = exceptRanges.some(({ start, end }) => {
       if (match?.index !== null && match?.index !== undefined) {
         return start <= match.index && match.index <= end;
       }
-      return false
+      return false;
     });
     if (isExcept) continue;
     const { 0: phone } = match;
@@ -206,14 +235,17 @@ export const replaceTextLinkToText = (text: string, lang = 'default') => {
   for (const match of matches) {
     const { 0: url, 1: type } = match;
     const linkType = mapExtensionToType[type] || 'other';
-    const anchorText = typeTextByLanguage[linkType][lang] || typeTextByLanguage[linkType].default;
+    const anchorText =
+      typeTextByLanguage[linkType][lang] ||
+      typeTextByLanguage[linkType].default;
     text = text.replace(url, anchorText);
   }
   const byOtherRegex = linkRegex.byOther;
   const matches2 = text.matchAll(byOtherRegex);
   for (const match of matches2) {
     const { 0: url } = match;
-    const anchorText = typeTextByLanguage['other'][lang] || typeTextByLanguage['other'].default;
+    const anchorText =
+      typeTextByLanguage['other'][lang] || typeTextByLanguage['other'].default;
     text = text.replace(url, anchorText);
   }
   return text;

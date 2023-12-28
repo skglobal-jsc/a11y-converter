@@ -21,15 +21,10 @@
     "allowSyntheticDefaultImports": true,
     "baseUrl": "./",
     "paths": {
-      "*": ["src/@custom_types/*"],
       "@src/*": ["src/*"]
     },
     "allowJs": true,
-    "typeRoots": [
-      "./node_modules/@types",
-      "src/@custom_types",
-      "src/@types/index.ts"
-    ],
+    "typeRoots": ["./node_modules/@types", "src/@types/index.ts"],
     "resolveJsonModule": true
   },
   "ts-node": {
