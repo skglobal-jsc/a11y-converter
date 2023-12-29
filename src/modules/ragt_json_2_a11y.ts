@@ -1,7 +1,6 @@
 import * as cheerio from 'cheerio';
 import { A11YSetting } from '../@types';
 import { _setupHead } from '../utils/css';
-import { _applyScript } from '../utils/script';
 import { BLOCK_TYPE, CLASS_NAME, RAGT_PLAYER_INFO } from '../constant';
 
 const _dfsRender = ({
@@ -87,9 +86,6 @@ export const ragtJson2A11Y = (ragtJson, a11ySetting?: A11YSetting) => {
         break;
     }
   });
-
-  // TODO: Add script
-  $('body').append(_applyScript());
 
   // TODO: Clean "break-line" character from 2 up
   const regexPattern = /(<br\s*\/?>\s*){3,}|(\\n\s*\s*){3,}/gi;
