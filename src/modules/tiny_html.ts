@@ -96,10 +96,7 @@ const _sanitizeHtml = (html, options) => {
     allowedAttributes: allowedAttributes,
     allowedStyles: {}, // allow only these styles
     textFilter: (text) => {
-      const data = text
-        // .trim()
-        .replace(/\s{2,}/g, ' ')
-        .replace(/\t/g, '');
+      const data = text.replace(/\s{2,}/g, ' ').replace(/\t/g, '');
       return data;
     },
     transformTags: {
@@ -111,26 +108,41 @@ const _sanitizeHtml = (html, options) => {
   });
 };
 
+// Check if the div container only contains text and allowed tag list
+const _isDivContainsTextAndAllowedTagList = (
+  $: cheerio.Cheerio<cheerio.Element>,
+  allowedTags: Array<string> = []
+): boolean => {
+  const data = $?.contents()
+    ?.toArray()
+    ?.every((node: any) => {
+      const tagName: string = node?.tagName || '';
+      return (
+        node.nodeType === 3 ||
+        (node.nodeType === 1 && allowedTags.includes(tagName))
+      );
+    });
+  return data;
+};
+
 const _replaceDivWithParagraph = ($) => {
   // Get all div elements
-  const divElements = $('div');
+  const $divElements: cheerio.Cheerio<cheerio.Element> = $('div');
 
   // Iterate through each div element
-  for (let i = 0; i < divElements.length; i++) {
-    const divElement = divElements[i];
+  $divElements.each((index, element) => {
+    const $divElement: cheerio.Cheerio<cheerio.Element> = $(element);
 
-    // Check if the div contains only text nodes
-    if (
-      divElement?.children?.length === 1 &&
-      divElement?.children[0]?.type === 'text'
-    ) {
+    // Check if the div container only contains text and allowed tag list
+    const allowedTags = ['span', 'a'];
+    if (_isDivContainsTextAndAllowedTagList($divElement, allowedTags)) {
       // Create a new paragraph element
-      const p = $('<p>').text(divElement.children[0].data);
+      const p = $('<p>').text($divElement.html());
 
       // Replace the div with the paragraph
-      $(divElement).replaceWith(p);
+      $divElement.replaceWith(p);
     }
-  }
+  });
 };
 
 const _preTinyHTMlProcessing = async ($, options) => {
