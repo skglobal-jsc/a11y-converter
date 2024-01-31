@@ -4,12 +4,12 @@ export const commonCssLinks = {
   ja: [
     'https://unpkg.com/a11y-css-reset/combo.css',
     'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;300;400;500;700;900&display=swap',
-    'https://ragt-dev.s3.ap-southeast-1.amazonaws.com/public/ragt-editor/ja.css',
+    'https://dev-storage.ragt.uni-voice.biz/public/ragt-editor/ja.css',
   ],
   en: [
     'https://unpkg.com/a11y-css-reset/combo.css',
     'https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100;300;400;500;700;900&display=swap',
-    'https://ragt-dev.s3.ap-southeast-1.amazonaws.com/public/ragt-editor/en.css',
+    'https://dev-storage.ragt.uni-voice.biz/public/ragt-editor/en.css',
   ],
 };
 
