@@ -43,10 +43,15 @@ const html2Text = async ({
       const ragtApi = new RagtService({
         ragtApiKey: playerBar?.ragtApiKey,
       });
-      ragtRes = await ragtApi.upsertMetadata({
-        data: { json: ragtJson, html: '<html></html>' },
-      });
+      try {
+        ragtRes = await ragtApi.upsertMetadata({
+          data: { json: ragtJson, html: '<html></html>' },
+        });
+      } catch (error) {
+        console.log('Error: ', error)
+      }
     }
+
     // Step3: Convert editor json to plain text
     const plainText = await json2Text({ json: ragtJson, iArticle });
 

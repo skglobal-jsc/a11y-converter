@@ -1,6 +1,5 @@
 const fs = require('fs');
-import { html2Text, fromUrl, editorJson2RagtJson } from './src/index';
-import { tinyhtml } from './src/modules';
+import { html2Text } from './src/index';
 
 // import { readFile, writeFile } from 'fs';
 
@@ -66,148 +65,120 @@ import { tinyhtml } from './src/modules';
 
 // })();
 
+// (async () => {
+//   const html = '';
+
+//   html2Text({
+//     html: html,
+//     contentSelectors: ['body'],
+//     titleSelector: '',
+//     iArticle: {
+//       title: '1234',
+//       publishDate: '1234',
+//       loadedUrl: 'https://www.env.go.jp/park/akan/point/index.html',
+//     },
+//     a11ySetting: {
+//       cssLinks: [],
+//       meta: {},
+//       // socialMeta: {},
+//       // favicon: undefined,
+//       googleAnalyticsId: '',
+//       playerBar: {
+//         isEnable: true,
+//         ragtApiKey: 'JGFew89YsN3lOHSqfbNjD3ZjAa3WHMfG7xLJQYkm',
+//         ragtClientId: 'uv_crawling_SXN3TN4P5NJICPBH',
+//       },
+//       // cssLinks: [
+//       //   'https://devstage-basestack-databuckete3889a50-1g1xv7rv7flx1.s3.amazonaws.com/news/a11y/3fbe9f8877.css',
+//       //   'https://site.uni-voice.biz/css/1307.9f62991a.css'
+//       // ],
+//       // meta: {},
+//       // // favicon: undefined,
+//       // googleAnalyticsId: 'UA-XXXX-XXXXX',
+//       // playerBar: {
+//       //   isEnable: true,
+//       //   ragtApiKey: 'JGFew89YsN3lOHSqfbNjD3ZjAa3WHMfG7xLJQYkm',
+//       //   ragtClientId: 'uv_crawling_SXN3TN4P5NJICPBH'
+//       // }
+//     },
+//     // a11ySetting: {
+//     //   meta: {
+//     //     lang: 'ja',
+//     //     title: '',
+//     //     description: '',
+//     //     keywords: '',
+//     //     favicon: '',
+//     //     image: '',
+//     //     type: '',
+//     //     socialMeta: {
+//     //       title: '',
+//     //       type: '',
+//     //       image: '',
+//     //       description: '',
+//     //     },
+//     //     twitterMeta: {
+//     //       title: '',
+//     //       type: '',
+//     //       image: '',
+//     //       description: '',
+//     //     }
+//     //   },
+//     //   cssLinks: undefined,
+//     //   googleAnalyticsId: '',
+//     //   playerBar: {
+//     //     isEnable: true,
+//     //     ragtApiKey: 'JGFew89YsN3lOHSqfbNjD3ZjAa3WHMfG7xLJQYkm',
+//     //     ragtClientId: 'uv_crawling_SXN3TN4P5NJICPBH'
+//     //   }
+//     // },
+//   }).then((res) => {
+//     console.log('res: ', res)
+//     fs.writeFile('index.html', res.a11yHTML, function (err) {
+//       if (err) {
+//         return console.log(err);
+//       }
+//       console.log('The file was saved!');
+//     });
+//   });
+// })();
+
 (async () => {
-  const html = `<article class="contentGpArticleDoc" data-serial-id="gp_article_docs-2547">
-  <div class="date">
-<p class="publishedAt">公開日 2024年01月07日</p>
-</div>
-
-
-<div class="body">
-<div class="text-beginning"><h3><span style="background-color:#99ff99">輪島市からのお願い</span></h3>
-
-<div class="clearfix temp1">
-<div class="thumb"><img alt="" src="file_contents/wajima48.jpg" style="height:281px; width:500px" title="wajima48"></div>
-
-<p>現在、全国の皆様から寄附の申し出を電話やFAX、メール等にてご依頼頂いておりますが、被災者への支援等に総力で取り組むため、ふるさと納税関係書類の郵送を停止しております。</p>
-
-<p><span style="color:#ee0000">ふるさと納税は、<a href="#災害支援サイト">各災害支援サイト（インターネット）</a>からお手続きをお願いいたします。</span></p>
-</div>
-
-<ul>
-<li>既に電話やFAX、メールにて寄附の申し出をされた方については、書類・振込用紙（ゆうちょ銀行）の送付にお時間を頂きますが、準備が整い次第、ご自宅に郵送いたします。（2月上旬予定）</li>
-<li>まだ寄附の申し出をされておらず、振込用紙（ゆうちょ銀行）による寄附を希望される方は、誠に申し訳ありませんが、2月以降ご連絡頂きますようご協力をお願いいたします。</li>
-</ul>
-
-<p>&nbsp;</p>
-
-<h3><span id="災害支援サイト" name="災害支援サイト" style="background-color:#99ff99">ふるさと納税・災害支援サイト</span></h3>
-
-<ul>
-<li><a href="https://www.furusato-tax.jp/saigai/filter?category_id%5B%5D=1303" target="_blank">ふるさとチョイス<img src="/_themes/city/img/ic-blank.gif" alt="新しいウィンドウで外部サイトを開きます" class="external"></a></li>
-<li><a href="https://furunavi.jp/c/disaster_support" target="_blank">ふるなび<img src="/_themes/city/img/ic-blank.gif" alt="新しいウィンドウで外部サイトを開きます" class="external"></a></li>
-<li><a href="https://www.satofull.jp/oenkifu/oenkifu_detail.php?page_id=507" target="_blank">さとふる<img src="/_themes/city/img/ic-blank.gif" alt="新しいウィンドウで外部サイトを開きます" class="external"></a></li>
-<li><a href="https://mifurusato.jp/item/ITM17204990001.html" target="_blank">三越伊勢丹ふるさと納税<img src="/_themes/city/img/ic-blank.gif" alt="新しいウィンドウで外部サイトを開きます" class="external"></a></li>
-<li><a href="https://furusato-nouzei.event.rakuten.co.jp/mypage/disaster-donation?page-id=20240102&amp;l-id=furusato_pc_top_notice_2" target="_blank">楽天ふるさと納税<img src="/_themes/city/img/ic-blank.gif" alt="新しいウィンドウで外部サイトを開きます" class="external"></a></li>
-</ul>
-</div>
-</div>
-
-
-
-        <div class="tags" style="">
-<h2>関連ワード</h2>
-<ul>
-<li style="">
-<a href="/tags/%E8%83%BD%E7%99%BB%E5%8D%8A%E5%B3%B6%E5%9C%B0%E9%9C%87/">能登半島地震</a>
-</li>
-<li style="">
-<a href="/tags/%E3%81%B5%E3%82%8B%E3%81%95%E3%81%A8%E7%B4%8D%E7%A8%8E/">ふるさと納税</a>
-</li>
-</ul>
-</div>
-
-
-
-    <div class="inquiry">
-<h2>お問い合わせ</h2>
-<address>
-<div class="section">産業部　漆器商工課　ふるさと納税推進室</div><div class="tel"><span class="label">TEL</span>：0768-23-1144</div><div class="fax"><span class="label">FAX</span>：0768-23-1856</div><div class="email"><span class="label">E-Mail</span>：<a href="mailto:furusato@city.wajima.lg.jp">furusato@city.wajima.lg.jp</a></div>
-</address>
-</div>
-
-
-
-</article>`;
-
-  const { html: tinyHTML } = await tinyhtml(html);
-
-  // const { html } = await fromUrl({
-  //   url: 'https://www.city.wajima.ishikawa.jp/article/2024010700079',
-  //   opt: {
-  //     contentSelectors: ['#contentBody > article > div.inquiry'],
-  //     iArticle: {
-  //       title: '',
-  //       publishDate: '',
-  //       loadedUrl: 'https://www.city.wajima.ishikawa.jp/article/2024010700079',
-  //     },
-  //   },
-  // });
-
   html2Text({
-    html: tinyHTML,
-    contentSelectors: ['body'],
-    titleSelector: '',
+    "html": "\r\n<!DOCTYPE HTML>\n\n  <head><script src=\"/static/111213/js/perf/stub.js\" type=\"text/javascript\"></script><script src=\"/jslibrary/1698336664248/sfdc/VFRemote.js\" type=\"text/javascript\"></script><script src=\"/jslibrary/1699262264248/ui-sfdc-javascript-impl/SfdcCore.js\" type=\"text/javascript\"></script><script src=\"/resource/1706501017000/X_PUB_DesignResources/assets/js/common/libs/jquery-3.7.0.min.js\" type=\"text/javascript\"></script><script src=\"/resource/1706501017000/X_PUB_DesignResources/assets/js/common/libs/jquery.cookie.min.js\" type=\"text/javascript\"></script><script src=\"/resource/1706501017000/X_PUB_DesignResources/assets/js/common/common.min.js\" type=\"text/javascript\"></script><script src=\"/resource/1706501017000/X_PUB_DesignResources/assets/js/top/index.min.js\" type=\"text/javascript\"></script><script src=\"/static/111213/js/picklist4.js\" type=\"text/javascript\"></script><script src=\"/jslibrary/1698336664248/sfdc/VFState.js\" type=\"text/javascript\"></script><link class=\"user\" href=\"/resource/1706501017000/X_PUB_DesignResources/assets/css/common/common.css\" rel=\"stylesheet\" type=\"text/css\"><link class=\"user\" href=\"/resource/1706501017000/X_PUB_DesignResources/assets/css/top/index.css\" rel=\"stylesheet\" type=\"text/css\"><script src=\"/jslibrary/1698336664248/sfdc/NetworkTracking.js\" type=\"text/javascript\"></script><script>try{ NetworkTracking.init('/_ui/networks/tracking/NetworkTrackingServlet', 'network', '0665i00000KEvEG'); }catch(x){}try{ NetworkTracking.logPageView();}catch(x){}</script><script>(function(UITheme) {\n    UITheme.getUITheme = function() { \n        return UserContext.uiTheme;\n    };\n}(window.UITheme = window.UITheme || {}));</script><script type=\"text/javascript\">\nVisualforce.remoting.Manager.add(new $VFRM.RemotingProviderImpl({\"vf\":{\"vid\":\"0665i00000KEvEG\",\"xhr\":false,\"dev\":false,\"tst\":false,\"dbg\":false,\"tm\":1716179388732,\"ovrprm\":false},\"actions\":{\"X_PUB_CL_HinanjyoNaviSearchCtrl\":{\"ms\":[{\"name\":\"convertAddressToLocation\",\"len\":1,\"ns\":\"\",\"ver\":57.0,\"csrf\":\"VmpFPSxNakF5TkMwd05TMHlNMVF3TkRveU9UbzBPQzQzTXpKYSxaM2R1bXhYQ09qQm9RM1JuOElYZ2hkZnRVUVc0T3V1MHEzVjFnMVBocEVnPSxZVGhtTW1RMA==\",\"authorization\":\"eyJub25jZSI6Ik9Hb0haX1RBdUZRMGs2TVFnTXBEVGpZNkZHYVB5ZXR1ZHkyZzJ2ZV9jTm9cdTAwM2QiLCJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImtpZCI6IntcInRcIjpcIjAwRDVpMDAwMDBEeGpHdVwiLFwidlwiOlwiMDJHNWkwMDAwMDB1S0VUXCIsXCJhXCI6XCJ2ZnJlbW90aW5nc2lnbmluZ2tleVwiLFwidVwiOlwiMDA1NWkwMDAwMEFuUWtVXCJ9IiwiY3JpdCI6WyJpYXQiXSwiaWF0IjoxNzE2MTc5Mzg4NzMzLCJleHAiOjB9.Q2poWVgxQlZRbDlEVEY5SWFXNWhibXA1YjA1aGRtbFRaV0Z5WTJoRGRISnNMbU52Ym5abGNuUkJaR1J5WlhOelZHOU1iMk5oZEdsdmJnPT0=.9qf9hIxSMDETfqtH_qni86zBmxJl8D_cfKlIcQ-gpB8=\"}],\"prm\":1}},\"service\":\"apexremote\"}));\n</script></head><meta content=\"text/html; charset=utf-8\" http-equiv=\"Content-Type\">\n  <style>\n    \n    @media screen and (max-width: 768px) {\n        .caution-icon {\n            font-size: 12px;\n            margin: auto;\n        }\n    }\n  .evac-block {\n    width: 100%;\n    height: 150px;\n    overflow: auto;\n  }\n  .evac-table {\n    margin-top: 15px;\n    width: 100%;\n    max-height: 150px;\n    overflow: auto;\n  }\n  .viewC.hinanjyoNabiTable {\n    background-color: #004F99;\n    border-radius: 14px;\n    padding: 6px;\n    box-sizing: border-box\n  }\n  .hinanjyoNabiButton {\n    border: solid;\n    border-color: #fff;\n  }\n  </style><span id=\"j_id0:j_id3\">\n    <head>\n<meta http-equiv=\"PRAGMA\" content=\"NO-CACHE\">\n<meta http-equiv=\"Expires\" content=\"Mon, 01 Jan 1990 12:00:00 GMT\">\n\n    <meta content=\"text/html; charset=utf-8\" http-equiv=\"Content-Type\">\n    <meta content=\"NO-CACHE\" http-equiv=\"PRAGMA\">\n    <meta content=\"Mon, 01 Jan 1990 12:00:00 GMT\" http-equiv=\"Expires\">\n    <meta charset=\"utf-8\">\n    <meta content=\"IE=edge\" http-equiv=\"X-UA-Compatible\">\n    <meta content=\"width=device-width, initial-scale=1\" name=\"viewport\">\n    <meta name=\"author\">\n    <meta name=\"description\">\n    <title>世田谷区防災ポータル</title>\n    </head></span>\n        \n        <script type=\"text/javascript\">\n        function googleTranslateElementInit() {\n                    new google.translate.TranslateElement({pageLanguage: 'ja',\n                                                includedLanguages: 'en,ko,zh-CN,zh-TW',\n                                                layout: google.translate.TranslateElement.InlineLayout.SIMPLE},\n                                                'google_translate_element');\n        }\n        </script>\n        <script src=\"//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit\" type=\"text/javascript\"></script>\n        <body><nav id=\"sp-fixnav-block\">\n            <ul class=\"sp-fixnav\">\n                <li><a href=\"#emergency\">緊急情報</a></li>\n                <li><a href=\"#notice\">お知らせ</a></li>\n                <li><a href=\"#weather\">気象・地震情報</a></li>\n                <li><a href=\"/X_PUB_VF_HinanJohoList\">避難情報</a></li>\n                <li><a href=\"#shelter\">避難所情報</a></li>\n                <li><button id=\"sp-nav-btn\"><span><span></span></span>メニュー</button></li>\n            </ul>\n        </nav>\n        \n        <script type=\"text/javascript\">\n            function resizeWindow(){\n                console.log('★'+window.innerWidth);\n                if (window.innerWidth <= 1180) {\n                    jQuery('#google_translate_element').appendTo('#spgoogle');\n                } else {\n                    jQuery('#google_translate_element').appendTo('#pcgoogle');                  \n                }\n            }            \n            window.onload = resizeWindow;\n            window.onresize = resizeWindow;\n        </script>\n        <div id=\"sp-nav-wrap\">\n            <span class=\"sp-nav-close\"></span>\n            <div class=\"sp-nav-content\">\n                <div class=\"sp-nav-detail\">\n                    <ul class=\"sp-nav\">\n                        <li><a href=\"/X_PUB_VF_LifeLine\">ライフライン</a></li>\n                        <li><a href=\"/X_PUB_VF_GIS\">GIS 地図情報</a></li>\n                    </ul>\n                    <p class=\"sp-nav-bousai-ttl\">知っておきたい！<br>日常の防災知識</p>\n                    <ul class=\"sp-nav-bousai\">\n                        <li><a href=\"#earthquake\" onclick=\"removeMenu('1')\" onkeypress=\"removeMenu('1')\">震災編</a></li>\n                        <li><a href=\"#flood\" onclick=\"removeMenu('2')\" onkeypress=\"removeMenu('2')\">水害・雪害・土砂災害編</a></li>\n                    </ul>\n                    <script type=\"text/javascript\">\n                        function removeMenu(arg) {\n                            var wrap = document.getElementById('sp-nav-wrap');\n                            var btn = document.getElementById('sp-nav-btn');\n\n                            wrap.classList.remove(\"show\");\n                            btn.classList.remove(\"active\");\n\n                            var earthquake = document.getElementById('earthquake');\n                            var flood = document.getElementById('flood');\n\n                            if (arg == 1) {\n                                earthquake.classList.add(\"current\");\n                                flood.classList.remove(\"current\");\n                            } else {\n                                earthquake.classList.remove(\"current\");\n                                flood.classList.add(\"current\");\n                            }\n                        }\n                    </script>\n                </div>\n                        \n               \n                            \n                        \n\n            </div>\n        </div><article id=\"wrap\">\n            <section class=\"index-content\">\n                <div class=\"block01\">\n                    <h1 class=\"index-ttl\">\n                        <a href=\"/X_PUB_VF_TOP\">\n                            <picture>\n                                <source media=\"(max-width: 768px)\" srcset=\"/resource/1706501017000/X_PUB_DesignResources/assets/img/common/logo_sp.svg?orgId=00D5i00000DxjGu\">\n                                <img alt=\"世田谷区防災ポータル\" height=\"307\" src=\"/resource/1706501017000/X_PUB_DesignResources/assets/img/top/logo_top.svg?orgId=00D5i00000DxjGu\" width=\"638\">\n                            </picture>\n                        </a> \n                    </h1>\n                </div>\n\n                <div class=\"spgoogleButton\">\n                        \n                        <div id=\"spgoogle\"></div>\n                </div>\n\n                <div class=\"block02 topic\" id=\"emergency\">\n                    <h2 class=\"topic-ttl emergency\">緊急情報</h2>\n                    <div>\n                        <dl class=\"index-news-list\"><span id=\"j_id0:j_id26\">\n                                <dd><span class=\"nullResult\">緊急情報 はありません。</span></dd></span>\n                        </dl>\n                        <div class=\"linkbtn\"><a href=\"/X_PUB_VF_KinkyujyouhouList\">一覧を見る</a></div>\n                    </div>\n                </div>\n                <div class=\"block03 topic\" id=\"notice\">\n                    <h2 class=\"topic-ttl notice\">お知らせ</h2>\n                    <div>\n                        <dl class=\"index-news-list\"><span id=\"j_id0:j_id38\">\n                                <dd><span class=\"nullResult\">お知らせ はありません。</span></dd></span>\n                        </dl>\n                        <div class=\"linkbtn\"><a href=\"/X_PUB_VF_OshiraseList\">一覧を見る</a></div>\n                    </div>\n                </div>\n                <div class=\"block04 topic\" id=\"evacuation\">\n                    <h2 class=\"topic-ttl evacuation\">避難情報</h2>\n                    <div class=\"evac-block\">\n                        <table class=\"evac-table\">\n                            <dl class=\"news-list caution\">\n                            </dl>\n                        </table><span id=\"j_id0:j_id46\">\n                            <dd><span class=\"nullResult\">避難情報はありません。</span></dd></span>\n                    </div>\n\n                    <div class=\"linkbtn\"><a href=\"/X_PUB_VF_HinanJohoList\">履歴を見る</a></div>\n                </div>\n                <div class=\"block05 topic\" id=\"shelter\">\n                    <h2 class=\"topic-ttl shelter\">避難所情報</h2>\n                    <div class=\"shelter-table\">\n                        <table>\n                            <thead>\n                                <tr>\n                                    <th class=\"width01\">開設中の避難所</th>\n                                </tr>\n                            </thead>\n                            <tbody>\n                            </tbody>\n                        </table><span id=\"j_id0:j_id54\">\n                            <dd><span class=\"nullResult\">避難所情報はありません。</span></dd></span>\n                    </div>\n                \n                <div class=\"hinanjyoNaviButtonPanel\" style=\"margin: 9px;\">\n                  <table class=\"listViewTable\" style=\"width: 100%;\">\n                    <tr class=\"hinanjyoNabiButton\">\n                      <td class=\"viewC hinanjyoNabiTable\" colspan=\"2\" onclick=\"searchHinanjyoGPS('1', '');\" onkeypress=\"searchHinanjyoGPS('1', '');\">\n                        <div class=\"shelter-linkbtn\"><a>現在地から探す</a></div>\n                        <p class=\"shelter-link-notice\">GPS（位置情報）を有効にしてご利用ください。<br>\n                            GPS（位置情報）が取得できない場合「現在地を設定する」をご利用ください。</p>\n                      </td>\n                    </tr>\n                    <tr class=\"hinanjyoNabiButton\">\n                      <td class=\"viewC hinanjyoNabiTable\" onclick=\"openModalNavi('modalNaviAddress');\" onkeypress=\"openModalNavi('modalNaviAddress');\" style=\"width: 49%;\">\n                        <div class=\"shelter-linkbtn\"><a>現在地を設定する</a></div>\n                      </td>\n                      <td class=\"viewC hinanjyoNabiTable\" onclick=\"openModalNavi('modalNaviKeyword');\" onkeypress=\"openModalNavi('modalNaviKeyword');\" style=\"width: 49%;\">\n                        <div><i class=\"fas fa-search-location fa-2x\" style=\"position: relative; color: #44f;\"></i></div>\n                        <div class=\"shelter-linkbtn\"><a>名称から探す</a></div>\n                      </td>\n                    </tr>\n                  </table>\n                </div>\n<form id=\"j_id0:j_id59\" name=\"j_id0:j_id59\" method=\"post\" action=\"/X_PUB_VF_Top\" enctype=\"application/x-www-form-urlencoded\">\n<input type=\"hidden\" name=\"j_id0:j_id59\" value=\"j_id0:j_id59\">\n<span id=\"j_id0:j_id59:j_id60\">\n<meta content=\"text/html; charset=utf-8\" http-equiv=\"Content-Type\">\n\n<style>\n/* スマホの縦で表示したときの調整 */\n@media screen and (orientation: portrait) {\n    .modalNaviContentPadding { padding:20px 8px; }     /* 8pxは、iPhone 5のために調整した値 */\n    .modalNaviNotePadding { padding: 0 10px; }\n}\n\n/* スマホの横、PCで表示したときの調整 */\n@media screen and (orientation: landscape) {\n    .modalNaviContentPadding { padding:20px 20px; }\n    .modalNaviNotePadding { padding: 0 20px; }\n}\n\n/* 避難所案内用のダイアログのサイズ */\n/* スマホの縦で、キーワードを入力したときに、縦に短いダイアログとなるため、上記の「@media screen and」の2つではなく、widthとmax-widthで制御することした */\n.modalNaviContentWidth {\n    width: 95%;\n    max-width: 400px;\n}\n\n.modalNaviContent {\n    position:fixed;\n    display: none;\n    z-index: 100;\n    border:2px solid #000;\n    background: #CBFFD3;\n    border-color:#006400;\n}\n\n.modalNaviContent ul li {\n    border-top: none !important;\n    background: #CBFFD3 !important;\n}\n\n.modalNaviContent ul li:hover {\n    opacity: 1.0 !important;\n}\n\n.modalNaviContent .btn {\n    margin-top:20px;\n    text-align: center;\n}\n\n/* 避難所案内用のダイアログ内のテキスト */\n.modalNaviText {\n    font-size: 0.9rem;\n    width: 57%;     /* 57%は、iPhone 5のために調整した値 */\n    height: 28px;\n    padding: 0px 5px;\n    border: 1px solid #999999;\n    border-radius: 4px;\n    -moz-border-radius: 4px;\n    -webkit-border-radius: 4px;\n}\n\n.modalNaviText:disabled {\n    background: #EEEEEE !important;\n}\n\n/* 避難所案内用のダイアログ内のボタン */\n.modalNaviBtn {\n    width: 5em!important;\n    height: 2em!important;\n    font-size: 0.9rem;\n    margin-top: 0.3em;\n    margin-right: 0.5em;\n    font-weight:bold;\n    background:#FFFFFF !important;\n    color:#000000;\n    background-image: none;\n    font: inherit;\n    border: 1px solid #999999;\n    border-radius: 4px;\n    -moz-border-radius: 4px;\n    -webkit-border-radius: 4px;\n}\n\n.modalNaviBtn:disabled {\n    background: #EEEEEE !important;\n}\n\n.modalNaviLabel {\n    font-weight: bold;\n    vertical-align: middle;\n}\n\n.modalNaviNote {\n    font-size: 0.9rem;\n    text-align: center;\n    display: block;\n}\n\n.modalNaviNoteInner {\n    font-size: 1.3rem;\n    margin-top: 10px;\n    text-align: left;\n    display: inline-block;\n}\n\n/* 閉じるボタンと、内容の表示位置 */\n.modalNaviClose {\n    position: absolute;\n    top: 3px;\n    right: 10px;\n    font-size: 2rem;\n    font-weight: normal;\n}\n\n.modalNaviDiv {\n    height: 90%;\n    margin-top: 10px;\n}\n\n.modalBg {\n\tposition:fixed;\n\tbackground: #f0f0f0;  \n\topacity: 0.7;\n\tfilter: alpha(opacity=70);\n\t-ms-filter: \"alpha(opacity=70)\";\n\ttop:0;left:0;\n\twidth:100%;\n\theight:100%;\n\tz-index: 30;\n}\n\n</style>\n\n\n<p class=\"modalBg\" style=\"display: none\"></p>\n\n\n<div class=\"modalNaviContent modalNaviContentWidth modalNaviContentPadding\" id=\"modalNaviAddress\">\n    <div class=\"modalNaviClose\" onclick=\"closeModalNavi('modalNaviAddress');\" onkeypress=\"closeModalNavi('modalNaviAddress');\" style=\"cursor: default;\">×</div>\n    <div class=\"modalNaviDiv\">\n        <ul style=\"list-style: none;\">\n            <li>\n                <span class=\"modalNaviLabel\">東京都世田谷区</span>\n                <input class=\"modalNaviText\" id=\"txtNaviAddress\" size=\"50\" type=\"text\">\n            </li>\n            <li>\n                <div class=\"modalNaviNote modalNaviNotePadding\">\n                    <div class=\"modalNaviNoteInner\">\n                        住所をご入力ください<br>\n                        （例）４丁目２１−２７<br>\n                        ※地点は凡その概算です。\n                    </div>\n                </div>\n            </li>\n        </ul>\n        <div class=\"btn\">\n            <button class=\"btn_decision modalNaviBtn\" id=\"btnSearchAddress\" onclick=\"searchHinanjyoAddress();\" onkeypress=\"searchHinanjyoAddress();\" type=\"button\">設定</button>\n        </div>\n    </div>\n</div>\n\n\n<div class=\"modalNaviContent modalNaviContentWidth modalNaviContentPadding\" id=\"modalNaviKeyword\">\n    <div class=\"modalNaviClose\" onclick=\"closeModalNavi('modalNaviKeyword');\" onkeypress=\"closeModalNavi('modalNaviKeyword');\" style=\"cursor: default;\">×</div>\n    <div class=\"modalNaviDiv\">\n        <ul style=\"list-style: none;\">\n            <li>\n                <span class=\"modalNaviLabel\">キーワード</span>\n                <input class=\"modalNaviText\" id=\"txtNaviKeyword\" size=\"50\" type=\"text\">\n            </li>\n        </ul>\n        <div class=\"btn\">\n            <button class=\"btn_decision modalNaviBtn\" id=\"btnSearchKeyword\" onclick=\"searchKeyword();\" onkeypress=\"searchKeyword();\" type=\"button\">検索</button>\n        </div>\n    </div>\n</div>\n\n\n<div class=\"modalNaviContent modalNaviContentWidth modalNaviContentPadding\" id=\"modalNaviShubetsuShosai\">\n    <div class=\"modalNaviClose\" onclick=\"closeModalNavi('modalNaviShubetsuShosai');\" onkeypress=\"closeModalNavi('modalNaviShubetsuShosai');\" style=\"cursor: default;\">×</div>\n    <div class=\"modalNaviDiv\">\n        <ul style=\"list-style: none;\">\n            <li>\n                <span class=\"modalNaviLabel\">避難所種別詳細</span>\n                <select id=\"shubetsuShosai\" name=\"shubetsuShosai\">\n                    <option value=\"all\">全て</option>\n                    <option value=\"type1\">避難所（指定避難所）</option>\n                    <option value=\"type2\">水害時避難所（第１次）</option>\n                    <option value=\"type3\">水害時避難所（第２次）</option>\n                    <option value=\"type4\">土砂災害時避難所</option>\n                    <option value=\"type5\">野川・仙川洪水時避難所</option>\n                </select>\n            </li>\n            <li>\n                <span class=\"modalNaviLabel\">開設状況          </span>                \n                <input checked=\"checked\" class=\"selectedbtn\" id=\"kaisetsuStatus1\" name=\"kaisetsuStatus\" type=\"radio\" value=\"all\">すべて\n                <input class=\"selectedbtn\" id=\"kaisetsuStatus2\" name=\"kaisetsuStatus\" type=\"radio\" value=\"open\">開設のみ\n            </li>\n        </ul>\n        <div class=\"btn\">\n            <button class=\"btn_decision modalNaviBtn\" id=\"btnSearchShubetsuShosai\" onclick=\"searchShubetsuShosai();\" onkeypress=\"searchShubetsuShosai();\" type=\"button\">設定</button>\n        </div>\n    </div>\n</div>\n\n\n<script type=\"text/javascript\">\nif (typeof(window.console) === \"undefined\") {\n    window.console = {\n        log: function(){}, // 何もしない関数 とする\n    }\n}\n\n// j$が作れる、フッターの読み込みの方が後なので、jn$を作成する\nvar jn$ = jQuery.noConflict();\n\n/**\n * 初期処理\n */\njn$(function() {\n    // テキストボックスに、Enterキーイベントを付与\n    jn$('#txtNaviAddress').on(\"keydown\", function(e) {\n        if (e.keyCode == 13) {\n            searchHinanjyoAddress();\n        }\n    });\n\n    jn$('#txtNaviKeyword').on(\"keydown\", function(e) {\n        if (e.keyCode == 13) {\n            searchKeyword();\n        }\n    });\n    \n    jn$('#txtNaviShubetsuShosai').on(\"keydown\", function(e) {\n        if (e.keyCode == 13) {\n            searchShubetsuShosai();//（世田谷独自）\n        }\n    });\n});\n\n/**\n  住所検索用と、キーワード検索用の、2種類のダイアログを使い分けるので、\n  引数渡しではなく、グローバル変数で、ダイアログを特定して、リサイズする。\n */\nvar selectModalId = null;\n\n/**\n * 避難所案内ダイアログ表示処理\n * @param modalId モーダルＩＤ\n */\nfunction openModalNavi(modalId) {\n    // ダイアログの外をクリックしたときに、ダイアログを閉じるかどうか\n    jn$('body').append('<div id=\"modalOverlay\"></div>');\n    jn$('#modalOverlay').show();\n\n    // リサイズのために、これから開くダイアログのIdをセット\n    selectModalId = modalId;\n\n    // ウィンドウサイズ変更時に、ダイアログのサイズも自動調整（リサイズ）\n    jn$(window).resize(centeringModalNaviSyncer);\n\n    // ボタンクリック時、不活性にするので、ダイアログを開いたときは、念のために、活性にする\n    if (modalId == 'modalNaviAddress') {\n        jn$('#btnSearchAddress').prop('disabled', false);\n        jn$('#txtNaviAddress').prop('disabled',  false);\n    } else if (modalId == 'modalNaviKeyword') {\n        jn$('#btnSearchKeyword').prop('disabled', false);\n        jn$('#txtNaviKeyword').prop('disabled', false);\n    } else if (modalId == 'modalNaviShubetsuShosai') {//（世田谷独自）\n        jn$('#btnSearchShubetsuShosai').prop('disabled', false);\n        jn$('#txtNaviShubetsuShosai').prop('disabled', false);\n    }\n\n    centeringModalNaviSyncer();\n    jn$('#' + modalId).show();\n    jn$('.modalBg').show();\n}\n\n/**\n * 避難所案内ダイアログサイズ調整処理\n */\nfunction centeringModalNaviSyncer() {\n    console.log('@@@ centeringModalNaviSyncer=' + selectModalId);\n\n    var windowObj = jn$(window);\n    var w = windowObj.width();\n    var h = windowObj.height();\n\n    var modalObj = jn$('#' + selectModalId);\n    var cw = modalObj.outerWidth(true);\n    var ch = modalObj.outerHeight(true);\n    modalObj.css({\"left\": ((w - cw)/2) + \"px\",\"top\": ((h - ch)/2) + \"px\"});\n}\n\n/**\n * 避難所案内ダイアログクローズ処理\n */\nfunction closeModalNavi(modalId) {\n    jn$('#' + modalId).hide();\n    jn$('.modalBg').hide();\n\n    // リサイズを解除\n    jn$(window).off('resize', centeringModalNaviSyncer);\n\n    var modalOverlayObj = jn$('#modalOverlay');\n    modalOverlayObj.hide();\n    modalOverlayObj.remove();\n}\n\n/**\n * 現在値設定画面の設定ボタンクリック処理\n */\nfunction searchHinanjyoAddress() {\n    jn$('#btnSearchAddress').prop('disabled', true);\n    jn$('#txtNaviAddress').prop('disabled', true);\n\n    // 住所から緯度経度を求めたら、あとは、GPSと同じ動作となる。\n\n    // リクエストパラメーターに、addressを持ち回るので、クロージャにするか、フラグで制御か、処理中を表示するか、不活性にするかで、不活性にすることにした。\n    var address = jn$('#txtNaviAddress').val();\n    // トリムしておく。SFDCのtirmは半角だけ。JavaScriptのtrimは半角と全角両方。\n    address = address.trim();\n    /**\n     actionFunction、RemoteActionのどちらで実装か悩んだが、ビューステートを渡すことがない、RemoteActionを選択した。\n    try-catchで囲んでおくが、むしろ、コールアウトしたときの関数をtry-catchすべきなのかもしれない。\n    */\n    try {\n        Visualforce.remoting.Manager.invokeAction('X_PUB_CL_HinanjyoNaviSearchCtrl.convertAddressToLocation', address,\n            function (result, event) {\n                console.log('こんすた⇒' + result.status);\n                if (!event.status) {\n                    console.log('住所から緯度経度の変換失敗 event.status=' + event.status);\n                    alert('住所検索に失敗しました。\\n再度実行してください。');\n                    jn$('#btnSearchAddress').prop('disabled', false);\n                    jn$('#txtNaviAddress').prop('disabled', false);\n                    return;\n                }\n\n                // GoogleMapAPIからの応答をそのままSFDCサーバー処理側から返しており、「\"status\" : \"OK\"」が返される想定。\n                var resultJson = JSON.parse(result);\n                if (resultJson.status != \"OK\" && resultJson.status != \"ok\") {\n                    console.log('住所から緯度経度の変換失敗 resultJson.status=' + resultJson.status);\n                    alert('住所検索に失敗しました。\\n再度実行してください。');\n                    jn$('#btnSearchAddress').prop('disabled', false);\n                    jn$('#txtNaviAddress').prop('disabled', false);\n                    return;\n                }\n\n                if (resultJson.results.length <= 0) {\n                    console.log('住所から緯度経度の変換失敗 resultJson.results.length=' + resultJson.results.length);\n                    alert('住所検索に失敗しました。\\n再度実行してください。');\n                    jn$('#btnSearchAddress').prop('disabled', false);\n                    jn$('#txtNaviAddress').prop('disabled', false);\n                    return;\n                }\n\n                var resultLoc = resultJson.results[0].geometry.location;\n                console.log('住所から緯度経度の変換成功 resultLoc.lat=' + resultLoc.lat + ', resultLoc.lng=' + resultLoc.lng);\n                moveHinanjyoNaviPageByAddress(resultLoc.lat, resultLoc.lng, address);\n\n            }, { buffer: false, escape: false }\n        );\n\n    } catch (e) {\n        console.log('住所から緯度経度の変換時に例外発生 e=' + e);\n        alert('住所検索に失敗しました。\\n再度実行してください。');\n        jn$('#btnSearchAddress').prop('disabled', false);\n        jn$('#txtNaviAddress').prop('disabled', false);\n        return;\n    }\n}\n\n/**\n * 現在値設定画面の設定ボタンクリックによる避難所案内画面遷移処理\n */\nfunction moveHinanjyoNaviPageByAddress(lat, lng, address) {\n    // GPS検索のときとは異なり、GET通信で、避難所案内を開く\n    // GPS検索同様に、緯度経度だけあればよい。住所はアドレスバーに見せるためだけの目的で付与する\n    location.href = \"/X_PUB_VF_HinanjyoNaviList\" + \"?mode=2&lat=\" + lat + \"&lng=\" + lng + \"&address=\" + encodeURIComponent(address);\n}\n\n/**\n * キーワード検索の検索ボタンクリック処理\n */\nfunction searchKeyword() {\n    jn$('#btnSearchKeyword').prop('disabled', true);\n    jn$('#txtNaviKeyword').prop('disabled', true);\n\n    // SFDCサーバーに届くまでに、避難所名の桁数が大きい過ぎる場合は、WEBサーバーの上限で落ちる想定\n    var keyword = jn$('#txtNaviKeyword').val();\n    // トリムしておく。SFDCのtirmは半角だけ。JavaScriptのtrimは半角と全角両方。\n    keyword = keyword.trim();\n\n    /**\n     キーワード検索は、GPS検索を行わない。\n    */\n    searchHinanjyoGPS('3', keyword);\n}\n\n// geolocationのタイムアウト時間\nvar geolocationTimeout = '5' * 1000;\n\n/**\n * 現在値から探すボタンクリック処理\n */\nfunction searchHinanjyoGPS(mode, keyword) {\n\n    // geolocationを利用できるか確認\n    if (!navigator.geolocation && (keyword == null || keyword == '')) {\n        console.log('navigator.geolocationが未対応のブラウザ。');\n        alert('現在地の取得に失敗しました。\\nGPS(位置情報）を有効にするか、「現在値を設定する」をご利用ください。');\n        jn$('#btnSearchKeyword').prop('disabled', false);\n        jn$('#txtNaviKeyword').prop('disabled', false);\n        return;\n    }\n\n    // 成功時\n    var successFunc = function(position) {\n        var coords = position.coords;\n        console.log('GPS取得成功 coords.latitude=' + coords.latitude + ', coords.longitude=' + coords.longitude);\n        moveHinanjyoNaviPageByGSP(mode, coords.latitude, coords.longitude, keyword);\n    };\n\n    // 失敗時\n    var errorFunc = function(err) {\n        if (keyword == null || keyword == '') {\n            // なお、err.codeが1の場合、ユーザーがGPSの位置情報取得を許可しなかったときだが、GPS取得失敗時と同じ扱いとする。\n            console.log('GPS取得失敗 err.code=' + err.code + ', err.message=' + err.message);\n            alert('現在地の取得に失敗しました。\\nGPS(位置情報）を有効にするか、「現在値を設定する」をご利用ください。');\n            jn$('#btnSearchKeyword').prop('disabled', false);\n            jn$('#txtNaviKeyword').prop('disabled', false);\n            return;\n        } else {\n            // キーワード設定時はGPSを利用せずに表示する。\n            moveHinanjyoNaviPageByGSP(mode, null, null, keyword);\n        }\n    };\n\n    // 現在位置を取得のオプション\n    var options = {\n        enableHighAccuracy: true,       // 精度の高い情報\n        timeout: geolocationTimeout,    // タイムアウト時間\n        maximumAge: 0                   // 常に最新情報\n    };\n\n    // 現在位置を取得する\n    navigator.geolocation.getCurrentPosition(successFunc, errorFunc, options);\n}\n\n/**\n * 現在値から探すボタンクリックによる避難所案内画面遷移処理\n */\nfunction moveHinanjyoNaviPageByGSP(mode, lat, lng, keyword) {\n    // 緯度経度を秘匿するため、POST通信で、避難所案内を開く\n    jn$('#hinanjyoNaviMode').val(mode);\n    jn$('#hinanjyoNaviLat').val(lat);\n    jn$('#hinanjyoNaviLng').val(lng);\n    jn$('#hinanjyoNaviKeyword').val(keyword);\n\n    jn$('#hinanjyoNaviSubmit').click();\n}\n\n/**\n * 避難所種別詳細検索の設定ボタンクリック処理（世田谷独自）\n */\n function searchShubetsuShosai() {\n    // 自画面を開く\n    var shubetsuShosai = jn$('#shubetsuShosai').val();\n    var kaisetsuStatus = jQuery('input:radio[name=\"kaisetsuStatus\"]:checked').val();\n\n    jn$('#hinanjyoNaviShubetsuShosai').val(shubetsuShosai);\n    jn$('#hinanjyoNaviKaisetsuStatus').val(kaisetsuStatus);\n\n    jn$('#hinanjyoNaviSubmit').click();\n}\n</script></span><div id=\"j_id0:j_id59:j_id75\"></div>\n</form><span id=\"ajax-view-state-page-container\" style=\"display: none\"><span id=\"ajax-view-state\" style=\"display: none\"><input type=\"hidden\" id=\"com.salesforce.visualforce.ViewState\" name=\"com.salesforce.visualforce.ViewState\" value=\"i:AAAAWXsidCI6IjAwRDVpMDAwMDBEeGpHdSIsInYiOiIwMkc1aTAwMDAwMHVLRVQiLCJhIjoidmZlbmNyeXB0aW9ua2V5IiwidSI6IjAwNTVpMDAwMDBBblFrVSJ99irWDPwT7Vb7YVhFc8RkGke+YIL/yJ82q1ViZQAAAY+UQ0kyfBwojYu3O9vDfC/nTpdwqUY0ZzdY/YGWhjdKYcxpWdxY03EyQAx3ke2XdoLHyBHevFWHwy4Hw2DePhofVngcy0INp57Cr7efVgdT+U8CPVkqD6OGCpzGcqh7b18IFSTgwvzi6Xy5GQpUGkyERrUolqpwh/HAN3ZgDN6B5NyAkEnYf3XRKt56LoowSI+BrkCEn8pOIRZmDjkc8Z29MCDQPCr84cr81AoI+REd5/Ar/glP8NZ3QXMHyAkT5GVACZcetrpFUktrHo9qNwOPuV9pitoMUSJehcvCLVt/8nm6HZ7wVH+7A2/Y+iW+QQ0CGoiOJCKpgZyAC1SP93uVBdrPfXmdzDh1FhBciinFxOecuyWA+uYZO2w2psQXXkAFbo67PBblTfOM9mRcIjqO/tWmxnxYdnHTtHie30bC08Li3e5w85eATIOJ2hSkeD1b2kjN6XfLIzT+3HHhgX+F1N4so857NvhfAe7wj/1aJdvrhKpbcXYpgMXQ7o/hD9PflCPXlhMGgyPt4r7IBSssOF6OKZD+9r0bLHXQTyti95pV7aDWbujJP8hfFSujYn4OrukeB/RGpDag2RheV8AECJ5DGoqeRUvKCGTgscbqF9gVAirAktQaWYNqAPX6g7SCxQgOmI9SxTQuFWarIj5weOejf3Bpr9MUtV4O3Fj6BDXYITZ6RU+X+24kLIsv2JrO+atVC8qOeKY7MX3K2aR0Z+7oGHDZJ4aZGNBeIay2wZTYnyWZSz1OFUPapldEcAoUdP87DV0jFwCX7DFpsQIpTMIMr6H6hUyl+KrpGChtOCTDpRsj1PN18R1968gKNjkOVpYJFg6Q3YI6Oz7faV1Flfy7y8+aZYoL27RhDG4XVBTaZ5v85Bm9P+KmGAHUOez23ryK+eGFB8C340/1exvsKb83I7DF498DBMT6VmHiooVeg5HsygPhDXwPZFvUY8/FaRW+FwwtyX6Gexd5RS+GD9lsot4uJZHuaZuP7E7Wo4/k2d7QZ/9ul0Vv/nnMTCecOVJnjmA1qtCN4B/GouGonoy6eZpz2AgBYsD+XrrBvub8N3tCTluPg2ZJK/8aQB4w0sJ+L2wI3YnvZD8QBzJei0EM0AMGNMiW9GSCDJk1vCBZcamt0H/olRyR9cTsQ6DpfJkohCPd3552w2PqBcGoJKz7eBeWRmI0rjlzjoCDO0DygtBYugKBGLoKZjhPsMAJ4Uo+PLniqQsy+nE0nvPBzts4E+Nk0gj8K69SMXEbRBZhTP15XwHAFz/1Hyz8e7m3ZuPJAB25uILttnzyGgC+7IvC3k95ttL7IfxRPYusmy+L0eqgwcqBek5/rMknbbbxsUhFXx0I2vCRBpQaTBvYHCnsXNn+4SQGypFnKmY2oPx/rnPPkj9qwFy8aLdSoKmVhPFMfN/LeHSnBNXXouiUGZAL3ulmN0Jq+hysplig7bUFsJBDMUsKw8mxcvEZ6FHY78/oMs/sxU6Vb/Vi4wKAsnXynvfjB5CFT+HjYMjZcP5ppzBtYmfIK3A8M78etidnsvu/wApavYWfb9CANzvkTwMWS3qfdRqpYCAv9UuDHwYMGVAP+LG7D/o6AudVuSlke1HbP0x7W/2vxGpagSjxUlZ4MOxuMLRBur6uckgaGc1QqKciNA//7Ma/xi7cGvuKsaNLgsqvrP5kFHiYCZb77r/v1ttx4C8Vyv7KygMkndWdMf3VTV5u8isBcwDssS+hcAB/9EAFXTGnArBd868RocNQPC/AP1e6N7kkDYznCf+YyzC46gnfTUXEiF2mI5DL31aZZMJix3Ag7AI9blx6O1xWNSSR5JyGHrd0hxM6APMC3LjCc5tv+MzsrOuDKLydQ4kLV5byXfpsCy/ScJmj77ZfXRXEQZ265+tu4L+VrcIa9V/1gf2JoLDo5YsNyTxZHs3TmbcamCY5iyVLs3x3PVWIxSkgzgJyfqZa286D3jxA8ko21W/lec7CeWH9WXVI+HMcNUeWnDw62zh5nsHfqtcoJEFZ4df6ehffvrxcgAlrV9s0Ic7t2oK+hxHd0yB9H2OAWRZKNLTsIcXuDkGV6JicU1rj8GeqBPnC7F+Tjf9AzBPE8auowSMRRzO9lNjkci6llfnehfCAfoESG7ZJPr/chnyBbcVmOLeLCi0yj8LmZY96cbYKv6y8bTidi6Ct8ArwiSvG9xRotjOyspwYmvSgG7e/85ZqSSPGMNHMck3hWm5F0VympyxGuogveE7CBTVuMxxDon11vW//4LGQBZxy9kL9JRNwFHY70WGfP7q6GHivBd0P3WFk22u2wCTZap9vU7f9Ql8aR4MG/R5nnv9cN6Ob5RvOtyLMlwWjrVt0Vyuo2z2P7bCWN66kd0qLtokhnmQhcH2EtrOD/0XZomgDnB1IKgQ6wKbLmQOX7Bo2pHfKNTmZ8CqDmvTsUcV/zoHLocQ8M73viBpHnf6L14rbUYVpJTG5MYLD6qgZU7t/SuVLtdSEFI76jyTU4hzZS8A7W0B4P9oW/lhcWZM8oXq2kVcZJ8qY16jq9W0NsfThLKapsd/7lxeJXc/J4S9c2bgccXc+lBS48iGwZRoo9G+q4Bk+smb8+pUErlx74P1XSwFiIxHbeWxku79eQJ0q4pZ1bqnepAs/8Mpy50RDJqhGwNuAJFdZq02QOXEIbixZKE2a0HfLyEBNsMCTqL5mHoWXs79tjK6wpnAp64srENb1/POW82WAt3AWPS5JruojQ1E9D/1UBI0HXgfwEVu33My62/s3HHyuRpTapUOcpqeBWLUFEZUbQnQhQqyvKzLsEFVBP3fwTLjKmHB2C8YZ8tI7xPMhlaT9S3TcBDXHvv+PSRfzeR3DakzmvGI/oCYKI5+KE5R5PD+jjfUFAkFgIBGV1klRfXs/V88Rsyj8va52waDxJrKE7BNmgr7M/9d5oGaZs1uGkaDE62eQ1EZVSjcmRz0vtbZC+6q7juqIH9CvollYf7Kpn0ryiBk7UKM5uJltoeGcgu/MXJKWlpK6xQbsPFNmcHLms4H53p0eMfsc6ANrcJCmUWdvmLi4JF2WDd8OIN+Ugs2+OM0SnHRHjyIXXpUGqJtN20AKbhdAd+zqnv1SNvmJWw3fRxcGQwmWtoOREF1vMHKWNyvQkBSTZxc71oAPWfXv/7CKDCn97hE7YA4V9NZcqBRyFKowOi23qMYTFEIahK/dvkH+mEhmvUow6UOlRRXA+FQn0UV5W0UqF7azhE7si8xFjJV07fwM0omC6LC4lxZD17h39jNzQCJCw0WM2vxUxD289QMnVW0EcakEVix1OF9NGksAqE7miOYYTl3EtoH2tlL3qyz0ew9cn3L8mYZVUMCjdzkGEa0QMjEAhGl3njiis4iK9LUlTqqYia9x1+CjC7LA9MIgyf4KWwfDut3ykKOPcf9vQMpvaepW9XSid8/gOEOktuI1tb+OYj9KXvSGdlZWSFKPyX4E9QXQsd8od3jMKvQHBNJuV6A2bxprW5Bh77/RCl0EPnhOW4/PIz59RjnIo08RZ2A2DXqc2flPjN6t0ga+zRkMQTiUcHDkuvgOJQQ9YNK/wBPnOqrNJIGZ3VP3tqPMYe2jrHqnbnaAkRc7xXhoh5XLDylNqyKvnUn9v+lUg2IzesPtiKH+nWHIMAJwoCjBDOYFOCPg3QdVXmIh1+8UJ4PupXJF31qDqZ7kULCy7l6pX5781O/E5aYfAgbxcDPM1Yya9Ufz1OZede6nkXn/MahwPRd10ioynuZ9eEqjunzU8SX0J1yAnxqV+JXgTB3xAJR6PIDF1ILs3GHzX2iADFicctq3gEsJtyFAHswv4QR/Wt+DV7JyG5fUH6Vw3sB9B8tk2dh5AesitBRv8FpT+VlVRt2Fd1dy5Km9MzLWM6QrkcijaGp8YST0yGQhbdt32TA3+IlH424KHXnwo6y1ape3izVEbKywh/0XtKd7EG6nmDN+oWbXIHFhjmAIYA78amSGznfp2U6wD6itcludQtd30AXJzwuASFxyE8BltA1T4rfzQx8HQbjlwpBQTzpmHrYM40VRePae99GngdZcZhSSLh5SIQbK1d8ReY7WCHVW+0JkYLHW1eFIM30KXR+zQWzoD3MUX2tdrdEqGveO9QdIxvOz50SU8e5roMnEdmvO5uUWQ09fZTszn+gAzM4wRLW71itcBn2VZs8pqr73FZg6/nB0snbabHxHDJ/YvN5P/Hmw0I8/DFOogrSoyMXJTG2jNo+wvExWKGChzWAQFkzEtGwiBx2iiuMCkvIKZJ8EOLdP3aYahID4tfhrq/dABfZcZXV8HyjThE3VFRVAufMtWPJW3b326aBI8zTHFfNg7dh9rdcYtSTsGANjCgfVEAPDNm+1/QOXCLJbXte1CGM34XaRp23h29wLXV+E74xBn8Ci+Wmk0y97nZIhO7LIhHeIILBZWTfwCgej4O8lgelZtG0uPqOazzWHZT5KjPnbl0Apqn+/V1y7wylsxN9SKEA65heqDOmsdDwBnRl2mSTIFN5EMxWbrNmzJIe7IAyji0zKq4wOpa9wP34b2V1HkNhyieFHsAkfbhHZaQpjhcgNB15Ndup9d+4AoXFMPBifLfOaE18YGE3a2M3UYkTFYIOmeFH/GRneYYtu9JRkVgUNfm9xLDEUAncGfH4fLv9R0Nyih/fu8LHO5GMOdB2UroTfrzYpgFgUOJEpgISztl5JJ5aK9C4g24HQLfJR2S0AWvMq3whmidsjbeuTyQQjr+2DjR9accsOrdRqfYYCkZRevy93zF3LlqTEZmzWZuqazJafYD4KaFLZdbxoJvktK4tNSzio8OiWN1DCUJdVE3ToDw/Lbe8AygKZufWmpX0OuNVVFeuRmjwLV93ppLD4/3RZzPt0EPOOK2QB4svd1sw4eTNpzlsbp7C2XaurDobtc2Pw70ERgzfRWYScoEyi99uEGwOchRjIZlb2fl6EYDMTe78sP3fNCv47PGVVhb5KqKMEQclJmHtoIEv0mOMNKUx2gPtiKOjarDWrgJ/eW/KdEwePch9/XTq7HQ5rrVx1mcm//IsicS0tgBImdRi9Az7RRHODJU2AIFiHXOe07Jz4ykPILWoWavftheFVdqDrNwN/AQ1LB6NXOy/DLSEfZCCc8TxYeXf6qJKw5MjMP0KM2xqi9lVpBPy84GYuDLbDElWp0dxM5fHsGF5acHtA50DvHZp0Vgf6SQLhgYhdIS3lzHtyzQY8hKe0+IYCe87fiXRLVL85DPRLCJmuq6tOUNVINBsNI+JXFTeVdxljdIoOaynGq4Gt2ERXtA5si9A56xd/pOvZ4Qh8G/5LElX2JGYhGO6gQaE35ZtnRVH/Ef3w+FFhjPqvHGDdJzbtvxXSZuW9wTQ4WUtawAaiy1DihR3kQOcw6EhODwjsQW1AnCQ4QGudWju5IRPp+eo/VqrrSvv89oaHAHvjlLdx/tdnlC4I/qF4bX1xSyCqJPaqNN4qLa8WNiwvs9NwEYfYot9OVLlYDXHzK2xx9HTBxKtW+nj5092h98jgmhiX8O99RvIe9o7jDwAcF9g3zqn0ZPv+93TGyEuyJohtNxrxWPzUivf1ftU1eEm2pYug6J9MBwRa1qfluGD0JECZSJJa+A68xXHCqvOyrR/eLPD1LsL20dBBRjeA3XSQcyUxEoV/HE80WWf5aF2KTOaxlJe9ULiqWhitnG8ZTawlski4l3Yyduaz/JuQFRo10PW7/xx97P0Nh2TfChbcBRZ+1NojcWZBCAVjw14jvzGUKrbq/nb8GSPgkNlT6B0ok4enVdlxEdfDgwUy4eXJlGIeKbTVoWXQZ1CsAq03tNiW+2UI0BRiCzYXTfnSpmuFxe+1f3FYpfZiPBEjnft65dy6K4mh7FdsQeVuby96NXYJg3kiJRca41zz82EwComTRRBOB4es2Dey08FBdj5KeRLBpf+Hh1cPq6UqktYUUMEP5M7Hzas7yADlvSjUEf8A22kLMpmxjd9vqjsW6FoNVah+AfGqPRPiEgXm2TbSHX97FxwPMMtGws0dZAFmCkvZ7/OZEAHWxeSv0bWEiTKJMBYUyZ1fgiRQbuOaDPplXzT14kSfUyQSHXZM34a9UPZxOIaz8FMVRJQXUU2KWtX39C+mfQkMmVPs+l5R7MPk/n/cZFMQbyQxLwM4hGS84fi6yV8qEzfcAEtfWZM8BERsLwKwuZnC+Vy4Wr43PO6ehQHtsaKEnMC5Gu0tuxNOUSX9bvs34wa0mD9at92TrVUrB6gq3C3viSP1tW1rtGfnlIo5RGwFEau0bc9eH5f8cMnl7YN8F9Z/NpNS0JD4kPZpuXzdPKsCRqeqsmzIgi2jBM/c7hssqUbc7gVkndchK510Ghwei4AbdkRIhgF5jULRYypnk2FhLI4ecbcVEh6OFlhDgpanpsfmOVVfFVNDKDZsX2MMCzgiZv0J0LaPQj3DKlKsaNDgptb3SWwPyaUyb+7LE1OO7s3SLu7AtHMVHYVpL94vQ1R/H4tL2WaV2nnGl05zTWDIoxlPVQjBw7UnPY7g1nHr0LO9IAIM+VgxzrxhpC90EA89dnIbUL7iyP3Nby19Day8L93QZzX8WEj4h9q+rfypIH5CJKdO+1HIZcq55kuF7wteTYPUQFXdQquhiaEBidaGW+wN87eWVaToGUIG6RZSWCZwzUIqJNq+WjxMnmiVv7Jla193QRErMMLs41jcIg8d2kUiDBwWYHt4W542UnKhKdIs10cPkupu0fvxR6UES7X3vlMT9AsyaZr5RYppLxjq5MTGyl5G7lIwJtn2+dImyGEg+sBa4kkat9fngLwm33xovc1ivkZj4PDVSpxy+JewZhMjF66EZJris7UC0yHh5pOY2k3Xbwmv6fHbVFfxYwpuVVrqbYl0sLknr3OdiCLNH0VQxHxU1Rhu/jbP35YJJuZDcISbeLOkZqW9vb/AwXc/1sasXdG7t93Gzk/MpJarox9fJvgoazVu/ShFGvTD6cZ2lPMyXKuMZ65QoZUYWiXqpRnKJKcYMpxS972SsYAMZoXydDxqwXORqiJ6Yj47Zc4b8ldRz/NNbxk+g+Dr2cuvMLlEUWsdt29/WRASIdk+5Ob9xTpGqfRZj8HElv+JO3QPT5W7SruBznPUa3E5pj79o8wUKOZ6y3AZIHz8uOwoRNnAzrGsqK0sCx2IxByFO3iFDIzThxb6hrE9v5LwjPUziD8B+m5eVWinWdYKBmxubAd5Nza7AFPHM/boUYBHaSSMxGWHQe8P3y61JXndzhJMm8xZmiJdzrT0436ooUqR0Kap1fcLNy1nLDap++Rq/H10dlY6VR2UAjT5x4RLwYNwPv2f2WOIe6LaZmdaObSQt9nM7jQjUzYzJVCZwqstsyEMyuppKCl3qoZiq7l88+kOAAlrz4FbN+/Mxw/Clv9vpxUjWK4tfrolJ5nITaUP8SpydlrF9xdmByvls8x3cvS5Z54b0cHNL5cX5GF9f66vffk2SAJxCIwBnCqAIlKz/nDNk05tZooVQKO2qCTJWQBbyqJtQQrQgWRcuokGdvdrGq6DtGNw8RtHJyQ2t9LBRhmZ4OZMI75PxSVdLzvCvA6A7KrBYCZjdRwmZlEWridoE7apjNblPf20836LRZIX\"><input type=\"hidden\" id=\"com.salesforce.visualforce.ViewStateVersion\" name=\"com.salesforce.visualforce.ViewStateVersion\" value=\"202405131835050167\"><input type=\"hidden\" id=\"com.salesforce.visualforce.ViewStateMAC\" name=\"com.salesforce.visualforce.ViewStateMAC\" value=\"AGV5SnViMjVqWlNJNklqRnJZV2xPYVd0RUxVWlFiWFpUTUV4NWNra3pWbFZFTWxKT2VpMVFWMlJYZUVzMVVsZzVNV2RDZWpSY2RUQXdNMlFpTENKMGVYQWlPaUpLVjFRaUxDSmhiR2NpT2lKSVV6STFOaUlzSW10cFpDSTZJbnRjSW5SY0lqcGNJakF3UkRWcE1EQXdNREJFZUdwSGRWd2lMRndpZGx3aU9sd2lNREpITldrd01EQXdNREIxUzBWVVhDSXNYQ0poWENJNlhDSjJabk5wWjI1cGJtZHJaWGxjSWl4Y0luVmNJanBjSWpBd05UVnBNREF3TURCQmJsRnJWVndpZlNJc0ltTnlhWFFpT2xzaWFXRjBJbDBzSW1saGRDSTZNVGN4TmpFM09UTTRPRGN5TkN3aVpYaHdJam93ZlE9PS4ubmlnblVVRXA0aTFQS3c3S3pqTjhGSFFOUmlfVE9XY0VaRDhzZ3puLXo4az0=\"></span></span>\n\n                \n                \n                <div style=\"display:none;\">\n                  <form action=\"/X_PUB_VF_HinanjyoNaviList\" id=\"hinanjyoNaviSendForm\" method=\"POST\">\n                    <fieldset>\n                    <legend>避難所ナビ送信</legend>         \n                    <label for=\"hinanjyoNaviMode\">モード</label>           \n                    <input id=\"hinanjyoNaviMode\" name=\"mode\" type=\"text\">\n                    <label for=\"hinanjyoNaviLat\">緯度</label>\n                    <input id=\"hinanjyoNaviLat\" name=\"lat\" type=\"text\">\n                    <label for=\"hinanjyoNaviLng\">経度</label>\n                    <input id=\"hinanjyoNaviLng\" name=\"lng\" type=\"text\">\n                    <label for=\"hinanjyoNaviKeyword\">キーワード</label>\n                    <input id=\"hinanjyoNaviKeyword\" name=\"keyword\" type=\"text\">\n                    <label for=\"hinanjyoNaviSubmit\">避難所ナビサブミット</label>\n                    <input id=\"hinanjyoNaviSubmit\" type=\"submit\">\n                    </fieldset>\n                  </form>\n                </div>\n                    <div class=\"linkbtn\"><a href=\"/X_PUB_VF_HinanjyoList\">開設状況・履歴一覧</a></div>\n                </div>\n                <div class=\"block06 topic\" id=\"weather\">\n                    <a href=\"/X_PUB_VF_WeatherList\"><h2 class=\"topic-ttl weather\">気象・地震情報</h2></a>\n                </div>\n                <div class=\"block07 topic\">\n                    <a href=\"/X_PUB_VF_LifeLine\"><h2 class=\"topic-ttl lifeline\">ライフ<br>ライン</h2></a>\n                </div>\n                <div class=\"block08 gis\"><a class=\"index-gis-link\" href=\"/X_PUB_VF_GIS\">GIS地図情報</a></div>\n                <div class=\"block09\">\n                    <dl id=\"head-btn\">\n                        <dt>文字サイズ</dt>\n                        <dd class=\"text-size-btn\">\n                            <div id=\"text-large\">大</div>\n                            <div class=\"active\" id=\"text-mid\">中</div>\n                            <div id=\"text-small\">小</div>\n                        </dd>\n                        <dd>\n                            <div id=\"pcgoogle\">\n                                \n                                <div id=\"google_translate_element\"></div>\n                            </div>\n                        </dd>\n                    </dl>\n                </div>\n            </section>\n        </article>\n        <article id=\"bousai-wrap\">\n            <div class=\"bousai-ttl-block\">\n                <h2 class=\"bousai-ttl\"><span>知っておきたい！<br class=\"sp\">日常の防災知識</span></h2>\n            </div>\n            <ul class=\"bousai-tab\">\n                <li class=\"current\" id=\"earthquake\">震災編</li>\n                <li id=\"flood\">水害・雪害・<br class=\"sp\">土砂災害編</li>\n            </ul>\n            <div class=\"bousai-content\">\n                <div class=\"bousai-link active\">\n                    <div><a href=\"https://www.city.setagaya.lg.jp/mokuji/kurashi/005/003/006/001/d00147933.html\" target=\"_blank\">マニュアル</a></div>\n                    <div><a href=\"https://www.city.setagaya.lg.jp/mokuji/kurashi/005/003/002/d00005584.html\" target=\"_blank\">災害時の情報</a></div>\n                    <div><a href=\"https://www.city.setagaya.lg.jp/mokuji/kurashi/005/003/006/index.html\" target=\"_blank\">日頃の備え・<br>知っておきたい知識</a></div>\n                </div>\n                <div class=\"bousai-link\">\n                    <div><a href=\"https://www.city.setagaya.lg.jp/theme/002/d00186327.html\" target=\"_blank\">マニュアル</a></div>\n                    <div><a href=\"https://www.city.setagaya.lg.jp/mokuji/kurashi/005/003/005/d00162729.html\" target=\"_blank\">災害時の情報</a></div>\n                    <div><a href=\"https://www.city.setagaya.lg.jp/mokuji/kurashi/005/003/005/index.html\" target=\"_blank\">日頃の備え・<br>知っておきたい知識</a></div>\n                </div>\n            </div>\n        </article><span id=\"j_id0:j_id65\">\n<footer>\n    <dl class=\"foot-link\">\n        <dt>関連サイトリンク集</dt>\n        <dd>\n                </dd><dd>\n                    <div><a href=\"https://www.city.setagaya.lg.jp/index.html\" target=\"_blank\">世田谷区ホームページ</a>\n                    </div>\n                </dd>\n                <dd>\n                    <div><a href=\"https://www.micosfit.jp/setagaya/\" target=\"_blank\">区雨量・水位観測システム</a>\n                    </div>\n                </dd>\n                <dd>\n                    <div><a href=\"https://www.jma.go.jp/bosai/#area_type=class20s&area_code=1311200&pattern=rain_snow\" target=\"_blank\">世田谷区の防災情報</a>\n                    </div>\n                </dd>\n        \n    </dl>\n</footer></span>\n    </body><script type=\"text/javascript\">Sfdc.onReady(function(){\n\tSfdcApp && SfdcApp.Visualforce && SfdcApp.Visualforce.VSManager && SfdcApp.Visualforce.VSManager.vfPrepareForms([\"j_id0:j_id59\"]);\n\n});</script>",
+    contentSelectors: [],
     iArticle: {
-      title: '1234',
-      publishDate: '1234',
-      loadedUrl: 'https://www.env.go.jp/park/akan/point/index.html',
+      "title": "世田谷区防災ポータル",
+      "publishDate": '',
+      "author": [],
+      "publisher": null,
+      "thumbnailURL": '',
+      "keywords": [],
+      "originalType": "text/html",
+      "taskId": "1lRDOfe8RHlIUoZFA2oLS",
+      "id": "1lRDOfe8RHlIUoZFA2oLS-aHR0cHM6Ly9zZXRhZ2F5YS1ib3VzYWkubXkuc2l0ZS5jb20vI2VtZXJnZW5jeQ",
+      "language": "ja",
+      "gscType": "NEWS",
+      "crawledAt": "2024-05-20T04:22:55.384Z",
+      "URL": "https://setagaya-bousai.my.site.com/#emergency",
+      "index": 0,
+      "pageIndex": 1,
+      "description": "\n\n * 緊急情報\n * お知らせ\n * 気象・地震情報\n * 避難情報\n * 避難所情報\n * メニュー\n\n\n\n\n\n\n\n\n\n\n\n\n * ライフライン\n * GIS 地図情報\n\n\n知っておきたい！\n日常の防災知識\n\n\n * 震災編\n * 水害・雪害・土砂災害編\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n緊急情報\n\n\n\n\n緊急情報 はありません。\n\n\n一覧を見る\n\n\n\n\n\n\n\nお知らせ\n\n\n\n\nお知らせ はありません。\n\n\n一覧を見る\n\n\n\n\n\n\n\n避難情報\n\n\n\n\n\n\n\n\n\n\n\n避難情報はありません。\n\n\n\n履歴を見る\n\n\n\n\n\n\n避難所情報\n\n\n\n\n\n\n\n\n開設中の避難所\n\n\n\n\n\n\n\n避難所情報はありません。\n\n\n\n\n\n\n\n\n\n\n現在地から探す\n\n\nGPS（位置情報）を有効にしてご利用ください。\n\nGPS（位置情報）が取得できない場合「現在地を設定する」をご利用ください。\n\n\n\n\n\n\n現在地を設定する\n\n\n\n\n\n名称から探す\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n×\n\n\n\n * \n   東京都世田谷区\n   \n   \n * \n   \n   \n   \n   \n   住所をご入力ください\n   \n   （例）４丁目２１−２７\n   \n   ※地点は凡その概算です。\n   \n   \n   \n\n\n\n設定\n\n\n\n\n\n\n\n\n×\n\n\n\n * \n   キーワード\n   \n   \n\n\n\n検索\n\n\n\n\n\n\n\n\n×\n\n\n\n * \n   避難所種別詳細\n   \n   全て\n   避難所（指定避難所）\n   水害時避難所（第１次）\n   水害時避難所（第２次）\n   土砂災害時避難所\n   野川・仙川洪水時避難所\n   \n   \n * \n   開設状況          \n   すべて\n   開設のみ\n   \n\n\n\n設定\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n避難所ナビ送信\nモード\n\n緯度\n\n経度\n\nキーワード\n\n避難所ナビサブミット\n\n\n\n\n\n開設状況・履歴一覧\n\n\n\n\n\n\n気象・地震情報\n\n\n\n\n\n\n\nライフ\nライン\n\n\n\nGIS地図情報\n\n\n\n文字サイズ\n\n\n大\n\n中\n\n小\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n知っておきたい！\n日常の防災知識\n\n\n\n * 震災編\n * 水害・雪害・\n   土砂災害編\n\n\n\n\n\n\nマニュアル\n\n災害時の情報\n\n日頃の備え・\n知っておきたい知識\n\n\n\n\nマニュアル\n\n災害時の情報\n\n日頃の備え・\n知っておきたい知識\n\n\n\n\n\n\n関連サイトリンク集\n\n\n\n世田谷区ホームページ\n\n\n\n\n区雨量・水位観測システム\n\n\n\n\n世田谷区の防災情報\n\n\n\n\n\n",
+      "loadedUrl": "https://setagaya-bousai.my.site.com/#emergency",
+      "articleCssPath": null
     },
-    a11ySetting: {
-      cssLinks: [],
-      meta: {},
-      // socialMeta: {},
-      // favicon: undefined,
-      googleAnalyticsId: '',
-      playerBar: {
-        isEnable: true,
-        ragtApiKey: 'JGFew89YsN3lOHSqfbNjD3ZjAa3WHMfG7xLJQYkm',
-        ragtClientId: 'uv_crawling_SXN3TN4P5NJICPBH',
-      },
-      // cssLinks: [
-      //   'https://devstage-basestack-databuckete3889a50-1g1xv7rv7flx1.s3.amazonaws.com/news/a11y/3fbe9f8877.css',
-      //   'https://site.uni-voice.biz/css/1307.9f62991a.css'
-      // ],
-      // meta: {},
-      // // favicon: undefined,
-      // googleAnalyticsId: 'UA-XXXX-XXXXX',
-      // playerBar: {
-      //   isEnable: true,
-      //   ragtApiKey: 'JGFew89YsN3lOHSqfbNjD3ZjAa3WHMfG7xLJQYkm',
-      //   ragtClientId: 'uv_crawling_SXN3TN4P5NJICPBH'
-      // }
-    },
-    // a11ySetting: {
-    //   meta: {
-    //     lang: 'ja',
-    //     title: '',
-    //     description: '',
-    //     keywords: '',
-    //     favicon: '',
-    //     image: '',
-    //     type: '',
-    //     socialMeta: {
-    //       title: '',
-    //       type: '',
-    //       image: '',
-    //       description: '',
-    //     },
-    //     twitterMeta: {
-    //       title: '',
-    //       type: '',
-    //       image: '',
-    //       description: '',
-    //     }
-    //   },
-    //   cssLinks: undefined,
-    //   googleAnalyticsId: '',
-    //   playerBar: {
-    //     isEnable: true,
-    //     ragtApiKey: 'JGFew89YsN3lOHSqfbNjD3ZjAa3WHMfG7xLJQYkm',
-    //     ragtClientId: 'uv_crawling_SXN3TN4P5NJICPBH'
-    //   }
-    // },
+    "a11ySetting": {
+      "cssLinks": [],
+      "meta": {},
+      // "socialMeta": {},
+      "googleAnalyticsId": "",
+      "playerBar": {
+        "isEnable": false,
+        "ragtApiKey": "JGFew89YsN3lOHSqfbNjD3ZjAa3WHMfG7xLJQYkm",
+        "ragtClientId": "uv_crawling_SXN3TN4P5NJICPBH"
+      }
+    }
   }).then((res) => {
+    console.log('res: ', res)
     fs.writeFile('index.html', res.a11yHTML, function (err) {
       if (err) {
         return console.log(err);
@@ -215,4 +186,4 @@ import { tinyhtml } from './src/modules';
       console.log('The file was saved!');
     });
   });
-})();
+})()
