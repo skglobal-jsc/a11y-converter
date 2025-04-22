@@ -5,12 +5,12 @@ import { html2Text, tinyhtml } from './src/index';
 <html>
   <body>
     <h1>Test</h1>
-    <span>Audio</span> <audio src="https://example.com/audio.mp3"></audio>
-    <span>Video</span> <video src="https://example.com/video.mp4"></video>
+    <span>Audio</span> <audio src="/audio.mp3"></audio>
+    <span>Video</span> <video src="/video.mp4"></video>
   </body>
 </html>
 `;
-  const { html: simplifiedHTML } = await tinyhtml(html);
+  const { html: simplifiedHTML } = await tinyhtml(html, { iArticle: { loadedUrl: 'https://example.com' } as any });
   console.log(simplifiedHTML)
   const data = await html2Text({ html: simplifiedHTML, iArticle: {} as any })
   console.log(data)

@@ -191,6 +191,28 @@ const _preTinyHTMlProcessing = async ($, options) => {
   _replaceDivWithParagraph($);
 };
 
+function normalizeUrls($, baseUrl) {
+
+  // Tags + their attributes
+  const elements = [
+    { tag: 'a', attr: 'href' },
+    { tag: 'img', attr: 'src' },
+    { tag: 'audio', attr: 'src' },
+    { tag: 'video', attr: 'src' },
+  ];
+
+  for (const { tag, attr } of elements) {
+    $(tag).each((_, el) => {
+      const val = $(el).attr(attr);
+      if (val) {
+        const absoluteUrl = new URL(val, baseUrl).toString();
+        $(el).attr(attr, absoluteUrl);
+      }
+
+    });
+  }
+}
+
 const tinyhtml = async (html: string, opt?: ProcessOptions) => {
   const options: ProcessOptions = {
     removeComments: true,
@@ -219,6 +241,9 @@ const tinyhtml = async (html: string, opt?: ProcessOptions) => {
 
   // Reduce html
   _reduceHtml($, options);
+
+  // Normalize Urls
+  normalizeUrls($, options?.iArticle?.loadedUrl)
 
   // Execute the after hook
   if (options.hooks?.after) {
