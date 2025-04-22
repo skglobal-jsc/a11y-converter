@@ -63,7 +63,6 @@ const htmlSimplified2EditorJson = (html) => {
     },
   };
   const metaOpts = buildMetaOptions(meta);
-  let groupUnSupportTag: string[] = [];
 
   // Build "Start Article sentence"
   blocks.push({
@@ -77,26 +76,27 @@ const htmlSimplified2EditorJson = (html) => {
     },
   });
 
+  // Replace each <audio> with its src text
+  $('audio').each((_, el) => {
+    const src = $(el).attr('src') || '';
+    $(el).replaceWith(src);
+  });
+  // Replace each <video> with its src text
+  $('video').each((_, el) => {
+    const src = $(el).attr('src') || '';
+    $(el).replaceWith(src);
+  });
+
   $('body')
     .contents()
     .each((i, el) => {
       if (el.type === 'tag') {
         // random attribute id
         const id = Math.random().toString(36).substring(7);
+
         // Wrap group other tag into paragraph
         if (BLOCK_TAGS.includes(el.name)) {
-          if (groupUnSupportTag.length) {
-            const unsupportedId = Math.random().toString(36).substring(7);
-            blocks.push({
-              id: unsupportedId,
-              type: BLOCK_TYPE.PARAGRAPH,
-              data: {
-                text: cleanInline(groupUnSupportTag.join('')),
-              },
-            });
-            groupUnSupportTag = [];
-          }
-          //TODO: Paragraph
+          // TODO: Paragraph
           if (el.name === 'p') {
             const imgTagPattern = /<img.*\/?>/g;
             if ($(el).text().trim() || imgTagPattern.test($(el).html() || '')) {
@@ -109,16 +109,18 @@ const htmlSimplified2EditorJson = (html) => {
               });
             }
           }
-          //TODO: A
-          if (el.name === 'a') {
+
+          // TODO: A
+          else if (el.name === 'a') {
             blocks.push({
               id,
               type: BLOCK_TYPE.PARAGRAPH,
               data: { text: $(el).toString() },
             });
           }
-          //TODO: Header
-          if (['h1', 'h2', 'h3'].includes(el.name)) {
+
+          // TODO: Header
+          else if (['h1', 'h2', 'h3'].includes(el.name)) {
             blocks.push({
               id,
               type: BLOCK_TYPE.HEADER,
@@ -128,7 +130,9 @@ const htmlSimplified2EditorJson = (html) => {
               },
             });
           }
-          if (['h4', 'h5', 'h6'].includes(el.name)) {
+
+          // TODO: Heading
+          else if (['h4', 'h5', 'h6'].includes(el.name)) {
             blocks.push({
               id,
               type: BLOCK_TYPE.PARAGRAPH,
@@ -137,8 +141,9 @@ const htmlSimplified2EditorJson = (html) => {
               },
             });
           }
-          //TODO: List
-          if (['ul', 'ol'].includes(el.name)) {
+
+          // TODO: List
+          else if (['ul', 'ol'].includes(el.name)) {
             const items = parseListItems($, el.children);
             blocks.push({
               id,
@@ -149,8 +154,9 @@ const htmlSimplified2EditorJson = (html) => {
               },
             });
           }
-          //TODO: Image
-          if (el.name === 'img') {
+
+          // TODO: Image
+          else if (el.name === 'img') {
             blocks.push({
               id,
               type: BLOCK_TYPE.IMAGE,
@@ -166,8 +172,8 @@ const htmlSimplified2EditorJson = (html) => {
             });
           }
 
-          //TODO: Table
-          if (el.name === 'table') {
+          // TODO: Table
+          else if (el.name === 'table') {
             const captionElement = $(el).find('caption');
             const firstRow = $(el).find('tr')?.[0];
             const rows = Array.from($(el).find('tr'));
@@ -211,8 +217,13 @@ const htmlSimplified2EditorJson = (html) => {
             });
           }
         } else {
-          //Group tag in case not supporting
-          groupUnSupportTag.push($.html(el));
+          blocks.push({
+            id,
+            type: BLOCK_TYPE.PARAGRAPH,
+            data: {
+              text: cleanInline($.html(el)),
+            },
+          });
         }
       } else if (el.type === 'text') {
         // random attribute id

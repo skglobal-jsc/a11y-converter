@@ -26,6 +26,8 @@ export const allowedAttributes = {
   span: [],
   strong: [],
   br: [],
+  audio: ['src'],
+  video: ['src']
 };
 export const allowedTags = [
   'html',
@@ -65,6 +67,8 @@ export const allowedTags = [
   'strike',
   'samp',
   's',
+  'audio',
+  'video'
 ];
 
 export const transformImgTag = (baseURL, attribs) => {

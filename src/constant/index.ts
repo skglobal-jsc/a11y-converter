@@ -17,7 +17,7 @@ export const BLOCK_TAGS = [
   'table',
   'p',
   'img',
-  'a'
+  'a',
 ];
 
 export const HEADER_LEVEL = {
@@ -90,7 +90,7 @@ export const EDITOR_BLOCK_TAGS = [
 ];
 
 // Allowed Tags no text content
-export const ALLOWED_TAG_NO_TEXT_CONTENT = ['img', 'br', 'td', 'th']
+export const ALLOWED_TAG_NO_TEXT_CONTENT = ['img', 'br', 'td', 'th', 'audio', 'video']
 
 // All class name
 export const CLASS_NAME = {
