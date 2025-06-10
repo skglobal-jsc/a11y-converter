@@ -2,17 +2,10 @@ import { html2Text, tinyhtml } from './src/index';
 
 (async () => {
   const html = `
-<html>
-  <body>
-    <h1>Test</h1>
-    <span>Audio</span> <audio src="/audio.mp3"></audio>
-    <span>Video</span> <video src="/video.mp4"></video>
-  </body>
-</html>
-`;
-  const { html: simplifiedHTML } = await tinyhtml(html, { iArticle: { loadedUrl: 'https://example.com' } as any });
-  console.log(simplifiedHTML)
-  const data = await html2Text({ html: simplifiedHTML, iArticle: {} as any })
+<html><body><section class="block" data-v-5dc72565=""><h2 class="" data-v-5dc72565="">ハンバーグのサウンドコラム</h2><!--[--><div class="" data-v-5dc72565=""><p class="mb-2" data-v-5dc72565="">サウンド1　コネて生まれる一体感</p><button class="self-stretch pl-4 pr-6 py-3 bg-[#484849] rounded-[6.25rem] flex items-center gap-4 cursor-pointer" tabindex="0" aria-label="音声を再生する" data-v-5dc72565="" data-v-2435c7c9=""><div class="flex-shrink-0 w-10 h-10 relative" aria-hidden="true" data-v-2435c7c9=""><svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" data-v-2435c7c9=""><path fill-rule="evenodd" clip-rule="evenodd" d="M20 40C31.0457 40 40 31.0457 40 20C40 8.9543 31.0457 0 20 0C8.9543 0 0 8.9543 0 20C0 31.0457 8.9543 40 20 40ZM28 20L16 29V11L28 20Z" fill="white" style="fill:white;fill-opacity:1;" data-v-2435c7c9=""></path></svg></div><span class="text-left text-white text-base font-normal font-['Noto Sans JP'] leading-7" data-v-2435c7c9=""> 音声を再生する</span><audio src="/event/otodemirurecipe/mp3/19-1.mp3" preload="auto" data-v-2435c7c9=""></audio></button></div><div class="" data-v-5dc72565=""><p class="mb-2" data-v-5dc72565="">サウンド2　おいしく焼きあげる音のヒント</p><button class="self-stretch pl-4 pr-6 py-3 bg-[#484849] rounded-[6.25rem] flex items-center gap-4 cursor-pointer" tabindex="0" aria-label="音声を再生する" data-v-5dc72565="" data-v-2435c7c9=""><div class="flex-shrink-0 w-10 h-10 relative" aria-hidden="true" data-v-2435c7c9=""><svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" data-v-2435c7c9=""><path fill-rule="evenodd" clip-rule="evenodd" d="M20 40C31.0457 40 40 31.0457 40 20C40 8.9543 31.0457 0 20 0C8.9543 0 0 8.9543 0 20C0 31.0457 8.9543 40 20 40ZM28 20L16 29V11L28 20Z" fill="white" style="fill:white;fill-opacity:1;" data-v-2435c7c9=""></path></svg></div><span class="text-left text-white text-base font-normal font-['Noto Sans JP'] leading-7" data-v-2435c7c9=""> 音声を再生する</span><audio src="/event/otodemirurecipe/mp3/19-2.mp3" preload="auto" data-v-2435c7c9=""></audio></button></div><!--]--></section></body></html>
+`
+
+  const data = await html2Text({ html, iArticle: {} as any })
   console.log(data)
 
   // html2Text({

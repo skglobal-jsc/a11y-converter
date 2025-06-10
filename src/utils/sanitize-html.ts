@@ -80,6 +80,24 @@ export const transformImgTag = (baseURL, attribs) => {
   };
 };
 
+export const transformAudioTag = (baseURL, attribs) => {
+  const originalSrc = attribs?.src || '';
+  const href = convertRelativeUrlsToAbsolute(baseURL, originalSrc) || '';
+  return {
+    tagName: 'a',
+    attribs: { ...attribs, href },
+  };
+};
+
+export const transformVideoTag = (baseURL, attribs) => {
+  const originalSrc = attribs?.src || '';
+  const href = convertRelativeUrlsToAbsolute(baseURL, originalSrc) || '';
+  return {
+    tagName: 'a',
+    attribs: { ...attribs, href },
+  };
+};
+
 export const transformATag = (baseURL, attribs) => {
   const href = convertRelativeUrlsToAbsolute(baseURL, attribs.href) || '';
   return {

@@ -8,6 +8,8 @@ import {
   transformATag,
   transformLinkTag,
   exclusiveFilter,
+  transformAudioTag,
+  transformVideoTag,
 } from '../utils/sanitize-html';
 import { ALLOWED_TAG_NO_TEXT_CONTENT } from '../constant';
 import { ProcessOptions } from '../index';
@@ -103,6 +105,8 @@ const _sanitizeHtml = (html, options) => {
       img: (_, attribs) => transformImgTag(baseURL, attribs),
       a: (_, attribs) => transformATag(baseURL, attribs),
       link: (_, attribs) => transformLinkTag(baseURL, attribs),
+      audio: (_, attribs) => transformAudioTag(baseURL, attribs),
+      video: (_, attribs) => transformVideoTag(baseURL, attribs),
     },
     exclusiveFilter: (frame) => exclusiveFilter(options, frame),
   });

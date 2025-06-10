@@ -61,6 +61,7 @@ export const listImgTag = (text: string) => {
   }
   return matches;
 };
+
 export const replaceTextLinkToSpecialHyperlink = (
   text: string,
   lang = 'default'
@@ -98,12 +99,14 @@ export const replaceTextLinkToSpecialHyperlink = (
   }
   return text;
 };
+
 export const replaceTextLinkToOtherHyperlink = (
   text: string,
   lang = 'default'
 ) => {
   const regex =
-    /(?:https?:\/\/(?:www\.|(?!www))(?:[a-zA-Z0-9][a-zA-Z0-9-]+(?:\.|(?!\.)))+(?:[\/,\?][^\s]{0,}|(?![\/,\?][^\s]{2,}))|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[a-zA-Z0-9]+(?:[\/,\?][^\s]{2,}|(?![\/,\?][^\s]{2,}))|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[a-zA-Z0-9]+(?:[\/,\?][^\s]{2,}|(?![\/,\?][^\s]{2,}))|www\.[a-zA-Z0-9]+\.[a-zA-Z0-9]+(?:[\/,\?][^\s]{2,}|(?![\/,\?][^\s]{2,})))/g;
+    /(https?:\/\/(?:www[_a-zA-Z0-9-]+\.|(?!www[_a-zA-Z0-9-]+))(?:[_a-zA-Z0-9-]+(?:\.|(?!\.)))+(?:[\/\,\?][^\s]+|(?![\/\,\?][^\s]+))\/?|www\.[_a-zA-Z0-9-]+[_a-zA-Z0-9]\.[a-zA-Z0-9]+(?:[\/\,\?][^\s]+|(?![\/\,\?][^\s]+))\/?|https?:\/\/(?:www\.\|(?!www))[_a-zA-Z0-9]+\.[a-zA-Z0-9]+(?:[\/\,\?][^\s]+|(?![\/\,\?][^\s]+))\/?|www\.[_a-zA-Z0-9]+\.[a-zA-Z0-9]+(?:[\/\,\?][^\s]+|(?![\/\,\?][^\s]+))\/?)/gm
+    // /(?:https?:\/\/(?:www\.|(?!www))(?:[a-zA-Z0-9][a-zA-Z0-9-]+(?:\.|(?!\.)))+(?:[\/,\?][^\s]{0,}|(?![\/,\?][^\s]{2,}))|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[a-zA-Z0-9]+(?:[\/,\?][^\s]{2,}|(?![\/,\?][^\s]{2,}))|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[a-zA-Z0-9]+(?:[\/,\?][^\s]{2,}|(?![\/,\?][^\s]{2,}))|www\.[a-zA-Z0-9]+\.[a-zA-Z0-9]+(?:[\/,\?][^\s]{2,}|(?![\/,\?][^\s]{2,})))/g;
   let match: RegExpExecArray | null;
   while ((match = regex.exec(text)) !== null) {
     // This is necessary to avoid infinite loops with zero-width matches
@@ -134,7 +137,8 @@ export const replaceTextLinkToOtherHyperlink = (
 
 export const replaceTextLinkToEmailHyperlink = (text: string) => {
   const regex =
-    /(?:[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)/g;
+    /[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/gm;
+    // /(?:[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)/g;
   let match: RegExpMatchArray | null;
   while ((match = regex.exec(text)) !== null) {
     // This is necessary to avoid infinite loops with zero-width matches
@@ -165,7 +169,8 @@ export const replaceTextLinkToEmailHyperlink = (text: string) => {
 
 export const replaceTextLinkToAddressHyperlink = (text: string) => {
   const regex =
-    /(?:〒[0-9０-９]{3}[-－−][0-9０-９]{4}[\n\s　]*)?(?:[^\n\s　;<>。、,，.:：]{2,5}[都道府県市区町村]){0,3}(?:[^\n;<>。、.,，：]{2,}?[0-9０-９一二三四五六七八九十]+(?:-|－|−|丁目|地割|部|番町|号)[0-9０-９一二三四五六七八九十]+(?:-|－|−|番地|番)?(?:[0-9０-９一二三四五六七八九十]+号?)?)(?:[^\n;<>。、.,，：]+ビル)?(?:[^\n;<>。、.,，：]*?[0-9０-９一二三四五六七八九]+[階F])?/g;
+    /(?!.*地区)(〒[0-9０-９]{3}[-－−][0-9０-９]{4}[\n\s　]*)?([^\n\s　;<>。、,，.:]{2,5}[都道府県市区町村]){1,3}([^\n;<>。、.,，（）]{2,}?[0-9０-９一二三四五六七八九十]+(?:-|－|−|丁目|地割|番町|号|番地|番)[0-9０-９一二三四五六七八九十]*(?:-|－|−|丁目|地割|番町|号|番地|番)?(?:[0-9０-９一二三四五六七八九十]+号?)?)([^\n;<>。、.,，]+ビル)?([^\n;<>。、.,，]*?[0-9０-９一二三四五六七八九]+[階F])?/gm;
+    // /(?:〒[0-9０-９]{3}[-－−][0-9０-９]{4}[\n\s　]*)?(?:[^\n\s　;<>。、,，.:：]{2,5}[都道府県市区町村]){0,3}(?:[^\n;<>。、.,，：]{2,}?[0-9０-９一二三四五六七八九十]+(?:-|－|−|丁目|地割|部|番町|号)[0-9０-９一二三四五六七八九十]+(?:-|－|−|番地|番)?(?:[0-9０-９一二三四五六七八九十]+号?)?)(?:[^\n;<>。、.,，：]+ビル)?(?:[^\n;<>。、.,，：]*?[0-9０-９一二三四五六七八九]+[階F])?/g;
   let match: RegExpMatchArray | null;
   while ((match = regex.exec(text)) !== null) {
     // This is necessary to avoid infinite loops with zero-width matches
