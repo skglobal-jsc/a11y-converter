@@ -2,7 +2,48 @@ import { html2Text, tinyhtml } from './src/index';
 
 (async () => {
   const html = `
-<html><body><section class="block" data-v-5dc72565=""><h2 class="" data-v-5dc72565="">ハンバーグのサウンドコラム</h2><!--[--><div class="" data-v-5dc72565=""><p class="mb-2" data-v-5dc72565="">サウンド1　コネて生まれる一体感</p><button class="self-stretch pl-4 pr-6 py-3 bg-[#484849] rounded-[6.25rem] flex items-center gap-4 cursor-pointer" tabindex="0" aria-label="音声を再生する" data-v-5dc72565="" data-v-2435c7c9=""><div class="flex-shrink-0 w-10 h-10 relative" aria-hidden="true" data-v-2435c7c9=""><svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" data-v-2435c7c9=""><path fill-rule="evenodd" clip-rule="evenodd" d="M20 40C31.0457 40 40 31.0457 40 20C40 8.9543 31.0457 0 20 0C8.9543 0 0 8.9543 0 20C0 31.0457 8.9543 40 20 40ZM28 20L16 29V11L28 20Z" fill="white" style="fill:white;fill-opacity:1;" data-v-2435c7c9=""></path></svg></div><span class="text-left text-white text-base font-normal font-['Noto Sans JP'] leading-7" data-v-2435c7c9=""> 音声を再生する</span><audio src="/event/otodemirurecipe/mp3/19-1.mp3" preload="auto" data-v-2435c7c9=""></audio></button></div><div class="" data-v-5dc72565=""><p class="mb-2" data-v-5dc72565="">サウンド2　おいしく焼きあげる音のヒント</p><button class="self-stretch pl-4 pr-6 py-3 bg-[#484849] rounded-[6.25rem] flex items-center gap-4 cursor-pointer" tabindex="0" aria-label="音声を再生する" data-v-5dc72565="" data-v-2435c7c9=""><div class="flex-shrink-0 w-10 h-10 relative" aria-hidden="true" data-v-2435c7c9=""><svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" data-v-2435c7c9=""><path fill-rule="evenodd" clip-rule="evenodd" d="M20 40C31.0457 40 40 31.0457 40 20C40 8.9543 31.0457 0 20 0C8.9543 0 0 8.9543 0 20C0 31.0457 8.9543 40 20 40ZM28 20L16 29V11L28 20Z" fill="white" style="fill:white;fill-opacity:1;" data-v-2435c7c9=""></path></svg></div><span class="text-left text-white text-base font-normal font-['Noto Sans JP'] leading-7" data-v-2435c7c9=""> 音声を再生する</span><audio src="/event/otodemirurecipe/mp3/19-2.mp3" preload="auto" data-v-2435c7c9=""></audio></button></div><!--]--></section></body></html>
+<html><body>
+<table border="1" width="100%" class="datatable spExTbl_none">
+	<tbody>
+		<tr>
+			<th style="text-align:center" width="30%">
+			<p>申請完了日</p>
+			</th>
+			<th style="text-align:center" width="35%">
+			<p>令和4年3月31日まで</p>
+			</th>
+			<th style="text-align:center" width="35%">
+			<p>令和4年4月1日以降</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="text-align:center" width="30%">
+			<p>マイナンバーカード</p>
+			</th>
+			<td style="text-align:center">
+			<p><strong>申請日に20歳以上の人</strong><br>
+			10回目の誕生日<br>
+			<strong>申請日に20歳未満の人</strong><br>
+			5回目の誕生日</p>
+			</td>
+			<td style="text-align:center">
+			<p><strong>申請日に18歳以上の人</strong><br>
+			10回目の誕生日<br>
+			<strong>申請日に18歳未満の人</strong><br>
+			5回目の誕生日</p>
+			</td>
+		</tr>
+		<tr>
+			<th style="text-align:center" width="30%">
+			<p>電子証明書</p>
+			</th>
+			<td colspan="2" style="text-align:center">
+			<p>発行日から5回目の誕生日</p>
+			</td>
+		</tr>
+	</tbody>
+</table>
+</body></html>
 `
 
   const data = await html2Text({ html, iArticle: {} as any })

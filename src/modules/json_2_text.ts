@@ -213,7 +213,10 @@ const parseTable2Text = (block, lang = 'ja', iArticle?: IArticle): any => {
       lang,
       value: rows
         ?.shift()
-        ?.map((item) => item?.data)
+        ?.map((item) => {
+          const $p = cheerio.load(item?.data || '')('body')[0];
+          return parseParagraph2Text($p, iArticle);
+        })
         ?.join(lang === 'ja' ? '、' : ', '),
     })}\n`;
   }
