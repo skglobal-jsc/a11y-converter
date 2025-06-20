@@ -1,6 +1,6 @@
 import * as cheerio from 'cheerio';
 const sanitizeHtml = require('sanitize-html');
-import { executeHookFn, isIgnoreText } from '../utils/helper';
+import { executeHookFn, isIgnoreText, convertRelativeUrlsToAbsolute } from '../utils/helper';
 import {
   allowedTags,
   allowedAttributes,
@@ -195,6 +195,45 @@ const _preTinyHTMlProcessing = async ($, options) => {
   _replaceDivWithParagraph($);
 };
 
+const _preprocessAudioVideo = async ($, options) => {
+  const baseURL = options?.iArticle?.url || options?.iArticle?.loadedUrl || '';
+
+  // Find all audio and video tags
+  $('audio, video').each((i, el) => {
+    const media = $(el);
+    const src = media.attr('src');
+    const href = convertRelativeUrlsToAbsolute(baseURL, src) || '';
+
+    let current = media;
+    let parentWithText;
+
+    // Traverse up to find a parent with non-empty text
+    while (current.parent().length) {
+      current = current.parent();
+
+      // Cleaned-up text content
+      const textContent = current.text().replace(/\s+/g, '').trim();
+
+      // Skip empty text
+      if (textContent) {
+        parentWithText = current;
+        break;
+      }
+    }
+
+    // Extract label from nearest parent with text
+    let label = parentWithText ? parentWithText.text().trim() : '';
+
+    // Create replacement <a> tag
+    const aTag = `<a href="${href}">${label}</a>`;
+
+    // Replace parentWithText with <a> tag
+    if (parentWithText) {
+      parentWithText.replaceWith(aTag);
+    }
+  });
+}
+
 function normalizeUrls($, baseUrl) {
 
   // Tags + their attributes
@@ -236,6 +275,9 @@ const tinyhtml = async (html: string, opt?: ProcessOptions) => {
   // Pre processing of tiny HTML
   await _preTinyHTMlProcessing($, options);
 
+  // Pre processing: audio, video element
+  await _preprocessAudioVideo($, options)
+
   // Sanitize html
   const sanitizedHtml = _sanitizeHtml($.html(), options);
   $ = cheerio.load(sanitizedHtml);
@@ -247,7 +289,9 @@ const tinyhtml = async (html: string, opt?: ProcessOptions) => {
   _reduceHtml($, options);
 
   // Normalize Urls
-  normalizeUrls($, options?.iArticle?.loadedUrl)
+  if (options?.iArticle?.loadedUrl) {
+    normalizeUrls($, options?.iArticle?.loadedUrl)
+  }
 
   // Execute the after hook
   if (options.hooks?.after) {
